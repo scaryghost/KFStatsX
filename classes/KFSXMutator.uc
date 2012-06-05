@@ -25,6 +25,8 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
         lri= pri.spawn(class'KFSXLinkedPRI', pri.Owner);
         lri.NextReplicationInfo= pri.CustomReplicationInfo;
         pri.CustomReplicationInfo= lri;
+    } else if (Frag(Other) != none) {
+        Frag(Other).FireModeClass[0]= class'FragFire_KFSX';
     }
 
     return super.CheckReplacement(Other, bSuperRelevant);

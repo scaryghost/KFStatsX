@@ -2,12 +2,18 @@ class KFSXHumanPawn extends KFHumanPawn;
 
 var float oldPrimaryAmmo, oldSecondaryAmmo;
 
+simulated function StartFiringX(bool bAltFire, bool bRapid) {
+    if (KFMeleeGun(Weapon) != none && Syringe(Weapon) == none && Welder(Weapon) == none) {
+        KFSXPlayerController(Controller).kfsxPRI.accum(GetItemName(string(Weapon.GetFireMode(0).class)), 1);
+    }
+}
+
 simulated function StopFiring() {
     local float newPrimaryAmmo, newSecondaryAmmo;
     local float primaryMax, secondaryMax;
     super.StopFiring();
 
-    if (KFMeleeGun(Weapon) == none && Welder(Weapon) == none && Syringe(Weapon) == none) {
+    if (KFMeleeGun(Weapon) == none) {
         Weapon.GetAmmoCount(primaryMax, newPrimaryAmmo);
         KFSXPlayerController(Controller).kfsxPRI.accum(GetItemName(string(Weapon.GetFireMode(0).class)),oldPrimaryAmmo-newPrimaryAmmo);
         oldPrimaryAmmo= newPrimaryAmmo;
@@ -40,5 +46,4 @@ simulated function AltFire(optional float F) {
         KFWeapon(Weapon).GetSecondaryAmmoCount(secondaryMax, oldSecondaryAmmo);
     }
 }
-
 
