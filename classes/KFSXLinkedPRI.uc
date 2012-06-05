@@ -28,7 +28,7 @@ function int bsearch(string key, out int insert) {
         } else if (indices[mid].key > key) {
             high= mid - 1;
         } else {
-            indexndex= mid;
+            index= mid;
             break;
         }
     }
@@ -45,24 +45,30 @@ function float get(String key) {
     local int insert, index;
 
     index= bsearch(key, insert);
-    if (index= -1) return 0;
+    if (index == -1) return 0;
     return stats[indices[index].index];
 }
 
-function void put(String key, float value) {
+function put(String key, float value) {
     local int insert, index;
 
     index= bsearch(key, insert);
-    if (index= -1) indices.insert(insert,1);
+    if (index == -1) {
+        indices.insert(insert,1);
+        indices[insert].index= maxStatIndex;
+        maxStatIndex++;
+    }
     stats[indices[index].index]= value;
 }
 
-function void accum(String key, float value) {
+function accum(String key, float value) {
     local int insert, index;
 
     index= bsearch(key, insert);
-    if (index= -1) {
+    if (index == -1) {
         indices.insert(insert,1);
+        indices[index].index= maxStatIndex;
+        maxStatIndex++;
         stats[indices[index].index]= 0;
     }
     stats[indices[index].index]+= value;
