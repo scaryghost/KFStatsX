@@ -115,7 +115,7 @@ defaultproperties {
         WinHeight=0.250
         OnPreDraw=BGBackground.InternalPreDraw
     End Object
-    i_BGBackground=GUISectionBackground'KFStatsX.PanelSettings.BGBackground'
+    i_BGBackground=GUISectionBackground'PanelSettings.BGBackground'
 
     Begin Object Class=GUISectionBackground Name=BGText
         bFillClient=True
@@ -126,7 +126,7 @@ defaultproperties {
         WinHeight=0.250
         OnPreDraw=BGText.InternalPreDraw
     End Object
-    i_BGText=GUISectionBackground'KFStatsX.PanelSettings.BGText'
+    i_BGText=GUISectionBackground'PanelSettings.BGText'
 
     Begin Object Class=moSlider Name=BackgroundRedSlider
         MaxValue=255
@@ -145,7 +145,7 @@ defaultproperties {
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
     End Object
-    sl_bgR=moSlider'KFStatsX.PanelSettings.BackgroundRedSlider'
+    sl_bgR=moSlider'PanelSettings.BackgroundRedSlider'
 
     Begin Object Class=moSlider Name=BackgroundGreenSlider
         MaxValue=255
@@ -164,7 +164,7 @@ defaultproperties {
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
     End Object
-    sl_bgG=moSlider'KFStatsX.PanelSettings.BackgroundGreenSlider'
+    sl_bgG=moSlider'PanelSettings.BackgroundGreenSlider'
 
     Begin Object Class=moSlider Name=BackgroundBlueSlider
         MaxValue=255
@@ -183,7 +183,7 @@ defaultproperties {
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
     End Object
-    sl_bgB=moSlider'KFStatsX.PanelSettings.BackgroundBlueSlider'
+    sl_bgB=moSlider'PanelSettings.BackgroundBlueSlider'
 
     Begin Object Class=moSlider Name=TextRedSlider
         MaxValue=255
@@ -202,7 +202,7 @@ defaultproperties {
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
     End Object
-    sl_txtR=moSlider'KFStatsX.PanelSettings.TextRedSlider'
+    sl_txtR=moSlider'PanelSettings.TextRedSlider'
 
     Begin Object Class=moSlider Name=TextGreenSlider
         MaxValue=255
@@ -221,7 +221,7 @@ defaultproperties {
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
     End Object
-    sl_txtG=moSlider'KFStatsX.PanelSettings.TextGreenSlider'
+    sl_txtG=moSlider'PanelSettings.TextGreenSlider'
 
     Begin Object Class=moSlider Name=TextBlueSlider
         MaxValue=255
@@ -240,7 +240,7 @@ defaultproperties {
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
     End Object
-    sl_txtB=moSlider'KFStatsX.PanelSettings.TextBlueSlider'
+    sl_txtB=moSlider'PanelSettings.TextBlueSlider'
 
     Begin Object Class=moSlider Name=AlphaSlider
         MaxValue=255
@@ -259,7 +259,7 @@ defaultproperties {
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
     End Object
-    sl_alpha=moSlider'KFStatsX.PanelSettings.AlphaSlider'
+    sl_alpha=moSlider'PanelSettings.AlphaSlider'
 
     Begin Object Class=moSlider Name=TextScale
         MaxValue=1
@@ -278,5 +278,5 @@ defaultproperties {
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
     End Object
-    sl_txtScale=moSlider'KFStatsX.PanelSettings.TextScale'
+    sl_txtScale=moSlider'PanelSettings.TextScale'
 }
