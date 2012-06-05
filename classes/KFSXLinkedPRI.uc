@@ -7,11 +7,12 @@ struct StatIndex {
 
 var int maxStatIndex;
 var array<float> stats[50];
+var array<string> keys[50];
 var array<StatIndex> indices;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority)
-        stats;
+        stats, keys;
 }
 
 function int bsearch(string key, out int insert) {
@@ -59,6 +60,7 @@ function put(String key, float value) {
         indices[insert].key= key;
         indices[insert].index= maxStatIndex;
         index= insert;
+        keys[maxStatIndex]= key;
         maxStatIndex++;
     }
     stats[indices[index].index]= value;
@@ -74,6 +76,7 @@ function accum(String key, float value) {
         indices[insert].index= maxStatIndex;
         index= insert;
         stats[indices[insert].index]= 0;
+        keys[maxStatIndex]= key;
         maxStatIndex++;
     }
     stats[indices[index].index]+= value;

@@ -6,7 +6,7 @@ function fillDescription() {
     descriptions.Length= ownerLRI.maxStatIndex;
 
     for(i= 0; i < ownerLRI.maxStatIndex; i++) {
-        descriptions[i].description=string(ownerLRI.stats[i]);
+        descriptions[i].description=ownerLRI.keys[i];
     }
 }
 

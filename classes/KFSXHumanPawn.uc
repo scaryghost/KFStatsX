@@ -4,7 +4,7 @@ var float oldPrimaryAmmo, oldSecondaryAmmo;
 
 simulated function StartFiringX(bool bAltFire, bool bRapid) {
     if (KFMeleeGun(Weapon) != none && Syringe(Weapon) == none && Welder(Weapon) == none) {
-        KFSXPlayerController(Controller).kfsxPRI.accum(GetItemName(string(Weapon.GetFireMode(0).class)), 1);
+        KFSXPlayerController(Controller).kfsxPRI.accum(Weapon.ItemName, 1);
     }
 }
 
@@ -15,11 +15,11 @@ simulated function StopFiring() {
 
     if (KFMeleeGun(Weapon) == none) {
         Weapon.GetAmmoCount(primaryMax, newPrimaryAmmo);
-        KFSXPlayerController(Controller).kfsxPRI.accum(GetItemName(string(Weapon.GetFireMode(0).class)),oldPrimaryAmmo-newPrimaryAmmo);
+        KFSXPlayerController(Controller).kfsxPRI.accum(Weapon.ItemName,oldPrimaryAmmo-newPrimaryAmmo);
         oldPrimaryAmmo= newPrimaryAmmo;
         if (KFWeapon(Weapon) != none && KFWeapon(Weapon).bHasSecondaryAmmo) {
             KFWeapon(Weapon).GetSecondaryAmmoCount(secondaryMax, newSecondaryAmmo);
-            KFSXPlayerController(Controller).kfsxPRI.accum(GetItemName(string(Weapon.GetFireMode(1).class)),oldSecondaryAmmo-newSecondaryAmmo);
+            KFSXPlayerController(Controller).kfsxPRI.accum(Weapon.ItemName$" Alt",oldSecondaryAmmo-newSecondaryAmmo);
             oldSecondaryAmmo= newSecondaryAmmo;
         }
     }

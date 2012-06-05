@@ -7,13 +7,13 @@ var automated StatListBox lb_StatSelect;
 var array<StatList.DescripInfo> descriptions;
 var KFSXLinkedPRI ownerLRI;
 
-function fillDescription() {
-}
+function fillDescription();
+
 
 function ShowPanel(bool bShow) {
     super.ShowPanel(bShow);
 
-        ownerLRI= KFSXPlayerController(PlayerOwner()).kfsxPRI;
+    ownerLRI= KFSXPlayerController(PlayerOwner()).kfsxPRI;
     if (descriptions.Length != ownerLRI.maxStatIndex) {
         fillDescription();
     }
