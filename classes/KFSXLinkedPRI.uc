@@ -20,6 +20,7 @@ function int bsearch(string key, out int insert) {
     low= 0;
     high= indices.Length - 1;
     index= -1;
+    mid= -1;
 
     while(low <= high) {
         mid= (low+high)/2;
@@ -32,7 +33,7 @@ function int bsearch(string key, out int insert) {
             break;
         }
     }
-    insert= mid+1;
+    insert= low;
     return index;
 }
 
@@ -55,7 +56,9 @@ function put(String key, float value) {
     index= bsearch(key, insert);
     if (index == -1) {
         indices.insert(insert,1);
+        indices[insert].key= key;
         indices[insert].index= maxStatIndex;
+        index= insert;
         maxStatIndex++;
     }
     stats[indices[index].index]= value;
@@ -67,9 +70,11 @@ function accum(String key, float value) {
     index= bsearch(key, insert);
     if (index == -1) {
         indices.insert(insert,1);
-        indices[index].index= maxStatIndex;
+        indices[insert].key= key;
+        indices[insert].index= maxStatIndex;
+        index= insert;
+        stats[indices[insert].index]= 0;
         maxStatIndex++;
-        stats[indices[index].index]= 0;
     }
     stats[indices[index].index]+= value;
 }
