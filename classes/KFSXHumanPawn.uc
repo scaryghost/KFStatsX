@@ -49,9 +49,10 @@ simulated function Fire(optional float F) {
 
 simulated function AltFire(optional float F) {
     super.AltFire(F);
-    oldPrimaryAmmo= Weapon.AmmoAmount(0);
     if(MP7MMedicGun(Weapon) != none || (KFWeapon(Weapon) != none && KFWeapon(Weapon).bHasSecondaryAmmo)) {
         oldSecondaryAmmo= Weapon.AmmoAmount(1);
+    } else {
+        oldPrimaryAmmo= Weapon.AmmoAmount(0);
     }
 }
 
