@@ -25,8 +25,10 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
         lri= pri.spawn(class'KFSXLinkedPRI', pri.Owner);
         lri.NextReplicationInfo= pri.CustomReplicationInfo;
         pri.CustomReplicationInfo= lri;
+        return true;
     } else if (Frag(Other) != none) {
         Frag(Other).FireModeClass[0]= class'FragFire_KFSX';
+        return true;
     }
 
     return super.CheckReplacement(Other, bSuperRelevant);
@@ -36,5 +38,10 @@ defaultproperties {
     GroupName="KFStatX"
     FriendlyName="KFStatsX v1.0"
     Description="Tracks statistics for each player"
+
+    bAddToServerPackages=true
+    RemoteRole=ROLE_SimulatedProxy
+    bAlwaysRelevant=true
+    
     kfsxPC= class'KFSXPlayerController'
 }
