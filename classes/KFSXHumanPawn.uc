@@ -5,6 +5,7 @@ var float oldPrimaryAmmo, oldSecondaryAmmo;
 simulated function StartFiringX(bool bAltFire, bool bRapid) {
     local float newPrimaryAmmo;
 
+    super.StartFiringX(bAltFire, bRapid);
     if (KFMeleeGun(Weapon) != none && Syringe(Weapon) == none && Welder(Weapon) == none) {
         KFSXPlayerController(Controller).kfsxPRI.accum(Weapon.ItemName, 1);
     } else if (HuskGun(Weapon) != none) {
@@ -41,18 +42,22 @@ simulated function StopFiring() {
 
 simulated function Fire(optional float F) {
     super.Fire(F);
-    oldPrimaryAmmo= Weapon.AmmoAmount(0);
-    if(KFWeapon(Weapon) != none && KFWeapon(Weapon).bHasSecondaryAmmo) {
-        oldSecondaryAmmo= Weapon.AmmoAmount(1);
+    if (!Weapon.GetFireMode(0).bIsFiring && !Weapon.GetFireMode(1).bIsFiring) {
+        oldPrimaryAmmo= Weapon.AmmoAmount(0);
+        if(KFWeapon(Weapon) != none && KFWeapon(Weapon).bHasSecondaryAmmo) {
+            oldSecondaryAmmo= Weapon.AmmoAmount(1);
+        }
     }
 }
 
 simulated function AltFire(optional float F) {
     super.AltFire(F);
-    if(MP7MMedicGun(Weapon) != none || (KFWeapon(Weapon) != none && KFWeapon(Weapon).bHasSecondaryAmmo)) {
-        oldSecondaryAmmo= Weapon.AmmoAmount(1);
-    } else {
+
+    if (!Weapon.GetFireMode(0).bIsFiring && !Weapon.GetFireMode(1).bIsFiring) {
         oldPrimaryAmmo= Weapon.AmmoAmount(0);
+        if(MP7MMedicGun(Weapon) != none || (KFWeapon(Weapon) != none && KFWeapon(Weapon).bHasSecondaryAmmo)) {
+            oldSecondaryAmmo= Weapon.AmmoAmount(1);
+        }
     }
 }
 
