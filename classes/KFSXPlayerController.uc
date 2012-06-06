@@ -2,14 +2,21 @@ class KFSXPlayerController extends KFPlayerController;
 
 var KFSXLinkedPRI kfsxPRI;
 
-event PostBeginPlay() {
+replication {
+    reliable if (bNetDirty && Role == ROLE_Authority) 
+        kfsxPRI;
+}
+
+simulated event PostBeginPlay() {
     local LinkedReplicationInfo lri;
 
     super.PostBeginPlay();
-    for(lri= PlayerReplicationInfo.CustomReplicationInfo; lri != none; lri= lri.NextReplicationInfo) {
-        if (KFSXLinkedPRI(lri) != none) {
-            kfsxPRI= KFSXLinkedPRI(lri);
-            break;
+    if (Role == ROLE_Authority) {
+        for(lri= PlayerReplicationInfo.CustomReplicationInfo; lri != none; lri= lri.NextReplicationInfo) {
+            if (KFSXLinkedPRI(lri) != none) {
+                kfsxPRI= KFSXLinkedPRI(lri);
+                break;
+            }
         }
     }
 }

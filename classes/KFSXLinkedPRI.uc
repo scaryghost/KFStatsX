@@ -12,7 +12,7 @@ var array<StatIndex> indices;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority)
-        stats, keys;
+        stats, keys, maxStatIndex;
 }
 
 function int bsearch(string key, out int insert) {
