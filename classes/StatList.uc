@@ -35,6 +35,7 @@ function InitList(KFSXLinkedReplicationInfo lri) {
     SetIndex(0);
 
     statValue.Length= itemCount;
+    statDescriptions.Length= itemCount;
     for(i= 0; i < itemCount; i++) {
         statDescriptions[i].description= lri.keys[i];
         statValue[i]= lri.stats[i];
