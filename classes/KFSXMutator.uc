@@ -22,7 +22,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
         PlayerReplicationInfo(Other).Owner != none) {
         
         pri= PlayerReplicationInfo(Other);
-        lri= pri.spawn(class'KFSXLinkedPRI', pri.Owner);
+        lri= pri.spawn(class'WeaponLRI', pri.Owner);
         lri.NextReplicationInfo= pri.CustomReplicationInfo;
         pri.CustomReplicationInfo= lri;
         return true;

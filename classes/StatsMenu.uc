@@ -24,9 +24,9 @@ defaultproperties {
     c_Main=GUITabControl'StatsMenu.StatsMenuTC'
 
     WinHeight=0.8125
-    Panels(0)=(ClassName="KFStatsX.PlayerStatsPanel",Caption="Player",Hint="Player related stats")
-    Panels(1)=(ClassName="KFStatsX.PlayerStatsPanel",Caption="Weapon",Hint="Stats about weapon usage")
-    Panels(2)=(ClassName="KFStatsX.PlayerStatsPanel",Caption="Kills",Hint="Breakdown of the kill count")
+    Panels(0)=(ClassName="KFStatsX.WeaponStatsPanel",Caption="Player",Hint="Player related stats")
+    Panels(1)=(ClassName="KFStatsX.WeaponStatsPanel",Caption="Weapon",Hint="Stats about weapon usage")
+    Panels(2)=(ClassName="KFStatsX.WeaponStatsPanel",Caption="Kills",Hint="Breakdown of the kill count")
     Panels(3)=(ClassName="KFStatsX.PanelSettings",Caption="Settings",Hint="Adjust settings for the stat panels")
     WindowName="Game Statistics"
 }

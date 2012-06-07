@@ -1,4 +1,4 @@
-class KFSXLinkedPRI extends LinkedReplicationInfo;
+class KFSXLinkedReplicationInfo extends LinkedReplicationInfo;
 
 struct StatIndex {
     var string key;

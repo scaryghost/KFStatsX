@@ -1,0 +1,1 @@
+class WeaponLRI extends KFSXLinkedReplicationInfo;

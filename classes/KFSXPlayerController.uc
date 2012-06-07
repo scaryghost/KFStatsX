@@ -1,10 +1,10 @@
 class KFSXPlayerController extends KFPlayerController;
 
-var KFSXLinkedPRI kfsxPRI;
+var KFSXLinkedReplicationInfo weaponLRI;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority) 
-        kfsxPRI;
+        weaponLRI;
 }
 
 simulated event PostBeginPlay() {
@@ -13,8 +13,8 @@ simulated event PostBeginPlay() {
     super.PostBeginPlay();
     if (Role == ROLE_Authority) {
         for(lri= PlayerReplicationInfo.CustomReplicationInfo; lri != none; lri= lri.NextReplicationInfo) {
-            if (KFSXLinkedPRI(lri) != none) {
-                kfsxPRI= KFSXLinkedPRI(lri);
+            if (WeaponLRI(lri) != none) {
+                weaponLRI= WeaponLRI(lri);
                 break;
             }
         }

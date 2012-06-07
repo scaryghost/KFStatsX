@@ -23,6 +23,6 @@ function DeactivateSpawnProtection() {
             itemName$= " Alt";
         }
 
-        KFSXPlayerController(Controller).kfsxPRI.accum(itemName, load);
+        KFSXPlayerController(Controller).weaponLRI.accum(itemName, load);
     }
 }

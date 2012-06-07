@@ -10,5 +10,5 @@ function DoFireEffect() {
     } else {
         fuelAmount= 10;
     }
-    KFSXPlayerController(Instigator.Controller).kfsxPRI.accum(Weapon.ItemName, fuelAmount);
+    KFSXPlayerController(Instigator.Controller).weaponLRI.accum(Weapon.ItemName, fuelAmount);
 }
