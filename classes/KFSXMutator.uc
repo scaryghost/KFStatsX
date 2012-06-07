@@ -29,6 +29,8 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
     } else if (Frag(Other) != none) {
         Frag(Other).FireModeClass[0]= class'FragFire_KFSX';
         return true;
+    } else if (Huskgun(Other) != none) {
+        Huskgun(Other).FireModeClass[0]= class'HuskGunFire_KFSX';
     }
 
     return super.CheckReplacement(Other, bSuperRelevant);
