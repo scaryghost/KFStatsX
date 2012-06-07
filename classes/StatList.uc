@@ -28,16 +28,16 @@ function bool PreDraw(Canvas Canvas) {
     return false;
 }
 
-function InitList(array<float> stats[50], array<DescripInfo> descriptions) {
+function InitList(KFSXLinkedReplicationInfo lri) {
     local int i;
     // Update the ItemCount and select the first item
-    itemCount= descriptions.Length;
+    itemCount= lri.maxStatIndex;
     SetIndex(0);
 
     statValue.Length= itemCount;
     for(i= 0; i < itemCount; i++) {
-        statDescriptions[i]= descriptions[i];
-        statValue[i]= stats[i];
+        statDescriptions[i]= lri.keys[i];
+        statValue[i]= lri.stats[i];
     }
 
     if ( bNotify ) {

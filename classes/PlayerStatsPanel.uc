@@ -1,6 +1,6 @@
 class PlayerStatsPanel extends StatsPanelBase;
 
-function fillDescription() {
+function ShowPanel(bool bShow) {
     ownerLRI= KFSXPlayerController(PlayerOwner()).playerLRI;
-    super.fillDescription();
+    super.ShowPanel(bShow);
 }

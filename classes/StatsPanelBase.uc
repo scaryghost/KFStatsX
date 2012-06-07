@@ -4,28 +4,13 @@ class StatsPanelBase extends MidGamePanel
 
 var automated GUISectionBackground i_BGStats;
 var automated StatListBox lb_StatSelect;
-var array<StatList.DescripInfo> descriptions;
 var KFSXLinkedReplicationInfo ownerLRI;
-
-function fillDescription() {
-    local int i;
-
-    descriptions.Length= ownerLRI.maxStatIndex;
-
-    for(i= 0; i < ownerLRI.maxStatIndex; i++) {
-        descriptions[i].description=ownerLRI.keys[i];
-    }
-}
-
 
 function ShowPanel(bool bShow) {
     super.ShowPanel(bShow);
 
-    if ( bShow ) {
-        if (ownerLRI == none || descriptions.Length != ownerLRI.maxStatIndex) {
-            fillDescription();
-        }
-        lb_StatSelect.statListObj.InitList(ownerLRI.stats,descriptions);
+    if (bShow && ownerLRI != none) {
+        lb_StatSelect.statListObj.InitList(ownerLRI);
     }
 }
 

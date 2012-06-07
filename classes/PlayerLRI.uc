@@ -4,4 +4,23 @@
  */
 class PlayerLRI extends KFSXLinkedReplicationInfo;
 
-const STAT_CASH= "Cash Spent";
+enum StatKeys {
+    Time_Alive, Cash_Spent, Welding, 
+    Received_Heal, Healed_Self, Healed_Teammates,
+    Damage_Taken, Armor_Lost, Backstabs, 
+    Decapitations, Shot_By_Husk, Husks_Stunned, 
+    Scrakes_Raged, Scrakes_Stunned, Fleshpounds_Raged
+};
+
+event PostBeginPlay() {
+    local int i;
+
+    for(i= 0; i < StatKeys.EnumCount; i++)
+        put(getKey(i), 0);
+
+    super.PostBeginPlay();
+}
+
+function string getKey(int index) {
+    return Repl(string(GetEnum(enum'StatKeys', index)), "_", " ");
+}

@@ -1,6 +1,6 @@
 class WeaponStatsPanel extends StatsPanelBase;
 
-function fillDescription() {
+function ShowPanel(bool bShow) {
     ownerLRI= KFSXPlayerController(PlayerOwner()).weaponLRI;
-    super.fillDescription();
+    super.ShowPanel(bShow);
 }
