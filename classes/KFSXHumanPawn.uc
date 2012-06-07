@@ -1,3 +1,9 @@
+/**
+ * Custom pawn class used by the KFStatsX mutator.  
+ * Injects stat tracking code above the KFHumanPawn class 
+ * to log events such as money spent, damage taken, etc...
+ * @author etsai (Scary Ghost)
+ */
 class KFSXHumanPawn extends KFHumanPawn;
 
 function DeactivateSpawnProtection() {
@@ -25,4 +31,31 @@ function DeactivateSpawnProtection() {
 
         KFSXPlayerController(Controller).weaponLRI.accum(itemName, load);
     }
+}
+
+function ServerBuyWeapon( Class<Weapon> WClass ) {
+    local int oldScore;
+
+    oldScore= PlayerReplicationInfo.Score;
+    super.ServerBuyWeapon(WClass);
+    KFSXPlayerController(Controller).playerLRI.accum(KFSXPlayerController(Controller).playerLRI.STAT_CASH, 
+            oldScore - PlayerReplicationInfo.Score);
+}
+
+function ServerBuyAmmo( Class<Ammunition> AClass, bool bOnlyClip ) {
+    local int oldScore;
+
+    oldScore= PlayerReplicationInfo.Score;
+    super.ServerBuyAmmo(AClass, bOnlyClip);
+    KFSXPlayerController(Controller).playerLRI.accum(KFSXPlayerController(Controller).playerLRI.STAT_CASH, 
+            oldScore - PlayerReplicationInfo.Score);
+}
+
+function ServerBuyKevlar() {
+    local int oldScore;
+
+    oldScore= PlayerReplicationInfo.Score;
+    super.ServerBuyKevlar();
+    KFSXPlayerController(Controller).playerLRI.accum(KFSXPlayerController(Controller).playerLRI.STAT_CASH, 
+        oldScore - PlayerReplicationInfo.Score);
 }

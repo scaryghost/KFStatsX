@@ -1,10 +1,15 @@
+/**
+ * Custom controller used by the KFStatsX mutator
+ * @author etsai (Scary Ghost)
+ */
 class KFSXPlayerController extends KFPlayerController;
 
-var KFSXLinkedReplicationInfo weaponLRI;
+var WeaponLRI weaponLRI;
+var PlayerLRI playerLRI;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority) 
-        weaponLRI;
+        weaponLRI, playerLRI;
 }
 
 simulated event PostBeginPlay() {
@@ -15,7 +20,8 @@ simulated event PostBeginPlay() {
         for(lri= PlayerReplicationInfo.CustomReplicationInfo; lri != none; lri= lri.NextReplicationInfo) {
             if (WeaponLRI(lri) != none) {
                 weaponLRI= WeaponLRI(lri);
-                break;
+            } else if (PlayerLRI(lri) != none) {
+                playerLRI= PlayerLRI(lri);
             }
         }
     }

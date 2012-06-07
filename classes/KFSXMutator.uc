@@ -1,7 +1,15 @@
+/**
+ * Mutator to load in the KFStatsX modifications
+ * @author etsai (Scary Ghost)
+ */
 class KFSXMutator extends Mutator;
 
+/** Reference to the KFGameType object */
 var KFGameType gametype;
+/** Player controller class to use for KFStatsX */
 var class<PlayerController> kfsxPC;
+/** Linked replication info classes to attach to PRI */
+var array<class<LinkedReplicationInfo> > lriList;
 
 function PostBeginPlay() {
     gameType= KFGameType(Level.Game);
@@ -15,6 +23,7 @@ function PostBeginPlay() {
 }
 
 function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
+    local int i;
     local PlayerReplicationInfo pri;
     local LinkedReplicationInfo lri;
 
@@ -22,9 +31,11 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
         PlayerReplicationInfo(Other).Owner != none) {
         
         pri= PlayerReplicationInfo(Other);
-        lri= pri.spawn(class'WeaponLRI', pri.Owner);
-        lri.NextReplicationInfo= pri.CustomReplicationInfo;
-        pri.CustomReplicationInfo= lri;
+        for(i= 0; i < lriList.Length; i++) {
+            lri= pri.spawn(lriList[i], pri.Owner);
+            lri.NextReplicationInfo= pri.CustomReplicationInfo;
+            pri.CustomReplicationInfo= lri;
+        }
         return true;
     } else if (Frag(Other) != none) {
         Frag(Other).FireModeClass[0]= class'FragFire_KFSX';
@@ -46,4 +57,6 @@ defaultproperties {
     bAlwaysRelevant=true
     
     kfsxPC= class'KFSXPlayerController'
+    lriList(0)= class'WeaponLRI'
+    lriList(1)= class'PlayerLRI'
 }
