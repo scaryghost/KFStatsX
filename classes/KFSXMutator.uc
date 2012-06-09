@@ -17,6 +17,8 @@ var array<Auxiliary.ReplacementPair> monsterReplacement;
 var string endGameBossClass, fallbackMonsterClass;
 /** Reference to the auxiliary class */
 var class<Auxiliary> auxiliaryRef;
+/** Reference to the game rules used by KFStatsX */
+var class<GameRules> kfStatsXRules;
 
 function PostBeginPlay() {
     gameType= KFGameType(Level.Game);
@@ -24,7 +26,8 @@ function PostBeginPlay() {
         Destroy();
         return;
     }
-
+    
+    Spawn(kfStatsXRules);
     gameType.PlayerControllerClass= kfsxPC;
     gameType.PlayerControllerClassName= string(kfsxPC);
 
@@ -81,10 +84,11 @@ defaultproperties {
     RemoteRole=ROLE_SimulatedProxy
     bAlwaysRelevant=true
 
-    auxiliaryRef= class'Auxiliary';
+    auxiliaryRef= class'Auxiliary'
+    kfStatsXRules= class'KFSXGameRules'
 
-    endGameBossClass= "KFStatsX.ZombieBoss"
-    fallbackMonsterClass= "KFStatsX.ZombieStalker"
+    endGameBossClass= "KFStatsX.ZombieBoss_KFSX"
+    fallbackMonsterClass= "KFStatsX.ZombieStalker_KFSX"
     monsterReplacement(0)=(oldClass=class'KFChar.ZombieBloat',newClass=class'KFStatsX.ZombieBloat_KFSX')
     monsterReplacement(1)=(oldClass=class'KFChar.ZombieClot',newClass=class'KFStatsX.ZombieClot_KFSX')
     monsterReplacement(2)=(oldClass=class'KFChar.ZombieCrawler',newClass=class'KFStatsX.ZombieCrawler_KFSX')
@@ -98,4 +102,5 @@ defaultproperties {
     kfsxPC= class'KFSXPlayerController'
     lriList(0)= class'WeaponLRI'
     lriList(1)= class'PlayerLRI'
+    lriList(2)= class'KillsLRI'
 }
