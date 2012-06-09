@@ -10,7 +10,7 @@ var KillsLRI killsLRI;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority) 
-        weaponLRI, playerLRI;
+        weaponLRI, playerLRI, killsLRI;
 }
 
 simulated event PostBeginPlay() {
