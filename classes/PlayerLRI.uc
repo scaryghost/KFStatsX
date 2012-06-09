@@ -15,10 +15,11 @@ enum StatKeys {
 event PostBeginPlay() {
     local int i;
 
-    for(i= 0; i < StatKeys.EnumCount; i++)
-        put(getKey(i), 0);
-
     super.PostBeginPlay();
+
+    for(i= 0; i < StatKeys.EnumCount; i++)
+        stats.put(getKey(i), 0);
+
 }
 
 function string getKey(int index) {

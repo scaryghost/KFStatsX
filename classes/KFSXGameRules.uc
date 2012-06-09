@@ -43,6 +43,6 @@ function ScoreKill(Controller Killer, Controller Killed) {
             killedName= "Teammate";
         }
         if (killedName != "")
-            KFSXPlayerController(Killer).killsLRI.accum(killedName, 1);
+            KFSXPlayerController(Killer).killsLRI.stats.accum(killedName, 1);
     }
 }

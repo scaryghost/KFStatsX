@@ -72,7 +72,7 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius,
 //KFStatsX - 1
                 if (humanVictim != none) {
                     playerLRI= KFSXPlayerController(humanVictim.Controller).playerLRI;
-                    playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Shot_By_Husk), 1);
+                    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Shot_By_Husk), 1);
                 }
 //KFStatsX - 1 End
 

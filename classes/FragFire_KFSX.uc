@@ -12,7 +12,7 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir) {
     else {
         g= class'Nade';
     }
-    KFSXPlayerController(Instigator.Controller).weaponLRI.accum(GetItemName(string(g)), 1);
+    KFSXPlayerController(Instigator.Controller).weaponLRI.stats.accum(GetItemName(string(g)), 1);
 
     return super.SpawnProjectile(Start,Dir);
 }

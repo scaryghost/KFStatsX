@@ -31,14 +31,14 @@ function bool PreDraw(Canvas Canvas) {
 function InitList(KFSXLinkedReplicationInfo lri) {
     local int i;
     // Update the ItemCount and select the first item
-    itemCount= lri.maxStatIndex;
+    itemCount= lri.stats.maxStatIndex;
     SetIndex(0);
 
     statValue.Length= itemCount;
     statDescriptions.Length= itemCount;
     for(i= 0; i < itemCount; i++) {
-        statDescriptions[i].description= lri.keys[i];
-        statValue[i]= lri.stats[i];
+        statDescriptions[i].description= lri.stats.keys[i];
+        statValue[i]= lri.stats.values[i];
     }
 
     if ( bNotify ) {

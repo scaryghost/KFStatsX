@@ -18,7 +18,7 @@ function Timer() {
         playerLRI= KFSXPlayerController(Controller).playerLRI;
     }
     timeDiff= Level.GRI.ElapsedTime - prevTime;
-    playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Time_Alive), timeDiff);
+    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Time_Alive), timeDiff);
     prevTime= Level.GRI.ElapsedTime;
 }
 
@@ -38,7 +38,7 @@ function DeactivateSpawnProtection() {
                 itemName= playerLRI.getKey(playerLRI.StatKeys.Healed_Self);
             else
                 itemName= playerLRI.getKey(playerLRI.StatKeys.Healed_Teammates);
-            playerLRI.accum(itemName,1);
+            playerLRI.stats.accum(itemName,1);
             return;
         }
 
@@ -53,7 +53,7 @@ function DeactivateSpawnProtection() {
             itemName$= " Alt";
         }
 
-        KFSXPlayerController(Controller).weaponLRI.accum(itemName, load);
+        KFSXPlayerController(Controller).weaponLRI.stats.accum(itemName, load);
     }
 }
 
@@ -69,9 +69,9 @@ simulated function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation
 
     Super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType);
    
-    playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Damage_Taken), 
+    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Damage_Taken), 
             oldHealth - fmax(Health,0.0));
-    playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Armor_Lost), 
+    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Armor_Lost), 
             oldShield - fmax(ShieldStrength,0.0));
     prevHealth= 0;
     prevShield= 0;
@@ -95,16 +95,16 @@ function TakeBileDamage() {
     healthtoGive-=5;
 
     if(playerLRI != none) {
-        playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Damage_Taken), 
+        playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Damage_Taken), 
                 oldHealth - fmax(Health,0.0));
-        playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Armor_Lost), 
+        playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Armor_Lost), 
                 oldShield - fmax(ShieldStrength,0.0));
     }
 }
 
 function Died(Controller Killer, class<DamageType> damageType, vector HitLocation) {
-    playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Damage_Taken), prevHealth);
-    playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Armor_Lost), prevShield);
+    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Damage_Taken), prevHealth);
+    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Armor_Lost), prevShield);
 /*
         pri.addToHiddenStat(pri.HiddenStat.DEATHS, 1);
 
@@ -123,7 +123,7 @@ function ServerBuyWeapon( Class<Weapon> WClass ) {
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyWeapon(WClass);
-    playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Cash_Spent), 
+    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Cash_Spent), 
             oldScore - PlayerReplicationInfo.Score);
 }
 
@@ -132,7 +132,7 @@ function ServerBuyAmmo( Class<Ammunition> AClass, bool bOnlyClip ) {
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyAmmo(AClass, bOnlyClip);
-    playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Cash_Spent), 
+    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Cash_Spent), 
             oldScore - PlayerReplicationInfo.Score);
 }
 
@@ -141,7 +141,7 @@ function ServerBuyKevlar() {
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyKevlar();
-    playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Cash_Spent), 
+    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Cash_Spent), 
             oldScore - PlayerReplicationInfo.Score);
 }
 
@@ -150,7 +150,7 @@ function bool GiveHealth(int HealAmount, int HealMax) {
 
     result= super.GiveHealth(HealAmount, HealMax);
     if (result) {
-        playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Received_Heal), 1);
+        playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Received_Heal), 1);
     }
     return result;
 }

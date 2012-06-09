@@ -12,7 +12,7 @@ simulated Function timer() {
     }
     super.timer();
     if (targetDoor != none && playerLRI != none) {
-        playerLRI.accum(playerLRI.getKey(playerLRI.StatKeys.Welding), 
+        playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Welding), 
                 targetDoor.MyTrigger.WeldStrength - oldWeldStrength);
     }
 }

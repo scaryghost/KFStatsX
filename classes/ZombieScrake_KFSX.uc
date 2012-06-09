@@ -14,7 +14,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         instigatorLRI= KFSXPlayerController(InstigatedBy.Controller).playerLRI;
     }
     if (instigatorLRI != none && tempHealth == 0 && bBackstabbed) {
-        instigatorLRI.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Backstabs), 1);
+        instigatorLRI.stats.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Backstabs), 1);
     }
 
     super.TakeDamage(Damage, InstigatedBy, Hitlocation, Momentum, damageType, HitIndex);
@@ -26,10 +26,10 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
     }
     if (instigatorLRI != none) {
         if (!decapCounted && bDecapitated) {
-            instigatorLRI.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Decapitations), 1);
+            instigatorLRI.stats.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Decapitations), 1);
             decapCounted= true;
         }
-        instigatorLRI.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Damage_Dealt), diffHealth);
+        instigatorLRI.stats.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Damage_Dealt), diffHealth);
     }
 }
 
@@ -43,7 +43,7 @@ state RunningState {
     function BeginState() {
         super.BeginState();
         if (!rageCounted) {
-            instigatorLRI.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Scrakes_Raged), 1);
+            instigatorLRI.stats.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Scrakes_Raged), 1);
             rageCounted= true;
         }
     }
@@ -52,7 +52,7 @@ state RunningState {
 function bool FlipOver() {
     if (super.FlipOver()) {
         if (Health > 0 && instigatorLRI != none) {
-            instigatorLRI.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Scrakes_Stunned), 1);
+            instigatorLRI.stats.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Scrakes_Stunned), 1);
         }
         return true;
     }
