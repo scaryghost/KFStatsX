@@ -1,48 +1,59 @@
+/**
+ * Custom kill and death rules for KFStatsX
+ * @author etsai (Scary Ghost)
+ */
 class KFSXGameRules extends GameRules
     dependson(KillsLRI);
+
+/** Record of deaths from all players */
+var SortedMap deaths;
+/** Key for environment death (fall or world fire) */
+var String envDeathKey;
+/** Key for self inflicted death */
+var String selfDeathKey;
+/** Key for teammate death */
+var String teammateDeathKey;
 
 function PostBeginPlay() {
     NextGameRules = Level.Game.GameRulesModifiers;
     Level.Game.GameRulesModifiers = Self;
+    deaths= Spawn(class'SortedMap');
 }
 
-/*
-function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> damageType, vector HitLocation) {
-    local GSTGameReplicationInfo.DeathStat deathIndex;
 
-    PlayerController(Killer).ClientMessage(damageType);
+function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> damageType, vector HitLocation) {
     if (!super.PreventDeath(Killed, Killer, damageType, HitLocation)) {
         if(damageType == class'Engine.Fell' || damageType == class'Gameplay.Burned') {
-            deathIndex= ENV_DEATH;
-            GSTGameReplicationInfo(Level.Game.GameReplicationInfo).deathStats[deathIndex]+= 1;
+            deaths.accum(envDeathKey,1);
         }
         return false;
     }
     return true;
 }
-*/
+
 
 function ScoreKill(Controller Killer, Controller Killed) {
     local string killedName;
 
     Super.ScoreKill(Killer,Killed);
     if (KFMonsterController(Killer) != none && PlayerController(Killed) != none) {
-/*
-        index= class'GSTAuxiliary'.static.binarySearch(GetItemName(string(Killer.pawn)), zedNames);
-        if (index > -1) GSTGameReplicationInfo(Level.Game.GameReplicationInfo).deathStats[index]+= 1;
-*/
+        deaths.accum(Killer.Pawn.MenuName,1 );
     } else if (PlayerController(Killer) != none) {
         if (Killed.PlayerReplicationInfo == none || 
             Killer.PlayerReplicationInfo.Team != Killed.PlayerReplicationInfo.Team) {
             killedName= Killed.Pawn.MenuName;
         } else if (Killer == Killed) {
-//            GSTGameReplicationInfo(Level.Game.GameReplicationInfo).deathStats[index]+= 1;
-            killedName= "Self";
+            deaths.accum(selfDeathKey, 1);
         } else if (Killer.PlayerReplicationInfo.Team == Killed.PlayerReplicationInfo.Team) { 
-//            GSTGameReplicationInfo(Level.Game.GameReplicationInfo).deathStats[index]+= 1;
-            killedName= "Teammate";
+            deaths.accum(teammateDeathKey, 1);
         }
         if (killedName != "")
             KFSXPlayerController(Killer).killsLRI.stats.accum(killedName, 1);
     }
+}
+
+defaultproperties {
+    envDeathKey= "Environment"
+    selfDeathKey= "Self"
+    teammateDeathKey= "Teammate"
 }
