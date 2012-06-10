@@ -24,13 +24,13 @@ var string playerProtocolVersion;
 
 
 function PostBeginPlay() {
-//    udpPort= bindPort(class'KFSXMutator'.default.serverPort+1, true);
-//    if (udpPort > 0) Resolve(class'KFSXMutator'.default.serverAddress);
+    udpPort= bindPort(class'KFSXMutator'.default.serverPort+1, true);
+    if (udpPort > 0) Resolve(class'KFSXMutator'.default.serverAddress);
 }
 
 event Resolved(IpAddr addr) {
     serverAddr= addr;
-//    serverAddr.port= class'KFSXMutator'.default.serverPort;
+    serverAddr.port= class'KFSXMutator'.default.serverPort;
 }
 
 function MatchStarting() {
@@ -47,7 +47,7 @@ function broadcastMatchResults() {
     matchPacket$= KFGameReplicationInfo(Level.GRI).EndGameType $ separator;
     matchPacket$= KFGameType(Level.Game).WaveNum+1 $ separator;
     //Add death stats here
-//    SendText(serverAddr, "kfstatsx-pwd" $ separator $ class'KFSXMutator'.default.serverPwd);
+    SendText(serverAddr, "kfstatsx-pwd" $ separator $ class'KFSXMutator'.default.serverPwd);
     SendText(serverAddr, matchPacket);
 }    
 
@@ -80,7 +80,7 @@ function broadcastPlayerStats(KFSXPlayerController pc) {
 //    statMsgs[statMsgs.Length]= "seq:3" $ separator $ "hidden" $ separator $ getStatValues(pc.hiddenLRI.stats);
     statMsgs[statMsgs.Length]= "seq:4" $ separator $ "match" $ separator $ matchData $ KFGameReplicationInfo(Level.GRI).EndGameType 
         $ separator $ KFGameType(Level.Game).WaveNum+1 $ separator $ "_close";
-//    SendText(serverAddr, "kfstatsx-pwd" $ separator $ class'KFSXMutator'.default.serverPwd);
+    SendText(serverAddr, "kfstatsx-pwd" $ separator $ class'KFSXMutator'.default.serverPwd);
     for(index= 0; index < statMsgs.Length; index++) {
         SendText(serverAddr, baseMsg $ statMsgs[index]);
     }

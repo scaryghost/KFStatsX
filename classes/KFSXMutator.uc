@@ -3,7 +3,19 @@
  * @author etsai (Scary Ghost)
  */
 class KFSXMutator extends Mutator
+    config(KFStatsX)
     dependson(Auxiliary);
+
+/** True if the player and match stats should be saved remotely */
+var() config bool broadcastStats;
+/** Port of the remote server */
+var() config int serverPort;
+/** Remote server address */
+var() config string serverAddress;
+/** Remote server password */
+var() config string serverPwd;
+/** Steam id of the local host */
+var() config string localHostSteamId;
 
 /** Reference to the KFGameType object */
 var KFGameType gametype;
@@ -73,6 +85,32 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
     }
 
     return super.CheckReplacement(Other, bSuperRelevant);
+}
+
+static function FillPlayInfo(PlayInfo PlayInfo) {
+    Super.FillPlayInfo(PlayInfo);
+    PlayInfo.AddSetting("GameStatsTab", "broadcastStats", "Accumulate Statistics", 0, 0, "Check");
+    PlayInfo.AddSetting("GameStatsTab", "localHostSteamId", "Local Host Steam ID", 0, 0, "Text", "128");
+    PlayInfo.AddSetting("GameStatsTab", "serverAddress", "Remote Server Address", 0, 0, "Text", "128");
+    PlayInfo.AddSetting("GameStatsTab", "serverPort", "Remote Server Port", 0, 0, "Text");
+    PlayInfo.AddSetting("GameStatsTab", "serverPwd", "Remote Server Password", 0, 0, "Text", "128");
+}
+
+static event string GetDescriptionText(string property) {
+    switch(property) {
+        case "broadcastStats":
+            return "Check if the mutator should save the stats to a remote server";
+        case "localHostSteamId":
+            return "16 digit steam id of the game's local host.  Used for solo or listen server games by the host.";
+        case "serverAddress":
+            return "Address of tracking server";
+        case "serverPort":
+            return "Port number of tracking server";
+        case "serverPwd":
+            return "Password of tracking server";
+        default:
+            return Super.GetDescriptionText(property);
+    }
 }
 
 defaultproperties {
