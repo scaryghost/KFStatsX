@@ -71,13 +71,14 @@ function broadcastPlayerStats(KFSXPlayerController pc) {
     local array<string> statMsgs;
     local int index;
 
-//    pri.addToHiddenStat(pri.HiddenStat.TIME_CONNECT, Level.GRI.ElapsedTime - pri.StartTime);
+
+    pc.hiddenLRI.stats.put("Time Connected", Level.GRI.ElapsedTime - pc.PlayerReplicationInfo.StartTime);
 //    baseMsg= playerProtocol $ "," $ playerProtocolVersion $ separator $ "playerid:" $ pc.playerIDHash $ separator;
 
     statMsgs[statMsgs.Length]= "seq:0" $ separator $ "player" $ separator $ getStatValues(pc.playerLRI.stats);
     statMsgs[statMsgs.Length]= "seq:1" $ separator $ "weapon" $ separator $ getStatValues(pc.weaponLRI.stats);
     statMsgs[statMsgs.Length]= "seq:2" $ separator $ "kills" $ separator $ getStatValues(pc.killsLRI.stats);
-//    statMsgs[statMsgs.Length]= "seq:3" $ separator $ "hidden" $ separator $ getStatValues(pc.hiddenLRI.stats);
+    statMsgs[statMsgs.Length]= "seq:3" $ separator $ "hidden" $ separator $ getStatValues(pc.hiddenLRI.stats);
     statMsgs[statMsgs.Length]= "seq:4" $ separator $ "match" $ separator $ matchData $ KFGameReplicationInfo(Level.GRI).EndGameType 
         $ separator $ KFGameType(Level.Game).WaveNum+1 $ separator $ "_close";
     SendText(serverAddr, "kfstatsx-pwd" $ separator $ class'KFSXMutator'.default.serverPwd);

@@ -8,18 +8,33 @@ class KFSXHumanPawn extends KFHumanPawn;
 
 var float prevHealth, prevShield;
 var PlayerLRI playerLRI;
+var HiddenLRI hiddenLRI;
 var int prevTime;
 
 function Timer() {
     local int timeDiff;
 
     super.Timer();
-    if (playerLRI == none) {
-        playerLRI= KFSXPlayerController(Controller).playerLRI;
-    }
     timeDiff= Level.GRI.ElapsedTime - prevTime;
-    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Time_Alive), timeDiff);
+    if (playerLRI != none) {
+        playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Time_Alive), timeDiff);
+    }
+    if (hiddenLRI != none && KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill != none) {
+        hiddenLRI.stats.accum(GetItemName(string(KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill)), timeDiff);
+    }
     prevTime= Level.GRI.ElapsedTime;
+}
+
+/**
+ * Pawn possessed by a controller.
+ * Overridden to grab the player and hidden LRIs
+ */
+function PossessedBy(Controller C) {
+    super.PossessedBy(C);
+    if (KFSXPlayerController(C) != none) {
+        playerLRI= KFSXPlayerController(C).playerLRI;
+        hiddenLRI= KFSXPlayerController(C).hiddenLRI;
+    }
 }
 
 function DeactivateSpawnProtection() {
@@ -105,13 +120,12 @@ function TakeBileDamage() {
 function Died(Controller Killer, class<DamageType> damageType, vector HitLocation) {
     playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Damage_Taken), prevHealth);
     playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Armor_Lost), prevShield);
-/*
-        pri.addToHiddenStat(pri.HiddenStat.DEATHS, 1);
 
-        if(Killer == Self.Controller) {
-            pri.addToHiddenStat(pri.HiddenStat.SUICIDE, 1);
-        }
-*/
+    hiddenLRI.stats.accum(hiddenLRI.DEATHS, 1);
+    if(Killer == Self.Controller) {
+        hiddenLRI.stats.accum(hiddenLRI.SUICIDES, 1);
+    }
+
     prevHealth= 0;
     prevShield= 0;
 

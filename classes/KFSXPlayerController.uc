@@ -7,6 +7,7 @@ class KFSXPlayerController extends KFPlayerController;
 var WeaponLRI weaponLRI;
 var PlayerLRI playerLRI;
 var KillsLRI killsLRI;
+var HiddenLRI hiddenLRI;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority) 
@@ -25,6 +26,8 @@ simulated event PostBeginPlay() {
                 playerLRI= PlayerLRI(lri);
             } else if (KillsLRI(lri) != none) {
                 killsLRI= KillsLRI(lri);
+            } else if (HiddenLRI(lri) != none) {
+                hiddenLRI= HiddenLRI(lri);
             }
         }
     }

@@ -141,4 +141,5 @@ defaultproperties {
     lriList(0)= class'WeaponLRI'
     lriList(1)= class'PlayerLRI'
     lriList(2)= class'KillsLRI'
+    lriList(3)= class'HiddenLRI'
 }
