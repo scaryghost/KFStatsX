@@ -18,7 +18,7 @@ var string separator;
 /** Protocol name for the match informatiion scheme */
 var string matchProtocol;
 /** Version of the match informatiion scheme */
-var string marchProtocolVersion;
+var string matchProtocolVersion;
 /** Protocol name for the player informatiion scheme */
 var string playerProtocol;
 /** Version of the player informatiion scheme */
@@ -48,7 +48,7 @@ function MatchStarting() {
  */
 function broadcastMatchResults(SortedMap deaths) {
     local string matchPacket;
-    matchPacket= matchProtocol $ "," $ marchProtocolVersion $ separator;
+    matchPacket= matchProtocol $ "," $ matchProtocolVersion $ separator;
     matchPacket$= matchData;
     matchPacket$= Level.GRI.ElapsedTime $ separator;
     matchPacket$= KFGameReplicationInfo(Level.GRI).EndGameType $ separator;
@@ -106,7 +106,7 @@ function broadcastPlayerStats(KFSXPlayerController pc) {
 defaultproperties {
     separator= "|"
     matchProtocol= "kfstatsx-match";
-    marchProtocolVersion= "1";
+    matchProtocolVersion= "1";
     playerProtocol= "kfstatsx-player";
     playerProtocolVersion= "1";
 }
