@@ -99,7 +99,7 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
                 PipeBombProjectile(Victims) != none && PipeBombProjectile(Victims).bDisintegrated ||
                 M79GrenadeProjectile(Victims) != none && M79GrenadeProjectile(Victims).bDisintegrated) {
                 playerLRI= KFSXPlayerController(Projectile(Victims).Instigator.Controller).playerLRI;
-                playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Explosives_Disintigrated), 1);
+                playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Explosives_Disintegrated), 1);
             }
 //KFStats - 2 End
             if (Instigator != None && Vehicle(Victims) != None && Vehicle(Victims).Health > 0)
