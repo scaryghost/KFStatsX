@@ -30,7 +30,7 @@ var string endGameBossClass, fallbackMonsterClass;
 /** Reference to the auxiliary class */
 var class<Auxiliary> auxiliaryRef;
 /** Reference to the game rules used by KFStatsX */
-var class<GameRules> kfStatsXRules;
+var class<KFSXGameRules> kfStatsXRules;
 
 /** Remote server link class */
 var class<RemoteServerLink> serverLinkClass;
@@ -38,13 +38,15 @@ var class<RemoteServerLink> serverLinkClass;
 var transient RemoteServerLink serverLink;
 
 function PostBeginPlay() {
+    local KFSXGameRules gameRules;
+
     gameType= KFGameType(Level.Game);
     if (gameType == none) {
         Destroy();
         return;
     }
     
-    Spawn(kfStatsXRules);
+    gameRules= Spawn(kfStatsXRules);
     gameType.PlayerControllerClass= kfsxPC;
     gameType.PlayerControllerClassName= string(kfsxPC);
 
@@ -64,6 +66,7 @@ function PostBeginPlay() {
 
     if (broadcastStats) {
         serverLink= spawn(serverLinkClass);
+        serverLink.deaths= gameRules.deaths;
         SetTimer(1,true);
     }
 

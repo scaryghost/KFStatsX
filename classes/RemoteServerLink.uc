@@ -9,8 +9,10 @@ class RemoteServerLink extends UDPLink;
 var int udpPort;
 /** Address of the remote tracking server */
 var IpAddr serverAddr;
+
 /** Stores map name, difficulty, and length */
 var string matchData;
+
 /** Character to separate packet information */
 var string separator;
 /** Protocol name for the match informatiion scheme */
@@ -22,6 +24,8 @@ var string playerProtocol;
 /** Version of the player informatiion scheme */
 var string playerProtocolVersion;
 
+/** Reference to the deaths object in KFSXGameRules */
+var SortedMap deaths;
 
 function PostBeginPlay() {
     udpPort= bindPort(class'KFSXMutator'.default.serverPort+1, true);
@@ -33,12 +37,18 @@ event Resolved(IpAddr addr) {
     serverAddr.port= class'KFSXMutator'.default.serverPort;
 }
 
+/**
+ * Initialize matchData with map name, difficulty, and length
+ */
 function MatchStarting() {
     matchData= Left(string(Level), InStr(string(Level), ".")) $ separator;
     matchData$= int(Level.Game.GameDifficulty) $ separator;
     matchData$= KFGameType(Level.Game).KFGameLength $ separator;
 }
 
+/**
+ * Send the match information to the remote server
+ */
 function broadcastMatchResults() {
     local string matchPacket;
     matchPacket= matchProtocol $ "," $ marchProtocolVersion $ separator;
@@ -46,11 +56,15 @@ function broadcastMatchResults() {
     matchPacket$= Level.GRI.ElapsedTime $ separator;
     matchPacket$= KFGameReplicationInfo(Level.GRI).EndGameType $ separator;
     matchPacket$= KFGameType(Level.Game).WaveNum+1 $ separator;
-    //Add death stats here
+    matchPacket$= getStatValues(deaths);
     SendText(serverAddr, "kfstatsx-pwd" $ separator $ class'KFSXMutator'.default.serverPwd);
     SendText(serverAddr, matchPacket);
 }    
 
+/**
+ * Convert the entries in the SortedMap into 
+ * comma separated ${key}=${value} pairs
+ */
 function string getStatValues(SortedMap stats) {
     local string statVals;
     local int i;
@@ -66,6 +80,10 @@ function string getStatValues(SortedMap stats) {
     return statVals;
 }
 
+/**
+ * Broadcast the stats from the custom linked replication info objects
+ * @param   pc  The controller to save
+ */
 function broadcastPlayerStats(KFSXPlayerController pc) {
     local string baseMsg;
     local array<string> statMsgs;
@@ -79,8 +97,9 @@ function broadcastPlayerStats(KFSXPlayerController pc) {
     statMsgs[statMsgs.Length]= "seq:1" $ separator $ "weapon" $ separator $ getStatValues(pc.weaponLRI.stats);
     statMsgs[statMsgs.Length]= "seq:2" $ separator $ "kills" $ separator $ getStatValues(pc.killsLRI.stats);
     statMsgs[statMsgs.Length]= "seq:3" $ separator $ "hidden" $ separator $ getStatValues(pc.hiddenLRI.stats);
-    statMsgs[statMsgs.Length]= "seq:4" $ separator $ "match" $ separator $ matchData $ KFGameReplicationInfo(Level.GRI).EndGameType 
-        $ separator $ KFGameType(Level.Game).WaveNum+1 $ separator $ "_close";
+    statMsgs[statMsgs.Length]= "seq:4" $ separator $ "match" $ separator $ matchData $ 
+        KFGameReplicationInfo(Level.GRI).EndGameType $ separator $ 
+        KFGameType(Level.Game).WaveNum+1 $ separator $ "_close";
     SendText(serverAddr, "kfstatsx-pwd" $ separator $ class'KFSXMutator'.default.serverPwd);
     for(index= 0; index < statMsgs.Length; index++) {
         SendText(serverAddr, baseMsg $ statMsgs[index]);
@@ -93,6 +112,4 @@ defaultproperties {
     marchProtocolVersion= "1";
     playerProtocol= "kfstatsx-player";
     playerProtocolVersion= "1";
-
-
 }
