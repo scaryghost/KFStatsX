@@ -33,22 +33,18 @@ function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> dam
 
 
 function ScoreKill(Controller Killer, Controller Killed) {
-    local string killedName;
-
     Super.ScoreKill(Killer,Killed);
     if (KFMonsterController(Killer) != none && PlayerController(Killed) != none) {
         deaths.accum(Killer.Pawn.MenuName,1 );
     } else if (PlayerController(Killer) != none) {
         if (Killed.PlayerReplicationInfo == none || 
             Killer.PlayerReplicationInfo.Team != Killed.PlayerReplicationInfo.Team) {
-            killedName= Killed.Pawn.MenuName;
+            KFSXPlayerController(Killer).killsLRI.stats.accum(Killed.Pawn.MenuName, 1);
         } else if (Killer == Killed) {
             deaths.accum(selfDeathKey, 1);
         } else if (Killer.PlayerReplicationInfo.Team == Killed.PlayerReplicationInfo.Team) { 
             deaths.accum(teammateDeathKey, 1);
         }
-        if (killedName != "")
-            KFSXPlayerController(Killer).killsLRI.stats.accum(killedName, 1);
     }
 }
 
