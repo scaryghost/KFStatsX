@@ -73,7 +73,7 @@ function broadcastPlayerStats(KFSXPlayerController pc) {
 
 
     pc.hiddenLRI.stats.put("Time Connected", Level.GRI.ElapsedTime - pc.PlayerReplicationInfo.StartTime);
-//    baseMsg= playerProtocol $ "," $ playerProtocolVersion $ separator $ "playerid:" $ pc.playerIDHash $ separator;
+    baseMsg= playerProtocol $ "," $ playerProtocolVersion $ separator $ "playerid:" $ pc.playerIDHash $ separator;
 
     statMsgs[statMsgs.Length]= "seq:0" $ separator $ "player" $ separator $ getStatValues(pc.playerLRI.stats);
     statMsgs[statMsgs.Length]= "seq:1" $ separator $ "weapon" $ separator $ getStatValues(pc.weaponLRI.stats);

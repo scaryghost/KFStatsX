@@ -8,6 +8,7 @@ var WeaponLRI weaponLRI;
 var PlayerLRI playerLRI;
 var KillsLRI killsLRI;
 var HiddenLRI hiddenLRI;
+var String playerIdHash;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority) 
@@ -30,6 +31,15 @@ simulated event PostBeginPlay() {
                 hiddenLRI= HiddenLRI(lri);
             }
         }
+    }
+}
+
+function MatchStarting() {
+    super.MatchStarting();
+    if (Self == Level.GetLocalPlayerController()) {
+        playerIDHash= class'KFSXMutator'.default.localHostSteamId;
+    } else {
+        playerIDHash= GetPlayerIDHash();
     }
 }
 
