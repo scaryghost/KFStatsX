@@ -29,6 +29,8 @@ var array<Auxiliary.ReplacementPair> monsterReplacement;
 var string endGameBossClass, fallbackMonsterClass;
 /** Reference to the auxiliary class */
 var class<Auxiliary> auxiliaryRef;
+/** KFStatsX game rules object */
+var KFSXGameRules gameRules;
 /** Reference to the game rules used by KFStatsX */
 var class<KFSXGameRules> kfStatsXRules;
 
@@ -38,7 +40,6 @@ var class<RemoteServerLink> serverLinkClass;
 var transient RemoteServerLink serverLink;
 
 function PostBeginPlay() {
-    local KFSXGameRules gameRules;
 
     gameType= KFGameType(Level.Game);
     if (gameType == none) {
@@ -66,7 +67,6 @@ function PostBeginPlay() {
 
     if (broadcastStats) {
         serverLink= spawn(serverLinkClass);
-        serverLink.deaths= gameRules.deaths;
         SetTimer(1,true);
     }
 
@@ -75,7 +75,7 @@ function PostBeginPlay() {
 function Timer() {
     if (KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType != 0 &&
         (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress)) {
-        serverLink.broadcastMatchResults();
+        serverLink.broadcastMatchResults(gameRules.deaths);
         if (broadcastStats && Level.NetMode != NM_DedicatedServer) {
             serverLink.broadcastPlayerStats(KFSXPlayerController(Level.GetLocalPlayerController()));
         }

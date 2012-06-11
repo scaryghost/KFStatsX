@@ -24,9 +24,6 @@ var string playerProtocol;
 /** Version of the player informatiion scheme */
 var string playerProtocolVersion;
 
-/** Reference to the deaths object in KFSXGameRules */
-var SortedMap deaths;
-
 function PostBeginPlay() {
     udpPort= bindPort(class'KFSXMutator'.default.serverPort+1, true);
     if (udpPort > 0) Resolve(class'KFSXMutator'.default.serverAddress);
@@ -49,7 +46,7 @@ function MatchStarting() {
 /**
  * Send the match information to the remote server
  */
-function broadcastMatchResults() {
+function broadcastMatchResults(SortedMap deaths) {
     local string matchPacket;
     matchPacket= matchProtocol $ "," $ marchProtocolVersion $ separator;
     matchPacket$= matchData;
