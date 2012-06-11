@@ -5,48 +5,6 @@ struct ReplacementPair {
     var class<Object> newClass;
 };
 
-static function int binarySearch(String key, array<string> values) {
-    local int replaceIndex;
-    local int low, high, mid;
-
-    low= 0;
-    high= values.Length - 1;
-    replaceIndex= -1;
-    while(low <= high) {
-        mid= (low+high)/2;
-        if (values[mid] < key) {
-            low= mid + 1;
-        } else if (values[mid] > key) {
-            high= mid - 1;
-        } else {
-            replaceIndex= mid;
-            break;
-        }
-    }
-    return replaceIndex;
-}
-
-static function int replaceClass(string className, array<ReplacementPair> replacementArray) {
-    local int replaceIndex;
-    local int low, high, mid;
-
-    low= 0;
-    high= replacementArray.Length - 1;
-    replaceIndex= -1;
-    while(low <= high) {
-        mid= (low+high)/2;
-        if (Caps(string(replacementArray[mid].oldClass)) < Caps(className)) {
-            low= mid + 1;
-        } else if (Caps(string(replacementArray[mid].oldClass)) > Caps(className)) {
-            high= mid - 1;
-        } else {
-            replaceIndex= mid;
-            break;
-        }
-    }
-    return replaceIndex;
-}
-
 /**
  *  Replaces the zombies in the given squadArray
  */

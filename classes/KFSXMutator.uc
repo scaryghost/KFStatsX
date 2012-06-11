@@ -39,6 +39,9 @@ var class<RemoteServerLink> serverLinkClass;
 /** Link to the remote tracking server */
 var transient RemoteServerLink serverLink;
 
+/** List of fire modes to replace */
+var array<Auxiliary.ReplacementPair> fireModeReplacement;
+
 function PostBeginPlay() {
 
     gameType= KFGameType(Level.Game);
@@ -92,7 +95,7 @@ function NotifyLogout(Controller Exiting) {
 }
 
 function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
-    local int i;
+    local int i, j;
     local PlayerReplicationInfo pri;
     local LinkedReplicationInfo lri;
 
@@ -106,14 +109,14 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
             pri.CustomReplicationInfo= lri;
         }
         return true;
-    } else if (Frag(Other) != none) {
-        Frag(Other).FireModeClass[0]= class'FragFire_KFSX';
-        return true;
-    } else if (Huskgun(Other) != none) {
-        Huskgun(Other).FireModeClass[0]= class'HuskGunFire_KFSX';
-    } else if (Welder(Other) != none) {
-        Welder(Other).FireModeClass[0]= class'WeldFire_KFSX';
-        Welder(Other).FireModeClass[1]= class'UnWeldFire_KFSX';
+    } else if (Weapon(Other) != none) {
+        for(i= 0; i < ArrayCount(Weapon(Other).FireModeClass); i++) {
+            for(j= 0; j < fireModeReplacement.Length; j++) {
+                if (Weapon(Other).FireModeClass[i] == fireModeReplacement[j].oldClass)
+                    Weapon(Other).FireModeClass[i]= class<WeaponFire>(fireModeReplacement[j].newClass);
+            }
+        }
+
         return true;
     }
 
@@ -170,6 +173,13 @@ defaultproperties {
     monsterReplacement(6)=(oldClass=class'KFChar.ZombieScrake',newClass=class'KFStatsX.ZombieScrake_KFSX')
     monsterReplacement(7)=(oldClass=class'KFChar.ZombieSiren',newClass=class'KFStatsX.ZombieSiren_KFSX')
     monsterReplacement(8)=(oldClass=class'KFChar.ZombieStalker',newClass=class'KFStatsX.ZombieStalker_KFSX')
+
+    fireModeReplacement(0)=(oldClass=class'KFMod.FragFire',newClass=class'FragFire_KFSX')
+    fireModeReplacement(1)=(oldClass=class'KFMod.HuskGunFire',newClass=class'HuskGunFire_KFSX')
+    fireModeReplacement(2)=(oldClass=class'KFMod.WeldFire',newClass=class'WeldFire_KFSX')
+    fireModeReplacement(3)=(oldClass=class'KFMod.UnWeldFire',newClass=class'UnWeldFire_KFSX')
+    fireModeReplacement(4)=(oldClass=class'KFMod.MP7MAltFire',newClass=class'MP7MAltFire_KFSX')
+    fireModeReplacement(5)=(oldClass=class'KFMod.MP5MAltFire',newClass=class'MP5MAltFire_KFSX')
 
     kfsxPC= class'KFSXPlayerController'
     lriList(0)= class'WeaponLRI'
