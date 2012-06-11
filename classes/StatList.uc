@@ -1,22 +1,11 @@
 class StatList extends GUIVertList
     config;
 
-enum DescripFormat {
-    TEXT,
-    DOSH,
-    TIME
-};
-
-struct DescripInfo {
-    var localized string description;
-    var DescripFormat format;
-};
-
 // Display
 var texture InfoBackground;
 
 // State
-var array<DescripInfo> statDescriptions;
+var array<string> statDescriptions;
 var array<int>  statValue;
 
 var() config int bgR, bgG, bgB;
@@ -34,10 +23,8 @@ function InitList(KFSXLinkedReplicationInfo lri) {
     itemCount= lri.stats.maxStatIndex;
     SetIndex(0);
 
-    statValue.Length= itemCount;
-    statDescriptions.Length= itemCount;
     for(i= 0; i < itemCount; i++) {
-        statDescriptions[i].description= lri.stats.keys[i];
+        statDescriptions[i]= lri.stats.keys[i];
         statValue[i]= lri.stats.values[i];
     }
 
@@ -75,16 +62,16 @@ function DrawStat(Canvas Canvas, int CurIndex, float X, float Y,
     Canvas.SetDrawColor(txtR, txtG, txtB, alpha);
 
     // Write stat name
-    Canvas.TextSize(statDescriptions[CurIndex].description,TempWidth,TempHeight);
+    Canvas.TextSize(statDescriptions[CurIndex],TempWidth,TempHeight);
     TempX += Width*0.1f;
     TempY += (Height-TempHeight)*0.5f;
     Canvas.SetPos(TempX, TempY);
-    Canvas.DrawText(statDescriptions[CurIndex].description);
+    Canvas.DrawText(statDescriptions[CurIndex]);
 
     // Write stat value
-    if (statDescriptions[CurIndex].format == DescripFormat.TIME) {
+    if (InStr(statDescriptions[CurIndex], "Time") != -1) {
         S= class'Auxiliary'.static.formatTime(statValue[CurIndex]);
-    } else if (statDescriptions[CurIndex].format == DescripFormat.DOSH) {
+    } else if (InStr(statDescriptions[CurIndex], "Cash") != -1) {
         S= "£" $ string(statValue[CurIndex]);
     } else {
         S = string(statValue[CurIndex]);
