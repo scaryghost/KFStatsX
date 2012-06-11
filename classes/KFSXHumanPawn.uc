@@ -118,9 +118,6 @@ function TakeBileDamage() {
 }
 
 function Died(Controller Killer, class<DamageType> damageType, vector HitLocation) {
-    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Damage_Taken), prevHealth);
-    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Armor_Lost), prevShield);
-
     hiddenLRI.stats.accum(hiddenLRI.DEATHS, 1);
     if(Killer == Self.Controller) {
         hiddenLRI.stats.accum(hiddenLRI.SUICIDES, 1);
@@ -133,30 +130,30 @@ function Died(Controller Killer, class<DamageType> damageType, vector HitLocatio
 }
 
 function ServerBuyWeapon( Class<Weapon> WClass ) {
-    local int oldScore;
+    local float oldScore;
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyWeapon(WClass);
     playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Cash_Spent), 
-            oldScore - PlayerReplicationInfo.Score);
+            (oldScore - PlayerReplicationInfo.Score));
 }
 
 function ServerBuyAmmo( Class<Ammunition> AClass, bool bOnlyClip ) {
-    local int oldScore;
+    local float oldScore;
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyAmmo(AClass, bOnlyClip);
     playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Cash_Spent), 
-            oldScore - PlayerReplicationInfo.Score);
+            (oldScore - PlayerReplicationInfo.Score));
 }
 
 function ServerBuyKevlar() {
-    local int oldScore;
+    local float oldScore;
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyKevlar();
     playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Cash_Spent), 
-            oldScore - PlayerReplicationInfo.Score);
+            (oldScore - PlayerReplicationInfo.Score));
 }
 
 function bool GiveHealth(int HealAmount, int HealMax) {
