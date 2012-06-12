@@ -180,6 +180,7 @@ defaultproperties {
     fireModeReplacement(3)=(oldClass=class'KFMod.UnWeldFire',newClass=class'UnWeldFire_KFSX')
     fireModeReplacement(4)=(oldClass=class'KFMod.MP7MAltFire',newClass=class'MP7MAltFire_KFSX')
     fireModeReplacement(5)=(oldClass=class'KFMod.MP5MAltFire',newClass=class'MP5MAltFire_KFSX')
+    fireModeReplacement(6)=(oldClass=class'KFMod.CrossbowFire',newClass=class'CrossbowFire_KFSX')
 
     kfsxPC= class'KFSXPlayerController'
     lriList(0)= class'WeaponLRI'

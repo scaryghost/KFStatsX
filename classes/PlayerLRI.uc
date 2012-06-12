@@ -5,10 +5,9 @@
 class PlayerLRI extends KFSXLinkedReplicationInfo;
 
 enum StatKeys {
-    Time_Alive, Cash_Spent, Welding,
+    Time_Alive, Cash_Spent, Welding, Damage_Taken, Armor_Lost,
     Received_Heal, Healed_Self, Healed_Teammates,
-    Damage_Taken, Armor_Lost, Explosives_Disintegrated,
-    Heal_Darts_Landed, 
+    Explosives_Disintegrated, Heal_Darts_Landed, Bolts_Retrieved,
     Backstabs, Decapitations, Shot_By_Husk, Husks_Stunned, 
     Scrakes_Raged, Scrakes_Stunned, Fleshpounds_Raged
 };
