@@ -1,3 +1,8 @@
+/**
+ * Custom siren that tracks decapitations, backstabs, 
+ * and how many players' explosives she disintegrated
+ * @author etsai (Scary Ghost)
+ */
 class ZombieSiren_KFSX extends KFChar.ZombieSiren;
 
 var PlayerLRI instigatorLRI;

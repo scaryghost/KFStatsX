@@ -11,6 +11,9 @@ var PlayerLRI playerLRI;
 var HiddenLRI hiddenLRI;
 var int prevTime;
 
+/**
+ * Accumulate Time_Alive and perk time
+ */
 function Timer() {
     local int timeDiff;
 
@@ -37,6 +40,10 @@ function PossessedBy(Controller C) {
     }
 }
 
+/**
+ * Called whenever a weapon is fired.  
+ * This function tracks usage for every weapon except the Welder and Huskgun
+ */
 function DeactivateSpawnProtection() {
     local int mode;
     local string itemName;

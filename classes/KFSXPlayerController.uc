@@ -4,10 +4,15 @@
  */
 class KFSXPlayerController extends KFPlayerController;
 
+/** Weapon usage */
 var WeaponLRI weaponLRI;
+/** Player actions and summary */
 var PlayerLRI playerLRI;
+/** Kill count */
 var KillsLRI killsLRI;
+/** Stats hidden from the player */
 var HiddenLRI hiddenLRI;
+/** SteamID of the player */
 var String playerIdHash;
 
 replication {
@@ -48,6 +53,9 @@ function SetPawnClass(string inClass, string inCharacter) {
     PawnClass = Class'KFSXHumanPawn';
 }
 
+/**
+ * Custom console command to bring up the stats menu
+ */
 exec function InGameStats() {
     ClientOpenMenu("KFStatsX.StatsMenu");
 }

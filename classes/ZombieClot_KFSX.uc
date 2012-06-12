@@ -1,3 +1,7 @@
+/**
+ * Custom clot that tracks decapitations and backstabs
+ * @author etsai (Scary Ghost)
+ */
 class ZombieClot_KFSX extends KFChar.ZombieClot;
 
 var PlayerLRI instigatorLRI;

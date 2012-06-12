@@ -1,6 +1,12 @@
+/**
+ * Based class for the custom linked replication information 
+ * used by each stat group
+ * @author etsai (Scary Ghost)
+ */
 class KFSXLinkedReplicationInfo extends LinkedReplicationInfo
     dependson(SortedMap);
 
+/** Map of values stored by this LRI */
 var SortedMap stats;
 
 replication {

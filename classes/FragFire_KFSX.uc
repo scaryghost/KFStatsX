@@ -1,3 +1,8 @@
+/**
+ * Special fire mode for tossing frags.  Logs which type of 
+ * nade was tossed
+ * @author etsai (Scary Ghost)
+ */
 class FragFire_KFSX extends FragFire;
 
 function projectile SpawnProjectile(Vector Start, Rotator Dir) {

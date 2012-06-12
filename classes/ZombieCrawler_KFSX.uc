@@ -1,3 +1,7 @@
+/**
+ * Custom crawler that tracks decapitations and backstabs
+ * @author etsai (Scary Ghost)
+ */
 class ZombieCrawler_KFSX extends KFChar.ZombieCrawler;
 
 var PlayerLRI instigatorLRI;

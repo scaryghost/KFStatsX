@@ -1,3 +1,7 @@
+/**
+ * Base class for the 3 stat group panels
+ * @author etsai (Scary Ghost)
+ */
 class StatsPanelBase extends MidGamePanel
     dependson(StatList)
     abstract;

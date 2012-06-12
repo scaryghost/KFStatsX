@@ -1,3 +1,8 @@
+/**
+ * Custom fleshpound that tracks decapitations, backstabs, 
+ * and how many times you raged it
+ * @author etsai (Scary Ghost)
+ */
 class ZombieFleshPound_KFSX extends KFChar.ZombieFleshPound;
 
 var PlayerLRI instigatorLRI;

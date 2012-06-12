@@ -1,3 +1,7 @@
+/**
+ * Special fire mode for the husk gun that tracks the ammo usage
+ * @author etsai (Sacry Ghost)
+ */
 class HuskGunFire_KFSX extends HuskGunFire;
 
 function DoFireEffect() {

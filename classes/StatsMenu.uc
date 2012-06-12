@@ -1,3 +1,7 @@
+/**
+ * Menu panel for the ingamestats command
+ * @author etsai (Scary Ghost)
+ */
 class StatsMenu extends KFInvasionLoginMenu;
 
 function InitComponent(GUIController MyController, GUIComponent MyComponent) {

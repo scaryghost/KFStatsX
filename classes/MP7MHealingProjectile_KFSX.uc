@@ -1,3 +1,8 @@
+/** 
+ * Custom projectile that increments Healed_Teammates
+ * Heal_Darts_Landed
+ * @author etsai (Scary Ghost)
+ */
 class MP7MHealingProjectile_KFSX extends MP7MHealinglProjectile;
 
 simulated function ProcessTouch(Actor Other, Vector HitLocation) {

@@ -1,3 +1,7 @@
+/**
+ * Custom bloat that tracks decapitations and backstabs
+ * @author etsai (Scary Ghost)
+ */
 class ZombieBloat_KFSX extends KFChar.ZombieBloat;
 
 var PlayerLRI instigatorLRI;

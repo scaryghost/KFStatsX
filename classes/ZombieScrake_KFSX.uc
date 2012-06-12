@@ -1,3 +1,8 @@
+/**
+ * Custom scrake that tracks decapitations, backstabs, 
+ * and how many times you stunned and raged it
+ * @author etsai (Scary Ghost)
+ */
 class ZombieScrake_KFSX extends KFChar.ZombieScrake;
 
 var bool rageCounted;

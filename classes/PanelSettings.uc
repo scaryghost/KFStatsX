@@ -1,3 +1,7 @@
+/**
+ * Displays the sliders controller text and background color/transparency
+ * @author etsai (Scary Ghost)
+ */
 class PanelSettings extends MidGamePanel;
 
 var automated GUISectionBackground i_BGText, i_BGBackground;

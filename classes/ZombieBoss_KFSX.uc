@@ -1,3 +1,7 @@
+/**
+ * Custom boss that tracks decapitations and backstabs
+ * @author etsai (Scary Ghost)
+ */
 class ZombieBoss_KFSX extends KFChar.ZombieBoss;
 
 var PlayerLRI instigatorLRI;

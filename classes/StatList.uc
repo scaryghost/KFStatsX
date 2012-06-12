@@ -1,3 +1,8 @@
+/**
+ * Vertical list of the stat values of the given 
+ * KFSXLinkedReplicationInfo object
+ * @author etsai (Scary Ghost)
+ */
 class StatList extends GUIVertList
     config;
 

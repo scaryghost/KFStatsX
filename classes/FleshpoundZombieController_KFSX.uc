@@ -1,3 +1,7 @@
+/**
+ * Custom fleshpound controller for the mutator
+ * @author etsai (Scary Ghost)
+ */
 class FleshpoundZombieController_KFSX extends KFChar.FleshpoundZombieController;
 
 state ZombieCharge {

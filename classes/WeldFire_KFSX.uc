@@ -1,3 +1,7 @@
+/**
+ * Special fire mode for welding that tracks door hp
+ * @author etsai (Scary Ghost)
+ */
 class WeldFire_KFSX extends KFMod.WeldFire;
 
 simulated Function timer() {

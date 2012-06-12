@@ -1,3 +1,7 @@
+/**
+ * Custom stalker that tracks decapitations and backstabs
+ * @author etsai (Scary Ghost)
+ */
 class ZombieStalker_KFSX extends KFChar.ZombieStalker;
 
 var PlayerLRI instigatorLRI;

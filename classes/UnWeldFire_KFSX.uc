@@ -1,3 +1,7 @@
+/**
+ * Special fire mode for unwelding to track door hp
+ * @author etsai (Scary Ghost)
+ */
 class UnWeldFire_KFSX extends KFMod.UnWeldFire;
 
 simulated Function timer() {

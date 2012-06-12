@@ -1,3 +1,7 @@
+/**
+ * GUI box containing the stat list
+ * @author etsai (Scary Ghost)
+ */
 class StatListBox extends GUIListBoxBase;
 
 var StatList statListObj;

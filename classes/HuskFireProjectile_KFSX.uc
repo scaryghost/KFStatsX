@@ -1,3 +1,7 @@
+/**
+ * Custom projectile that increments the Shot_By_Husk counter
+ * @author etsai (Scary Ghost)
+ */
 class HuskFireProjectile_KFSX extends KFChar.HuskFireProjectile;
 
 /**

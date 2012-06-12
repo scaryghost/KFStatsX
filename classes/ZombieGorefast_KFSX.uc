@@ -1,3 +1,7 @@
+/**
+ * Custom gorefast that tracks decapitations and backstabs
+ * @author etsai (Scary Ghost)
+ */
 class ZombieGorefast_KFSX extends KFChar.ZombieGorefast;
 
 var PlayerLRI instigatorLRI;

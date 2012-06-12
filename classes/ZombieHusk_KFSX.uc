@@ -1,3 +1,8 @@
+/**
+ * Custom husk that tracks decapitations, backstabs, 
+ * and how many times you stunned it
+ * @author etsai (Scary Ghost)
+ */
 class ZombieHusk_KFSX extends KFChar.ZombieHusk;
 
 var PlayerLRI instigatorLRI;
