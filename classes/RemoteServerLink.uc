@@ -53,7 +53,7 @@ function broadcastMatchResults(SortedMap deaths) {
     matchPacket$= Level.GRI.ElapsedTime $ separator;
     matchPacket$= KFGameReplicationInfo(Level.GRI).EndGameType $ separator;
     matchPacket$= KFGameType(Level.Game).WaveNum+1 $ separator;
-    matchPacket$= getStatValues(deaths);
+    matchPacket$= getStatValues(deaths) $ separator $ "_close";
     SendText(serverAddr, "kfstatsx-pwd" $ separator $ class'KFSXMutator'.default.serverPwd);
     SendText(serverAddr, matchPacket);
 }    
