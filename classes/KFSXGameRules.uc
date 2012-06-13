@@ -23,7 +23,8 @@ function PostBeginPlay() {
 
 function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> damageType, vector HitLocation) {
     if (!super.PreventDeath(Killed, Killer, damageType, HitLocation)) {
-        if(damageType == class'Engine.Fell' || damageType == class'Gameplay.Burned') {
+        if(KFHumanPawn(Killed) != none && 
+                (damageType == class'Engine.Fell' || damageType == class'Gameplay.Burned')) {
             deaths.accum(envDeathKey,1);
         }
         return false;
