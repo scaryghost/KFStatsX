@@ -38,6 +38,10 @@ function PossessedBy(Controller C) {
     lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(PlayerReplicationInfo);
 }
 
+function bool isMedicGun() {
+    return MP7MMedicGun(Weapon) != none;
+}
+
 /**
  * Called whenever a weapon is fired.  
  * This function tracks usage for every weapon except the Welder and Huskgun
@@ -62,13 +66,13 @@ function DeactivateSpawnProtection() {
             return;
         }
 
-        if (KFMeleeGun(Weapon) != none || (mode == 1 && MP7MMedicGun(Weapon) != none)) {
+        if (KFMeleeGun(Weapon) != none || (mode == 1 && isMedicGun())) {
             load= 1;
         } else {
             load= Weapon.GetFireMode(mode).Load;
         }
 
-        if (mode == 1 && (MP7MMedicGun(Weapon) != none || 
+        if (mode == 1 && (isMedicGun() || 
                 (KFWeapon(Weapon) != none && KFWeapon(Weapon).bHasSecondaryAmmo))) {
             itemName$= " Alt";
         }
