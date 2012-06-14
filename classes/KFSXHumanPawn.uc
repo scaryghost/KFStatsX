@@ -119,9 +119,11 @@ function TakeBileDamage() {
 }
 
 function Died(Controller Killer, class<DamageType> damageType, vector HitLocation) {
-    lri.hiddenInfo.accum(lri.deaths, 1);
-    if(Killer == Self.Controller) {
-        lri.hiddenInfo.accum(lri.suicides, 1);
+    if (!Controller.IsInState('GameEnded')) {
+        lri.hiddenInfo.accum(lri.deaths, 1);
+        if(Killer == Self.Controller) {
+            lri.hiddenInfo.accum(lri.suicides, 1);
+        }
     }
 
     prevHealth= 0;

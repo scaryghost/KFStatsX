@@ -15,7 +15,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
     local float prevHealth, diffHealth;
 
     prevHealth= Health;
-    if (InstigatedBy != none && instigatorLRI != none) {
+    if (InstigatedBy != none) {
         instigatorLRI= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(InstigatedBy.PlayerReplicationInfo);
     }
     if (instigatorLRI != none && tempHealth == 0 && bBackstabbed) {
