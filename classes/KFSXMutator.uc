@@ -16,11 +16,13 @@ var() config string serverAddress;
 var() config string serverPwd;
 /** Steam id of the local host */
 var() config string localHostSteamId;
+/** Player controller to be used by the game in ${package}.${class} format */
+var() config string playerController;
+/** Semi colon separated list of available, supported custom controllers */
+var() config string compatibleControllers;
 
 /** Reference to the KFGameType object */
 var KFGameType gametype;
-/** Player controller class to use for KFStatsX */
-var class<PlayerController> kfsxPC;
 /** Linked replication info class to attach to PRI */
 var class<LinkedReplicationInfo> kfsxLRIClass;
 /** Stores the pairs of default monsters with their stats counterparts */
@@ -51,8 +53,8 @@ function PostBeginPlay() {
     }
     
     gameRules= Spawn(kfStatsXRules);
-    gameType.PlayerControllerClass= kfsxPC;
-    gameType.PlayerControllerClassName= string(kfsxPC);
+    gameType.PlayerControllerClass= class<PlayerController>(DynamicLoadObject(playerController, class'Class'));
+    gameType.PlayerControllerClassName= playerController;
 
     //Replace all instances of the old specimens with the new ones 
     auxiliaryRef.static.replaceStandardMonsterClasses(gameType.StandardMonsterClasses, 
@@ -123,6 +125,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
 
 static function FillPlayInfo(PlayInfo PlayInfo) {
     Super.FillPlayInfo(PlayInfo);
+    PlayInfo.AddSetting("KFStatsX", "playerController", "Compatability", 0, 0, "Select", default.compatibleControllers, "Xb");
     PlayInfo.AddSetting("KFStatsX", "broadcastStats", "Broadcast Statistics", 0, 0, "Check");
     PlayInfo.AddSetting("KFStatsX", "localHostSteamId", "Local Host Steam ID", 0, 0, "Text", "128");
     PlayInfo.AddSetting("KFStatsX", "serverAddress", "Remote Server Address", 0, 0, "Text", "128");
@@ -142,6 +145,8 @@ static event string GetDescriptionText(string property) {
             return "Port number of tracking server";
         case "serverPwd":
             return "Password of tracking server";
+        case "playerController":
+            return "Set compatability mode.  Only used other mutators with custom controllers are also being loaded ";
         default:
             return Super.GetDescriptionText(property);
     }
@@ -180,6 +185,7 @@ defaultproperties {
     fireModeReplacement(5)=(oldClass=class'KFMod.MP5MAltFire',newClass=class'MP5MAltFire_KFSX')
     fireModeReplacement(6)=(oldClass=class'KFMod.CrossbowFire',newClass=class'CrossbowFire_KFSX')
 
-    kfsxPC= class'KFSXPlayerController'
     kfsxLRIClass= class'KFSXLinkedReplicationInfo'
+    playerController= "KFStatsX.KFSXPlayerController"
+    compatibleControllers= "KFStatsX.KFSXPlayerController;Vanilla KF"
 }
