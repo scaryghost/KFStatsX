@@ -24,9 +24,23 @@ var string playerProtocol;
 /** Version of the player informatiion scheme */
 var string playerProtocolVersion;
 
+var array<string> difficulties, lengths;
+
 function PostBeginPlay() {
+    local KFGameType gametype;
+    local array<string> parts;
+    local int i;
+
     udpPort= bindPort(class'KFSXMutator'.default.serverPort+1, true);
     if (udpPort > 0) Resolve(class'KFSXMutator'.default.serverAddress);
+
+    gametype= KFGameType(Level.Game);
+    Split(gametype.GIPropsExtras[0], ";", parts);
+    for(i= 0; i < parts.Length; i+= 2)
+        difficulties[int(parts[i])]= parts[i+1];
+    Split(gametype.GIPropsExtras[1], ";", parts);
+    for(i= 0; i < parts.Length; i+= 2)
+        lengths[int(parts[i])]= parts[i+1];
 }
 
 event Resolved(IpAddr addr) {
@@ -39,8 +53,8 @@ event Resolved(IpAddr addr) {
  */
 function MatchStarting() {
     matchData= Left(string(Level), InStr(string(Level), ".")) $ separator;
-    matchData$= int(Level.Game.GameDifficulty) $ separator;
-    matchData$= KFGameType(Level.Game).KFGameLength $ separator;
+    matchData$= difficulties[int(Level.Game.GameDifficulty)] $ separator;
+    matchData$= lengths[KFGameType(Level.Game).KFGameLength] $ separator;
 }
 
 /**
