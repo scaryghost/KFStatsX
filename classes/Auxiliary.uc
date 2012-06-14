@@ -8,8 +8,8 @@ class Auxiliary extends Object;
  * Pair that ties which class should be replaced
  */
 struct ReplacementPair {
-    var class<Object> oldClass;
-    var class<Object> newClass;
+    var string oldClass;
+    var string newClass;
 };
 
 /**
@@ -26,8 +26,8 @@ static function replaceSpecialSquad(out array<KFGameType.SpecialSquad> squadArra
         for(i=0;i<squadArray[j].ZedClass.Length; i++) {
             for(k=0; k<replacementArray.Length; k++) {
                 pair= replacementArray[k];
-                if(squadArray[j].ZedClass[i] ~= string(pair.oldClass)) {
-                    squadArray[j].ZedClass[i]=  string(pair.newClass);
+                if(squadArray[j].ZedClass[i] ~= pair.oldClass) {
+                    squadArray[j].ZedClass[i]=  pair.newClass;
                 }
             }
         }
@@ -49,8 +49,8 @@ static function replaceStandardMonsterClasses(out array<KFGameType.MClassTypes> 
         for(k=0; k<replacementArray.Length; k++) {
             pair= replacementArray[k];
             //Use ~= for case insensitive compare
-            if (monsterClasses[i].MClassName ~= string(pair.oldClass)) {
-                monsterClasses[i].MClassName= string(pair.newClass);
+            if (monsterClasses[i].MClassName ~= pair.oldClass) {
+                monsterClasses[i].MClassName= pair.newClass;
             }
         }
     }

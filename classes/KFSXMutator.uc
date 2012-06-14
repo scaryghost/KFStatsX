@@ -42,7 +42,7 @@ var class<RemoteServerLink> serverLinkClass;
 var transient RemoteServerLink serverLink;
 
 /** List of fire modes to replace */
-var array<Auxiliary.ReplacementPair> fireModeReplacement;
+var() config array<Auxiliary.ReplacementPair> fireModeReplacement;
 
 function PostBeginPlay() {
 
@@ -112,8 +112,9 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
     } else if (Weapon(Other) != none) {
         for(i= 0; i < ArrayCount(Weapon(Other).FireModeClass); i++) {
             for(j= 0; j < fireModeReplacement.Length; j++) {
-                if (Weapon(Other).FireModeClass[i] == fireModeReplacement[j].oldClass)
-                    Weapon(Other).FireModeClass[i]= class<WeaponFire>(fireModeReplacement[j].newClass);
+                if (string(Weapon(Other).FireModeClass[i]) ~= fireModeReplacement[j].oldClass)
+                    Weapon(Other).FireModeClass[i]= 
+                            class<WeaponFire>(DynamicLoadObject(fireModeReplacement[j].newClass, class'Class'));
             }
         }
 
@@ -167,23 +168,15 @@ defaultproperties {
 
     endGameBossClass= "KFStatsX.ZombieBoss_KFSX"
     fallbackMonsterClass= "KFStatsX.ZombieStalker_KFSX"
-    monsterReplacement(0)=(oldClass=class'KFChar.ZombieBloat',newClass=class'KFStatsX.ZombieBloat_KFSX')
-    monsterReplacement(1)=(oldClass=class'KFChar.ZombieClot',newClass=class'KFStatsX.ZombieClot_KFSX')
-    monsterReplacement(2)=(oldClass=class'KFChar.ZombieCrawler',newClass=class'KFStatsX.ZombieCrawler_KFSX')
-    monsterReplacement(3)=(oldClass=class'KFChar.ZombieFleshPound',newClass=class'KFStatsX.ZombieFleshpound_KFSX')
-    monsterReplacement(4)=(oldClass=class'KFChar.ZombieGorefast',newClass=class'KFStatsX.ZombieGorefast_KFSX')
-    monsterReplacement(5)=(oldClass=class'KFChar.ZombieHusk',newClass=class'KFStatsX.ZombieHusk_KFSX')
-    monsterReplacement(6)=(oldClass=class'KFChar.ZombieScrake',newClass=class'KFStatsX.ZombieScrake_KFSX')
-    monsterReplacement(7)=(oldClass=class'KFChar.ZombieSiren',newClass=class'KFStatsX.ZombieSiren_KFSX')
-    monsterReplacement(8)=(oldClass=class'KFChar.ZombieStalker',newClass=class'KFStatsX.ZombieStalker_KFSX')
-
-    fireModeReplacement(0)=(oldClass=class'KFMod.FragFire',newClass=class'FragFire_KFSX')
-    fireModeReplacement(1)=(oldClass=class'KFMod.HuskGunFire',newClass=class'HuskGunFire_KFSX')
-    fireModeReplacement(2)=(oldClass=class'KFMod.WeldFire',newClass=class'WeldFire_KFSX')
-    fireModeReplacement(3)=(oldClass=class'KFMod.UnWeldFire',newClass=class'UnWeldFire_KFSX')
-    fireModeReplacement(4)=(oldClass=class'KFMod.MP7MAltFire',newClass=class'MP7MAltFire_KFSX')
-    fireModeReplacement(5)=(oldClass=class'KFMod.MP5MAltFire',newClass=class'MP5MAltFire_KFSX')
-    fireModeReplacement(6)=(oldClass=class'KFMod.CrossbowFire',newClass=class'CrossbowFire_KFSX')
+    monsterReplacement(0)=(oldClass="KFChar.ZombieBloat",newClass="KFStatsX.ZombieBloat_KFSX")
+    monsterReplacement(1)=(oldClass="KFChar.ZombieClot",newClass="KFStatsX.ZombieClot_KFSX")
+    monsterReplacement(2)=(oldClass="KFChar.ZombieCrawler",newClass="KFStatsX.ZombieCrawler_KFSX")
+    monsterReplacement(3)=(oldClass="KFChar.ZombieFleshPound",newClass="KFStatsX.ZombieFleshpound_KFSX")
+    monsterReplacement(4)=(oldClass="KFChar.ZombieGorefast",newClass="KFStatsX.ZombieGorefast_KFSX")
+    monsterReplacement(5)=(oldClass="KFChar.ZombieHusk",newClass="KFStatsX.ZombieHusk_KFSX")
+    monsterReplacement(6)=(oldClass="KFChar.ZombieScrake",newClass="KFStatsX.ZombieScrake_KFSX")
+    monsterReplacement(7)=(oldClass="KFChar.ZombieSiren",newClass="KFStatsX.ZombieSiren_KFSX")
+    monsterReplacement(8)=(oldClass="KFChar.ZombieStalker",newClass="KFStatsX.ZombieStalker_KFSX")
 
     kfsxLRIClass= class'KFSXLinkedReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"
