@@ -8,13 +8,13 @@ class StatsPanelBase extends MidGamePanel
 
 var automated GUISectionBackground i_BGStats;
 var automated StatListBox lb_StatSelect;
-var KFSXLinkedReplicationInfo ownerLRI;
+var SortedMap statsInfo;
 
 function ShowPanel(bool bShow) {
     super.ShowPanel(bShow);
 
-    if (bShow && ownerLRI != none) {
-        lb_StatSelect.statListObj.InitList(ownerLRI);
+    if (bShow && statsInfo != none) {
+        lb_StatSelect.statListObj.InitList(statsInfo);
     }
 }
 

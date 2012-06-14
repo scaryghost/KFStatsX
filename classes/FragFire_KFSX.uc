@@ -7,6 +7,7 @@ class FragFire_KFSX extends FragFire;
 
 function projectile SpawnProjectile(Vector Start, Rotator Dir) {
     local class<Projectile> g;
+    local KFSXLinkedReplicationInfo lri;
 
     /** Copied from FragFire.SpawnProjectile */
     if ( KFPlayerReplicationInfo(Instigator.PlayerReplicationInfo) != none && 
@@ -17,7 +18,8 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir) {
     else {
         g= class'Nade';
     }
-    KFSXPlayerController(Instigator.Controller).weaponLRI.stats.accum(GetItemName(string(g)), 1);
+    lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(Instigator.PlayerReplicationInfo);
+    lri.weaponInfo.accum(GetItemName(string(g)), 1);
 
     return super.SpawnProjectile(Start,Dir);
 }

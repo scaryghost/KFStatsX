@@ -6,15 +6,52 @@
 class KFSXLinkedReplicationInfo extends LinkedReplicationInfo
     dependson(SortedMap);
 
+var String damage, deaths, suicides;
+var String healedTeammates, healDartsConnected, welding,
+            backstabs, decapitations;
+
 /** Map of values stored by this LRI */
-var SortedMap stats;
+var SortedMap playerInfo, weaponInfo, killsInfo, hiddenInfo;
+var String playerIdHash;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority)
-        stats;
+        playerInfo, weaponInfo, killsInfo;
+}
+
+function MatchStarting() {
+    super.MatchStarting();
+    if (PlayerController(Owner) == Level.GetLocalPlayerController()) {
+        playerIDHash= class'KFSXMutator'.default.localHostSteamId;
+    } else {
+        playerIDHash= PlayerController(Owner).GetPlayerIDHash();
+    }
 }
 
 event PostBeginPlay() {
     super.PostBeginPlay();
-    stats= Spawn(class'SortedMap');
+    playerInfo= Spawn(class'SortedMap');
+    weaponInfo= Spawn(class'SortedMap');
+    killsInfo= Spawn(class'SortedMap');
+    hiddenInfo= Spawn(class'SortedMap');
+}
+
+static function KFSXLinkedReplicationInfo findKFSXlri(PlayerReplicationInfo pri) {
+    local LinkedReplicationInfo lri;
+    for(lri= pri.CustomReplicationInfo; lri != none; lri= lri.NextReplicationInfo) {
+        if (KFSXLinkedReplicationInfo(lri) != none)
+            return KFSXLinkedReplicationInfo(lri);
+    }
+    return none;
+}
+
+defaultproperties {
+    damage= "Damage"
+    deaths= "Deaths"
+    suicides= "Suicides"
+    healedTeammates= "Healed Teammates"
+    healDartsConnected= "Heal Darts Connected"
+    welding= "Welding"
+    backstabs= "Backstabs"
+    decapitations= "Decapitations"
 }

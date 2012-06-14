@@ -2,8 +2,7 @@
  * Custom kill and death rules for KFStatsX
  * @author etsai (Scary Ghost)
  */
-class KFSXGameRules extends GameRules
-    dependson(KillsLRI);
+class KFSXGameRules extends GameRules;
 
 /** Record of deaths from all players */
 var SortedMap deaths;
@@ -35,6 +34,7 @@ function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> dam
 
 function ScoreKill(Controller Killer, Controller Killed) {
     local string itemName;
+    local KFSXLinkedReplicationInfo lri;
 
     Super.ScoreKill(Killer,Killed);
     if (KFMonsterController(Killer) != none && PlayerController(Killed) != none) {
@@ -50,8 +50,10 @@ function ScoreKill(Controller Killer, Controller Killed) {
             deaths.accum(teammateDeathKey, 1);
             itemName= teammateDeathKey;
         }
-        if (itemName != "") 
-            KFSXPlayerController(Killer).killsLRI.stats.accum(itemName, 1);
+        if (itemName != "") {
+            lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(Killer.PlayerReplicationInfo);
+            lri.killsInfo.accum(itemName, 1);
+        }
     }
 }
 

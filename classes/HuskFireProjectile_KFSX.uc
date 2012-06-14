@@ -4,6 +4,8 @@
  */
 class HuskFireProjectile_KFSX extends KFChar.HuskFireProjectile;
 
+var String shotByHusk;
+
 /**
  * Copied from HuskFireProjectile.HurtRadius.
  * Added extra check to increment shot by husk stat
@@ -22,7 +24,7 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius,
     local bool bAlreadyChecked;
 
     local KFHumanPawn humanVictim;
-    local PlayerLRI playerLRI;
+    local KFSXLinkedReplicationInfo lri;
 
     if ( bHurtEntry )
         return;
@@ -75,8 +77,8 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius,
                 }
 //KFStatsX - 1
                 if (humanVictim != none) {
-                    playerLRI= KFSXPlayerController(humanVictim.Controller).playerLRI;
-                    playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Shot_By_Husk), 1);
+                    lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(humanVictim.PlayerReplicationInfo);
+                    lri.playerInfo.accum(shotByHusk, 1);
                 }
 //KFStatsX - 1 End
 
@@ -146,3 +148,6 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius,
     bHurtEntry = false;
 }
 
+defaultproperties {
+    shotByHusk= "Shot By Husk"
+}

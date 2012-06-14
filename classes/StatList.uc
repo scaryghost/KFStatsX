@@ -22,15 +22,15 @@ function bool PreDraw(Canvas Canvas) {
     return false;
 }
 
-function InitList(KFSXLinkedReplicationInfo lri) {
+function InitList(SortedMap statsInfo) {
     local int i;
     // Update the ItemCount and select the first item
-    itemCount= lri.stats.maxStatIndex;
+    itemCount= statsInfo.maxStatIndex;
     SetIndex(0);
 
     for(i= 0; i < itemCount; i++) {
-        statDescriptions[i]= lri.stats.keys[i];
-        statValue[i]= lri.stats.values[i];
+        statDescriptions[i]= statsInfo.keys[i];
+        statValue[i]= statsInfo.values[i];
     }
 
     if ( bNotify ) {

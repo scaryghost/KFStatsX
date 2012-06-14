@@ -5,22 +5,21 @@
  */
 class ZombieSiren_KFSX extends KFChar.ZombieSiren;
 
-var PlayerLRI instigatorLRI;
+var String explosivesDisintegrated;
+var KFSXLinkedReplicationInfo instigatorLRI;
 var float tempHealth;
 var bool decapCounted;
 
 function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, 
         class<DamageType> damageType, optional int HitIndex) {
     local float prevHealth, diffHealth;
-    local HiddenLRI hiddenLRI;
 
     prevHealth= Health;
-    if (InstigatedBy != none && KFSXPlayerController(InstigatedBy.Controller) != none) {
-        instigatorLRI= KFSXPlayerController(InstigatedBy.Controller).playerLRI;
-        hiddenLRI= KFSXPlayerController(InstigatedBy.Controller).hiddenLRI;
+    if (InstigatedBy != none && instigatorLRI != none) {
+        instigatorLRI= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(InstigatedBy.PlayerReplicationInfo);
     }
     if (instigatorLRI != none && tempHealth == 0 && bBackstabbed) {
-        instigatorLRI.stats.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Backstabs), 1);
+        instigatorLRI.playerInfo.accum(instigatorLRI.backstabs, 1);
     }
 
     super.TakeDamage(Damage, InstigatedBy, Hitlocation, Momentum, damageType, HitIndex);
@@ -32,12 +31,12 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
     }
     if (instigatorLRI != none) {
         if (!decapCounted && bDecapitated) {
-            instigatorLRI.stats.accum(instigatorLRI.getKey(instigatorLRI.StatKeys.Decapitations), 1);
+            instigatorLRI.playerInfo.accum(instigatorLRI.decapitations, 1);
             decapCounted= true;
         }
     }
-    if (hiddenLRI != none) {
-        hiddenLRI.stats.accum(hiddenLRI.DAMAGE, diffHealth);
+    if (instigatorLRI != none) {
+        instigatorLRI.hiddenInfo.accum(instigatorLRI.damage, diffHealth);
     }
 }
 
@@ -49,7 +48,7 @@ function RemoveHead() {
 
 simulated function HurtRadius( float DamageAmount, float DamageRadius, class<DamageType> DamageType, 
         float Momentum, vector HitLocation ) {
-    local PlayerLRI playerLRI;
+    local KFSXLinkedReplicationInfo lri;
     local actor Victims;
     local float damageScale, dist;
     local vector dir;
@@ -103,8 +102,8 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
                 LAWProj(Victims) != none && LAWProj(Victims).bDisintegrated || 
                 PipeBombProjectile(Victims) != none && PipeBombProjectile(Victims).bDisintegrated ||
                 M79GrenadeProjectile(Victims) != none && M79GrenadeProjectile(Victims).bDisintegrated) {
-                playerLRI= KFSXPlayerController(Projectile(Victims).Instigator.Controller).playerLRI;
-                playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Explosives_Disintegrated), 1);
+                lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(Projectile(Victims).Instigator.PlayerReplicationInfo);
+                lri.playerInfo.accum(explosivesDisintegrated, 1);
             }
 //KFStats - 2 End
             if (Instigator != None && Vehicle(Victims) != None && Vehicle(Victims).Health > 0)
@@ -113,4 +112,8 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
         }
     }
     bHurtEntry = false;
+}
+
+defaultproperties {
+    explosivesDisintegrated= "Explosives Disintegrated"
 }

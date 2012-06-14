@@ -1,10 +1,12 @@
 /**
- * Displays the stats from PlayerLRI
+ * Displays the stats from playerInfo
  * @author etsai (Scary Ghost)
  */
 class PlayerStatsPanel extends StatsPanelBase;
 
 function ShowPanel(bool bShow) {
-    ownerLRI= KFSXPlayerController(PlayerOwner()).playerLRI;
+    if (statsInfo == none) {
+        statsInfo= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(PlayerOwner().PlayerReplicationInfo).playerInfo;
+    }
     super.ShowPanel(bShow);
 }

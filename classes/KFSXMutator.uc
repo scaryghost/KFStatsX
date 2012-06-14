@@ -21,8 +21,8 @@ var() config string localHostSteamId;
 var KFGameType gametype;
 /** Player controller class to use for KFStatsX */
 var class<PlayerController> kfsxPC;
-/** Linked replication info classes to attach to PRI */
-var array<class<LinkedReplicationInfo> > lriList;
+/** Linked replication info class to attach to PRI */
+var class<LinkedReplicationInfo> kfsxLRIClass;
 /** Stores the pairs of default monsters with their stats counterparts */
 var array<Auxiliary.ReplacementPair> monsterReplacement;
 /** End game boss and the fall back monster class */
@@ -80,7 +80,7 @@ function Timer() {
         (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress)) {
         serverLink.broadcastMatchResults(gameRules.deaths);
         if (broadcastStats && Level.NetMode != NM_DedicatedServer) {
-            serverLink.broadcastPlayerStats(KFSXPlayerController(Level.GetLocalPlayerController()));
+            serverLink.broadcastPlayerStats(Level.GetLocalPlayerController().PlayerReplicationInfo);
         }
         SetTimer(0,false);
     }
@@ -90,7 +90,7 @@ function NotifyLogout(Controller Exiting) {
     if (broadcastStats && gameType.GameReplicationInfo.bMatchHasBegun && 
         (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress) &&
         Exiting != Level.GetLocalPlayerController()) {
-        serverLink.broadcastPlayerStats(KFSXPlayerController(Exiting));
+        serverLink.broadcastPlayerStats(Exiting.PlayerReplicationInfo);
     }
 }
 
@@ -103,11 +103,9 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
         PlayerReplicationInfo(Other).Owner != none) {
         
         pri= PlayerReplicationInfo(Other);
-        for(i= 0; i < lriList.Length; i++) {
-            lri= pri.spawn(lriList[i], pri.Owner);
-            lri.NextReplicationInfo= pri.CustomReplicationInfo;
-            pri.CustomReplicationInfo= lri;
-        }
+        lri= pri.spawn(kfsxLRIClass, pri.Owner);
+        lri.NextReplicationInfo= pri.CustomReplicationInfo;
+        pri.CustomReplicationInfo= lri;
         return true;
     } else if (Weapon(Other) != none) {
         for(i= 0; i < ArrayCount(Weapon(Other).FireModeClass); i++) {
@@ -183,8 +181,5 @@ defaultproperties {
     fireModeReplacement(6)=(oldClass=class'KFMod.CrossbowFire',newClass=class'CrossbowFire_KFSX')
 
     kfsxPC= class'KFSXPlayerController'
-    lriList(0)= class'WeaponLRI'
-    lriList(1)= class'PlayerLRI'
-    lriList(2)= class'KillsLRI'
-    lriList(3)= class'HiddenLRI'
+    kfsxLRIClass= class'KFSXLinkedReplicationInfo'
 }

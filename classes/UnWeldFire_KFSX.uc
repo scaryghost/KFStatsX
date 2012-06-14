@@ -7,16 +7,15 @@ class UnWeldFire_KFSX extends KFMod.UnWeldFire;
 simulated Function timer() {
     local KFDoorMover targetDoor;
     local float oldWeldStrength;
-    local PlayerLRI playerLRI;
+    local KFSXLinkedReplicationInfo lri;
 
     targetDoor= GetDoor();
-    playerLRI= KFSXPlayerController(Instigator.Controller).playerLRI;
+    lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(Instigator.PlayerReplicationInfo);
     if (targetDoor != none) {
         oldWeldStrength= targetDoor.MyTrigger.WeldStrength;
     }
     super.timer();
-    if (targetDoor != none && playerLRI != none) {
-        playerLRI.stats.accum(playerLRI.getKey(playerLRI.StatKeys.Welding), 
-                oldWeldStrength - targetDoor.MyTrigger.WeldStrength);
+    if (targetDoor != none && lri != none) {
+        lri.playerInfo.accum(lri.welding, oldWeldStrength - targetDoor.MyTrigger.WeldStrength);
     }
 }
