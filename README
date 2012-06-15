@@ -2,7 +2,9 @@
 Scary Ghost
 
 +About
-Provides advanced statistics about a player's performance and tracks game information for each match.
+Provides advanced statistics about a player's performance and tracks game information for each match.  This started out 
+as enhancements to Game Stats Tab but I did not like how static everything was.  Eventually, I decided to rebuild the 
+mutator from ground up and new features have made the mutator more resemble HLStatsX.
 
 +Version
 1.0
@@ -11,7 +13,7 @@ Provides advanced statistics about a player's performance and tracks game inform
 https://dl.dropbox.com/u/16251678/KFStatsX_v1.0.zip
 
 +MD5 Hash
-These are the MD5 hashes for version 1.0.0.  If the .u and .ucl files do not match these signatures, you do not have 
+These are the MD5 hashes for version 1.0.  If the .u and .ucl files do not match these signatures, you do not have 
 an official released version from me.
 
 KFStatsX.u        a157cf3c26c8134329bead86fda11266
