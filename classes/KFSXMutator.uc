@@ -126,7 +126,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
 
 static function FillPlayInfo(PlayInfo PlayInfo) {
     Super.FillPlayInfo(PlayInfo);
-    PlayInfo.AddSetting("KFStatsX", "playerController", "Compatability", 0, 0, "Select", default.compatibleControllers, "Xb");
+    PlayInfo.AddSetting("KFStatsX", "playerController", "Compatability", 0, 1, "Select", default.compatibleControllers, "Xb",,true);
     PlayInfo.AddSetting("KFStatsX", "broadcastStats", "Broadcast Statistics", 0, 0, "Check");
     PlayInfo.AddSetting("KFStatsX", "localHostSteamId", "Local Host Steam ID", 0, 0, "Text", "128");
     PlayInfo.AddSetting("KFStatsX", "serverAddress", "Remote Server Address", 0, 0, "Text", "128");
