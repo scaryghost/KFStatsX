@@ -17,9 +17,9 @@ struct StatIndex {
 /** Number of entries in the map */
 var int maxStatIndex;
 /** Values for each key */
-var array<float> values[50];
+var array<float> values[63];
 /** Set of keys used by the map */
-var array<string> keys[50];
+var array<string> keys[63];
 /** List of key index pairs */
 var array<StatIndex> indices;
 
