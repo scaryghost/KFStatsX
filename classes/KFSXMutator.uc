@@ -20,6 +20,8 @@ var() config string localHostSteamId;
 var() config string playerController;
 /** Semi colon separated list of available, supported custom controllers */
 var() config string compatibleControllers;
+/** List of fire modes to replace */
+var() config array<Auxiliary.ReplacementPair> fireModeReplacement;
 
 /** Reference to the KFGameType object */
 var KFGameType gametype;
@@ -40,9 +42,6 @@ var class<KFSXGameRules> kfStatsXRules;
 var class<RemoteServerLink> serverLinkClass;
 /** Link to the remote tracking server */
 var transient RemoteServerLink serverLink;
-
-/** List of fire modes to replace */
-var() config array<Auxiliary.ReplacementPair> fireModeReplacement;
 
 function PostBeginPlay() {
 
@@ -177,6 +176,14 @@ defaultproperties {
     monsterReplacement(6)=(oldClass="KFChar.ZombieScrake",newClass="KFStatsX.ZombieScrake_KFSX")
     monsterReplacement(7)=(oldClass="KFChar.ZombieSiren",newClass="KFStatsX.ZombieSiren_KFSX")
     monsterReplacement(8)=(oldClass="KFChar.ZombieStalker",newClass="KFStatsX.ZombieStalker_KFSX")
+
+    fireModeReplacement(0)=(oldClass="KFMod.FragFire",NewClass="KFStatsX.FragFire_KFSX")
+    fireModeReplacement(1)=(oldClass="KFMod.HuskGunFire",NewClass="KFStatsX.HuskGunFire_KFSX")
+    fireModeReplacement(2)=(oldClass="KFMod.WeldFire",NewClass="KFStatsX.WeldFire_KFSX")
+    fireModeReplacement(3)=(oldClass="KFMod.UnWeldFire",NewClass="KFStatsX.UnWeldFire_KFSX")
+    fireModeReplacement(4)=(oldClass="KFMod.MP7MAltFire",NewClass="KFStatsX.MP7MAltFire_KFSX")
+    fireModeReplacement(5)=(oldClass="KFMod.MP5MAltFire",NewClass="KFStatsX.MP5MAltFire_KFSX")
+    fireModeReplacement(6)=(oldClass="KFMod.CrossbowFire",NewClass="KFStatsX.CrossbowFire_KFSX")
 
     kfsxLRIClass= class'KFSXLinkedReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"
