@@ -103,13 +103,13 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
 
     lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(pri);
     lri.hiddenInfo.put("Time Connected", Level.GRI.ElapsedTime - pri.StartTime);
-    baseMsg= playerProtocol $ "," $ playerProtocolVersion $ separator $ "playerid:" $ lri.playerIDHash $ separator;
+    baseMsg= playerProtocol $ "," $ playerProtocolVersion $ separator $ lri.playerIDHash $ separator;
 
-    statMsgs[statMsgs.Length]= "seq:0" $ separator $ "player" $ separator $ getStatValues(lri.playerInfo);
-    statMsgs[statMsgs.Length]= "seq:1" $ separator $ "weapon" $ separator $ getStatValues(lri.weaponInfo);
-    statMsgs[statMsgs.Length]= "seq:2" $ separator $ "kills" $ separator $ getStatValues(lri.killsInfo);
-    statMsgs[statMsgs.Length]= "seq:3" $ separator $ "hidden" $ separator $ getStatValues(lri.hiddenInfo);
-    statMsgs[statMsgs.Length]= "seq:4" $ separator $ "match" $ separator $ matchData $ 
+    statMsgs[statMsgs.Length]= "0" $ separator $ "player" $ separator $ getStatValues(lri.playerInfo);
+    statMsgs[statMsgs.Length]= "1" $ separator $ "weapon" $ separator $ getStatValues(lri.weaponInfo);
+    statMsgs[statMsgs.Length]= "2" $ separator $ "kills" $ separator $ getStatValues(lri.killsInfo);
+    statMsgs[statMsgs.Length]= "3" $ separator $ "hidden" $ separator $ getStatValues(lri.hiddenInfo);
+    statMsgs[statMsgs.Length]= "4" $ separator $ "match" $ separator $ matchData $ 
         KFGameReplicationInfo(Level.GRI).EndGameType $ separator $ 
         KFGameType(Level.Game).WaveNum+1 $ separator $ "_close";
     SendText(serverAddr, "kfstatsx-pwd" $ separator $ class'KFSXMutator'.default.serverPwd);
