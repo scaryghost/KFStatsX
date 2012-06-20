@@ -46,9 +46,9 @@ static function KFSXLinkedReplicationInfo findKFSXlri(PlayerReplicationInfo pri)
 }
 
 defaultproperties {
-    damage= "Damage"
-    deaths= "Deaths"
-    suicides= "Suicides"
+    damage= "player->Damage"
+    deaths= "player->Deaths"
+    suicides= "player->Suicides"
     healedTeammates= "Healed Teammates"
     healDartsConnected= "Heal Darts Connected"
     welding= "Welding"

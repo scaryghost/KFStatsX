@@ -24,7 +24,7 @@ function Timer() {
         lri.playerInfo.accum(timeAlive, timeDiff);
     }
     if (lri != none && KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill != none) {
-        lri.hiddenInfo.accum(GetItemName(string(KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill)), timeDiff);
+        lri.hiddenInfo.accum("perk->"$GetItemName(string(KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill)), timeDiff);
     }
     prevTime= Level.GRI.ElapsedTime;
 }

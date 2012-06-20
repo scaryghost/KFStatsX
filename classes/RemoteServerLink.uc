@@ -101,7 +101,7 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     local KFSXLinkedReplicationInfo lri;
 
     lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(pri);
-    lri.hiddenInfo.put("Time Connected", Level.GRI.ElapsedTime - pri.StartTime);
+    lri.hiddenInfo.put("player->Time Connected", Level.GRI.ElapsedTime - pri.StartTime);
     baseMsg= playerProtocol $ "," $ playerProtocolVersion $ "," $ 
         class'KFSXMutator'.default.serverPwd $ separator $ lri.playerIDHash $ separator;
 
