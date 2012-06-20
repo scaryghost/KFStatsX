@@ -62,13 +62,12 @@ function MatchStarting() {
  */
 function broadcastMatchResults(SortedMap deaths) {
     local string matchPacket;
-    matchPacket= matchProtocol $ "," $ matchProtocolVersion $ separator;
+    matchPacket= matchProtocol $ "," $ matchProtocolVersion $ "," $ class'KFSXMutator'.default.serverPwd $ separator;
     matchPacket$= matchData;
     matchPacket$= Level.GRI.ElapsedTime $ separator;
     matchPacket$= KFGameReplicationInfo(Level.GRI).EndGameType $ separator;
     matchPacket$= KFGameType(Level.Game).WaveNum+1 $ separator;
     matchPacket$= getStatValues(deaths) $ separator $ "_close";
-    SendText(serverAddr, "kfstatsx-pwd" $ separator $ class'KFSXMutator'.default.serverPwd);
     SendText(serverAddr, matchPacket);
 }    
 
@@ -103,7 +102,8 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
 
     lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(pri);
     lri.hiddenInfo.put("Time Connected", Level.GRI.ElapsedTime - pri.StartTime);
-    baseMsg= playerProtocol $ "," $ playerProtocolVersion $ separator $ lri.playerIDHash $ separator;
+    baseMsg= playerProtocol $ "," $ playerProtocolVersion $ "," $ 
+        class'KFSXMutator'.default.serverPwd $ separator $ lri.playerIDHash $ separator;
 
     statMsgs[statMsgs.Length]= "0" $ separator $ "player" $ separator $ getStatValues(lri.playerInfo);
     statMsgs[statMsgs.Length]= "1" $ separator $ "weapon" $ separator $ getStatValues(lri.weaponInfo);
@@ -112,7 +112,6 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     statMsgs[statMsgs.Length]= "4" $ separator $ "match" $ separator $ matchData $ 
         KFGameReplicationInfo(Level.GRI).EndGameType $ separator $ 
         KFGameType(Level.Game).WaveNum+1 $ separator $ "_close";
-    SendText(serverAddr, "kfstatsx-pwd" $ separator $ class'KFSXMutator'.default.serverPwd);
     for(index= 0; index < statMsgs.Length; index++) {
         SendText(serverAddr, baseMsg $ statMsgs[index]);
     }
