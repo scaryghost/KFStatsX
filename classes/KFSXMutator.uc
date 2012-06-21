@@ -19,7 +19,7 @@ var() config string localHostSteamId;
 /** Player controller to be used by the game in ${package}.${class} format */
 var() config string playerController;
 /** Semi colon separated list of available, supported custom controllers */
-var() config string compatibleControllers;
+var() config array<string> compatibleControllers;
 /** List of fire modes to replace */
 var() config array<Auxiliary.ReplacementPair> fireModeReplacement;
 
@@ -124,8 +124,16 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
 }
 
 static function FillPlayInfo(PlayInfo PlayInfo) {
+    local string controllers;
+    local int i;
+    
     Super.FillPlayInfo(PlayInfo);
-    PlayInfo.AddSetting("KFStatsX", "playerController", "Compatability", 0, 1, "Select", default.compatibleControllers, "Xb",,true);
+    for(i= 0; i < default.compatibleControllers.Length; i++) {
+        if (i != 0) 
+            controllers$= ";";
+        controllers$= default.compatibleControllers[i];
+    }
+    PlayInfo.AddSetting("KFStatsX", "playerController", "Compatability", 0, 1, "Select", controllers, "Xb",,true);
     PlayInfo.AddSetting("KFStatsX", "broadcastStats", "Broadcast Statistics", 0, 0, "Check");
     PlayInfo.AddSetting("KFStatsX", "localHostSteamId", "Local Host Steam ID", 0, 0, "Text", "128");
     PlayInfo.AddSetting("KFStatsX", "serverAddress", "Remote Server Address", 0, 0, "Text", "128");
@@ -187,5 +195,5 @@ defaultproperties {
 
     kfsxLRIClass= class'KFSXLinkedReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"
-    compatibleControllers= "KFStatsX.KFSXPlayerController;Vanilla KF"
+    compatibleControllers(0)= "KFStatsX.KFSXPlayerController;Vanilla KF"
 }
