@@ -31,7 +31,6 @@ defaultproperties {
     Panels(1)=(ClassName="KFStatsX.ActionPanel",Caption="Actions",Hint="Player actions")
     Panels(2)=(ClassName="KFStatsX.WeaponStatsPanel",Caption="Weapons",Hint="Weapons usage")
     Panels(3)=(ClassName="KFStatsX.KillStatsPanel",Caption="Kills",Hint="Kill counts")
-    Panels(4)=(ClassName="KFStatsX.PerksPanel",Caption="Perks",Hint="Perks selected")
-    Panels(5)=(ClassName="KFStatsX.PanelSettings",Caption="Settings",Hint="Adjust settings for the stat panels")
+    Panels(4)=(ClassName="KFStatsX.PanelSettings",Caption="Settings",Hint="Adjust settings for the stat panels")
     WindowName="KFStatsX v1.0"
 }

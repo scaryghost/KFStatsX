@@ -16,7 +16,7 @@ var String playerIdHash;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority)
-        player, actions, weapons, kills, perks;
+        player, actions, weapons, kills;
 }
 
 function MatchStarting() {

@@ -25,12 +25,15 @@ function bool PreDraw(Canvas Canvas) {
 function InitList(SortedMap statsInfo) {
     local int i;
     // Update the ItemCount and select the first item
-    itemCount= statsInfo.maxStatIndex;
+    itemCount= 0;
     SetIndex(0);
 
-    for(i= 0; i < itemCount; i++) {
-        statDescriptions[i]= statsInfo.keys[i];
-        statValue[i]= statsInfo.values[i];
+    for(i= 0; i < statsInfo.maxStatIndex; i++) {
+        if (statsInfo.keys[i] != class'KFSXLinkedReplicationInfo'.default.damage) {
+            statDescriptions[itemCount]= statsInfo.keys[i];
+            statValue[itemCount]= statsInfo.values[i];
+            itemCount++;
+        }
     }
 
     if ( bNotify ) {

@@ -7,7 +7,7 @@
 class KFSXHumanPawn extends KFHumanPawn;
 
 var String damageTaken, armorLost, timeAlive, healedSelf, cashSpent, receivedHeal;
-var String deaths, suicided;
+var String deaths;
 var float prevHealth, prevShield;
 var KFSXLinkedReplicationInfo lri;
 var int prevTime;
@@ -125,9 +125,6 @@ function TakeBileDamage() {
 function Died(Controller Killer, class<DamageType> damageType, vector HitLocation) {
     if (!Controller.IsInState('GameEnded')) {
         lri.player.accum(deaths, 1);
-        if(Killer == Self.Controller) {
-            lri.actions.accum(suicided, 1);
-        }
     }
 
     prevHealth= 0;
@@ -178,5 +175,4 @@ defaultproperties {
     cashSpent= "Cash Spent"
     receivedHeal= "Received Heal"
     deaths= "Deaths"
-    suicided= "Suicided"
 }
