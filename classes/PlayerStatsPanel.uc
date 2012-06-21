@@ -1,5 +1,5 @@
 /**
- * Displays the stats from playerInfo
+ * Displays general player info
  * @author etsai (Scary Ghost)
  */
 class PlayerStatsPanel extends StatsPanelBase;
@@ -7,7 +7,7 @@ class PlayerStatsPanel extends StatsPanelBase;
 function ShowPanel(bool bShow) {
     if (statsInfo == none) {
         statsInfo= class'KFSXLinkedReplicationInfo'.static
-                .findKFSXlri(PlayerOwner().PlayerReplicationInfo).playerInfo;
+                .findKFSXlri(PlayerOwner().PlayerReplicationInfo).player;
     }
     super.ShowPanel(bShow);
 }

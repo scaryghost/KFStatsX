@@ -11,7 +11,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation) {
     super.ProcessTouch(Other, HitLocation);
     if (KFPawn(Other) != none) {
         lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(KFPawn(Other).PlayerReplicationInfo);
-        lri.playerInfo.accum(lri.healDartsConnected, 1);
-        lri.playerInfo.accum(lri.healedTeammates, 1);
+        lri.actions.accum(lri.healDartsConnected, 1);
+        lri.actions.accum(lri.healedTeammates, 1);
     }
 }

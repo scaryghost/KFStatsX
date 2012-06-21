@@ -7,7 +7,7 @@
 class KFSXHumanPawn extends KFHumanPawn;
 
 var String damageTaken, armorLost, timeAlive, healedSelf, cashSpent, receivedHeal;
-var String deaths, suicides;
+var String deaths, suicided;
 var float prevHealth, prevShield;
 var KFSXLinkedReplicationInfo lri;
 var int prevTime;
@@ -21,10 +21,10 @@ function Timer() {
     super.Timer();
     timeDiff= Level.GRI.ElapsedTime - prevTime;
     if (lri != none) {
-        lri.playerInfo.accum(timeAlive, timeDiff);
+        lri.player.accum(timeAlive, timeDiff);
     }
     if (lri != none && KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill != none) {
-        lri.hiddenInfo.accum("perk->"$GetItemName(string(KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill)), timeDiff);
+        lri.perks.accum(GetItemName(string(KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill)), timeDiff);
     }
     prevTime= Level.GRI.ElapsedTime;
 }
@@ -62,7 +62,7 @@ function DeactivateSpawnProtection() {
                 itemName= healedSelf;
             else
                 itemName= lri.healedTeammates;
-            lri.playerInfo.accum(itemName,1);
+            lri.actions.accum(itemName,1);
             return;
         }
 
@@ -77,7 +77,7 @@ function DeactivateSpawnProtection() {
             itemName$= " Alt";
         }
 
-        lri.weaponInfo.accum(itemName, load);
+        lri.weapons.accum(itemName, load);
     }
 }
 
@@ -93,8 +93,8 @@ simulated function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation
 
     Super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType);
    
-    lri.playerInfo.accum(damageTaken, oldHealth - fmax(Health,0.0));
-    lri.playerInfo.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
+    lri.player.accum(damageTaken, oldHealth - fmax(Health,0.0));
+    lri.player.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
     prevHealth= 0;
     prevShield= 0;
 }
@@ -117,16 +117,16 @@ function TakeBileDamage() {
     healthtoGive-=5;
 
     if(lri != none) {
-        lri.playerInfo.accum(damageTaken, oldHealth - fmax(Health,0.0));
-        lri.playerInfo.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
+        lri.player.accum(damageTaken, oldHealth - fmax(Health,0.0));
+        lri.player.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
     }
 }
 
 function Died(Controller Killer, class<DamageType> damageType, vector HitLocation) {
     if (!Controller.IsInState('GameEnded')) {
-        lri.hiddenInfo.accum(lri.deaths, 1);
+        lri.player.accum(deaths, 1);
         if(Killer == Self.Controller) {
-            lri.hiddenInfo.accum(lri.suicides, 1);
+            lri.actions.accum(suicided, 1);
         }
     }
 
@@ -141,7 +141,7 @@ function ServerBuyWeapon( Class<Weapon> WClass ) {
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyWeapon(WClass);
-    lri.playerInfo.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
+    lri.player.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
 }
 
 function ServerBuyAmmo( Class<Ammunition> AClass, bool bOnlyClip ) {
@@ -149,7 +149,7 @@ function ServerBuyAmmo( Class<Ammunition> AClass, bool bOnlyClip ) {
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyAmmo(AClass, bOnlyClip);
-    lri.playerInfo.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
+    lri.player.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
 }
 
 function ServerBuyKevlar() {
@@ -157,7 +157,7 @@ function ServerBuyKevlar() {
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyKevlar();
-    lri.playerInfo.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
+    lri.player.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
 }
 
 function bool GiveHealth(int HealAmount, int HealMax) {
@@ -165,7 +165,7 @@ function bool GiveHealth(int HealAmount, int HealMax) {
 
     result= super.GiveHealth(HealAmount, HealMax);
     if (result) {
-        lri.playerInfo.accum(receivedHeal, 1);
+        lri.actions.accum(receivedHeal, 1);
     }
     return result;
 }
@@ -177,4 +177,6 @@ defaultproperties {
     healedSelf= "Healed Self"
     cashSpent= "Cash Spent"
     receivedHeal= "Received Heal"
+    deaths= "Deaths"
+    suicided= "Suicided"
 }

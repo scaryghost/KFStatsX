@@ -16,6 +16,6 @@ simulated Function timer() {
     }
     super.timer();
     if (targetDoor != none && lri != none) {
-        lri.playerInfo.accum(lri.welding, targetDoor.MyTrigger.WeldStrength - oldWeldStrength);
+        lri.player.accum(lri.welding, targetDoor.MyTrigger.WeldStrength - oldWeldStrength);
     }
 }

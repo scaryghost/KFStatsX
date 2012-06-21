@@ -20,7 +20,7 @@ simulated state OnWall {
                     PlaySound(Sound'KF_InventorySnd.Ammo_GenericPickup', SLOT_Pain,2*TransientSoundVolume,,400);
                     if(PlayerController(Pawn(Other).Controller) !=none) {
                         PlayerController(Pawn(Other).Controller).ClientMessage( "You picked up a bolt" );
-                        lri.playerInfo.accum(statKey, 1.0);
+                        lri.actions.accum(statKey, 1.0);
                     }
                     Destroy();
                 }

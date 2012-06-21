@@ -7,7 +7,7 @@ class KillStatsPanel extends StatsPanelBase;
 function ShowPanel(bool bShow) {
     if (statsInfo == none) {
         statsInfo= class'KFSXLinkedReplicationInfo'.static
-                .findKFSXlri(PlayerOwner().PlayerReplicationInfo).killsInfo;
+                .findKFSXlri(PlayerOwner().PlayerReplicationInfo).kills;
     }
     super.ShowPanel(bShow);
 }

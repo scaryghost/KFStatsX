@@ -52,7 +52,7 @@ function ScoreKill(Controller Killer, Controller Killed) {
         }
         if (itemName != "") {
             lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(Killer.PlayerReplicationInfo);
-            lri.killsInfo.accum(itemName, 1);
+            lri.kills.accum(itemName, 1);
         }
     }
 }

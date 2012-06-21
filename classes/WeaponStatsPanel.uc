@@ -7,7 +7,7 @@ class WeaponStatsPanel extends StatsPanelBase;
 function ShowPanel(bool bShow) {
     if (statsInfo == none) {
         statsInfo= class'KFSXLinkedReplicationInfo'.static
-                .findKFSXlri(PlayerOwner().PlayerReplicationInfo).weaponInfo;
+                .findKFSXlri(PlayerOwner().PlayerReplicationInfo).weapons;
     }
     super.ShowPanel(bShow);
 }

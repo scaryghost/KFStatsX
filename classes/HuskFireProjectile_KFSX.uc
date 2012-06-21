@@ -78,7 +78,7 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius,
 //KFStatsX - 1
                 if (humanVictim != none) {
                     lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(humanVictim.PlayerReplicationInfo);
-                    lri.playerInfo.accum(shotByHusk, 1);
+                    lri.actions.accum(shotByHusk, 1);
                 }
 //KFStatsX - 1 End
 

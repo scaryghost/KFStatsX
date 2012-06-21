@@ -16,5 +16,5 @@ function DoFireEffect() {
         fuelAmount= 10;
     }
     lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(Instigator.PlayerReplicationInfo);
-    lri.weaponInfo.accum(Weapon.ItemName, fuelAmount);
+    lri.weapons.accum(Weapon.ItemName, fuelAmount);
 }

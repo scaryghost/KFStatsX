@@ -19,7 +19,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         instigatorLRI= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(InstigatedBy.PlayerReplicationInfo);
     }
     if (instigatorLRI != none && tempHealth == 0 && bBackstabbed) {
-        instigatorLRI.playerInfo.accum(instigatorLRI.backstabs, 1);
+        instigatorLRI.actions.accum(instigatorLRI.backstabs, 1);
     }
 
     super.TakeDamage(Damage, InstigatedBy, Hitlocation, Momentum, damageType, HitIndex);
@@ -31,12 +31,12 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
     }
     if (instigatorLRI != none) {
         if (!decapCounted && bDecapitated) {
-            instigatorLRI.playerInfo.accum(instigatorLRI.decapitations, 1);
+            instigatorLRI.actions.accum(instigatorLRI.decapitations, 1);
             decapCounted= true;
         }
     }
     if (instigatorLRI != none) {
-        instigatorLRI.hiddenInfo.accum(instigatorLRI.damage, diffHealth);
+        instigatorLRI.player.accum(instigatorLRI.damage, diffHealth);
     }
 }
 
@@ -58,7 +58,7 @@ function StartCharging() {
         targetLRI= instigatorLRI;
     }
     if (Health > 0 && targetLRI != none) {
-        targetLRI.playerInfo.accum(fleshpoundsRaged, 1);
+        targetLRI.actions.accum(fleshpoundsRaged, 1);
     }
 }
 

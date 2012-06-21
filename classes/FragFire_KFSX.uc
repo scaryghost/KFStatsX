@@ -19,7 +19,7 @@ function projectile SpawnProjectile(Vector Start, Rotator Dir) {
         g= class'Nade';
     }
     lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(Instigator.PlayerReplicationInfo);
-    lri.weaponInfo.accum(GetItemName(string(g)), 1);
+    lri.weapons.accum(GetItemName(string(g)), 1);
 
     return super.SpawnProjectile(Start,Dir);
 }

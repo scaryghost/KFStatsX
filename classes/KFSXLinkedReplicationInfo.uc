@@ -6,17 +6,17 @@
 class KFSXLinkedReplicationInfo extends LinkedReplicationInfo
     dependson(SortedMap);
 
-var String damage, deaths, suicides;
-var String healedTeammates, healDartsConnected, welding,
+var String damage, welding;
+var String healedTeammates, healDartsConnected,
             backstabs, decapitations;
 
 /** Map of values stored by this LRI */
-var SortedMap playerInfo, weaponInfo, killsInfo, hiddenInfo;
+var SortedMap player, actions, weapons, kills, perks;
 var String playerIdHash;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority)
-        playerInfo, weaponInfo, killsInfo;
+        player, actions, weapons, kills, perks;
 }
 
 function MatchStarting() {
@@ -30,10 +30,11 @@ function MatchStarting() {
 
 event PostBeginPlay() {
     super.PostBeginPlay();
-    playerInfo= Spawn(class'SortedMap');
-    weaponInfo= Spawn(class'SortedMap');
-    killsInfo= Spawn(class'SortedMap');
-    hiddenInfo= Spawn(class'SortedMap');
+    player= Spawn(class'SortedMap');
+    weapons= Spawn(class'SortedMap');
+    kills= Spawn(class'SortedMap');
+    actions= Spawn(class'SortedMap');
+    perks= Spawn(class'SortedMap');
 }
 
 static function KFSXLinkedReplicationInfo findKFSXlri(PlayerReplicationInfo pri) {
@@ -46,9 +47,7 @@ static function KFSXLinkedReplicationInfo findKFSXlri(PlayerReplicationInfo pri)
 }
 
 defaultproperties {
-    damage= "player->Damage"
-    deaths= "player->Deaths"
-    suicides= "player->Suicides"
+    damage= "Damage"
     healedTeammates= "Healed Teammates"
     healDartsConnected= "Heal Darts Connected"
     welding= "Welding"
