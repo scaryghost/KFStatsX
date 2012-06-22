@@ -50,10 +50,13 @@ function PostBeginPlay() {
         Destroy();
         return;
     }
-    
+
     gameRules= Spawn(kfStatsXRules);
     gameType.PlayerControllerClass= class<PlayerController>(DynamicLoadObject(playerController, class'Class'));
     gameType.PlayerControllerClassName= playerController;
+    if (Level.NetMode != NM_Standalone && gameType.PlayerControllerClass != class'KFSXPlayerController') {
+        AddToPackageMap(string(gameType.PlayerControllerClass.Outer.name));
+    }
 
     //Replace all instances of the old specimens with the new ones 
     auxiliaryRef.static.replaceStandardMonsterClasses(gameType.StandardMonsterClasses, 
@@ -162,8 +165,8 @@ static event string GetDescriptionText(string property) {
 
 defaultproperties {
     GroupName="KFStatX"
-    FriendlyName="KFStatsX v1.0"
-    Description="Tracks statistics for each player"
+    FriendlyName="~KFStatsX v1.0"
+    Description="Tracks statistics for each player, version 1.0"
 
     bAddToServerPackages=true
     RemoteRole=ROLE_SimulatedProxy
