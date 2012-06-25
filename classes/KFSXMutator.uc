@@ -137,7 +137,7 @@ static function FillPlayInfo(PlayInfo PlayInfo) {
     }
     PlayInfo.AddSetting("KFStatsX", "playerController", "Compatability", 0, 1, "Select", controllers, "Xb",,true);
     PlayInfo.AddSetting("KFStatsX", "broadcastStats", "Broadcast Statistics", 0, 0, "Check");
-    PlayInfo.AddSetting("KFStatsX", "localHostSteamId", "Local Host Steam ID", 0, 0, "Text", "128");
+    PlayInfo.AddSetting("KFStatsX", "localHostSteamId", "Local Host Steam ID", 0, 0, "Text", "128",,,true);
     PlayInfo.AddSetting("KFStatsX", "serverAddress", "Remote Server Address", 0, 0, "Text", "128");
     PlayInfo.AddSetting("KFStatsX", "serverPort", "Remote Server Port", 0, 0, "Text");
     PlayInfo.AddSetting("KFStatsX", "serverPwd", "Remote Server Password", 0, 0, "Text", "128");
@@ -148,7 +148,7 @@ static event string GetDescriptionText(string property) {
         case "broadcastStats":
             return "Check if the mutator should broadcast the stats to a remote server";
         case "localHostSteamId":
-            return "16 digit steam id of the game's local host.  Used for solo or listen server games by the host.";
+            return "Local host's steamid64.  Only used for solo or listen server games by the host.";
         case "serverAddress":
             return "Address of tracking server";
         case "serverPort":
