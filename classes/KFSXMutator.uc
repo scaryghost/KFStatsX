@@ -20,8 +20,9 @@ var() config string localHostSteamId;
 var() config string playerController;
 /** Semi colon separated list of available, supported custom controllers */
 var() config array<string> compatibleControllers;
+
 /** List of fire modes to replace */
-var() config array<Auxiliary.ReplacementPair> fireModeReplacement;
+var array<Auxiliary.ReplacementPair> fireModeReplacement;
 
 /** Reference to the KFGameType object */
 var KFGameType gametype;
@@ -186,9 +187,6 @@ defaultproperties {
     fireModeReplacement(1)=(oldClass="KFMod.HuskGunFire",NewClass="KFStatsX.HuskGunFire_KFSX")
     fireModeReplacement(2)=(oldClass="KFMod.WeldFire",NewClass="KFStatsX.WeldFire_KFSX")
     fireModeReplacement(3)=(oldClass="KFMod.UnWeldFire",NewClass="KFStatsX.UnWeldFire_KFSX")
-    fireModeReplacement(4)=(oldClass="KFMod.MP7MAltFire",NewClass="KFStatsX.MP7MAltFire_KFSX")
-    fireModeReplacement(5)=(oldClass="KFMod.MP5MAltFire",NewClass="KFStatsX.MP5MAltFire_KFSX")
-    fireModeReplacement(6)=(oldClass="KFMod.CrossbowFire",NewClass="KFStatsX.CrossbowFire_KFSX")
 
     kfsxRIClass= class'KFSXReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"

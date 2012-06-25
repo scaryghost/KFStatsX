@@ -6,11 +6,30 @@
  */
 class KFSXHumanPawn extends KFHumanPawn;
 
-var String damageTaken, armorLost, timeAlive, healedSelf, cashSpent, receivedHeal;
+var String damageTaken, armorLost, timeAlive, cashSpent;
+var String healedSelf, receivedHeal, boltsRetrieved;
 var String deaths;
 var float prevHealth, prevShield;
 var KFSXReplicationInfo kfsxri;
 var int prevTime;
+
+function Touch(Actor Other) {
+    local KFSXReplicationInfo instigatorRI;
+
+    super.Touch(Other);
+    PlayerController(Controller).ClientMessage("Touch touch touch..."$Other.name);
+    if (isHealingProjectile(Other) && KFSXHumanPawn(Other.Instigator) != Self) {
+        instigatorRI= class'KFSXReplicationInfo'.static.findKFSXri(Other.Instigator.PlayerReplicationInfo);
+        instigatorRI.actions.accum(kfsxri.healDartsConnected, 1);
+        instigatorRI.actions.accum(kfsxri.healedTeammates, 1);
+    } else if (CrossbowArrow(Other) != none && Other.IsInState('OnWall')) {
+        kfsxri.actions.accum(boltsRetrieved, 1);
+    }
+}
+
+function bool isHealingProjectile(Actor Other) {
+    return MP7MHealinglProjectile(Other) != none;
+}
 
 simulated function PostBeginPlay() {
     super.PostBeginPlay();
@@ -25,7 +44,6 @@ function Timer() {
 
     super.Timer();
     currTime= Level.GRI.ElapsedTime;
-    PlayerController(Controller).ClientMessage(currTime);
     timeDiff= currTime - prevTime;
     if (kfsxri != none) {
         kfsxri.player.accum(timeAlive, timeDiff);
@@ -182,4 +200,5 @@ defaultproperties {
     cashSpent= "Cash Spent"
     receivedHeal= "Received Heal"
     deaths= "Deaths"
+    boltsRetrieved= "Bolts Retrieved"
 }
