@@ -12,16 +12,6 @@ mutator from ground up and new features have made the mutator more resemble HLSt
 +Download
 https://dl.dropbox.com/u/16251678/KFStatsX_v1.0.zip
 
-+MD5 Hash
-These are the MD5 hashes for version 1.0.  If the .u and .ucl files do not match these signatures, you do not have 
-an official released version from me.
-
-KFStatsX.u        ca4a93a95271be1dfa4e4fb5145d3012
-KFStatsX.ucl      06e16014d6d1385f249b1135107fae1f
-
-A record of all md5 hashes may be viewed here:
-https://github.com/scaryghost/KFStatsX/wiki/MD5-Hashes
-
 +Install
 Copy the contents of the system folder to your Killing Floor system folder.  By default, mutator will provide an 
 in game panel of statistics for each player but will not braodcast the accumulated stats to a remote server.  The panel 
