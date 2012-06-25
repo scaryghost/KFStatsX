@@ -17,7 +17,7 @@ function Touch(Actor Other) {
     local KFSXReplicationInfo instigatorRI;
 
     super.Touch(Other);
-    if (isHealingProjectile(Other) && KFSXHumanPawn(Other.Instigator) != Self) {
+    if (Health < HealthMax && isHealingProjectile(Other) && KFSXHumanPawn(Other.Instigator) != Self) {
         instigatorRI= class'KFSXReplicationInfo'.static.findKFSXri(Other.Instigator.PlayerReplicationInfo);
         instigatorRI.actions.accum(kfsxri.healDartsConnected, 1);
         instigatorRI.actions.accum(kfsxri.healedTeammates, 1);
