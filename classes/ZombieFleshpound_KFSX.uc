@@ -6,7 +6,7 @@
 class ZombieFleshPound_KFSX extends KFChar.ZombieFleshPound;
 
 var String fleshpoundsRaged;
-var KFSXReplicationInfo instigatorLRI;
+var KFSXReplicationInfo instigatorRI;
 var float tempHealth;
 var bool decapCounted;
 
@@ -16,10 +16,10 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 
     prevHealth= Health;
     if (InstigatedBy != none) {
-        instigatorLRI= class'KFSXReplicationInfo'.static.findKFSXri(InstigatedBy.PlayerReplicationInfo);
+        instigatorRI= class'KFSXReplicationInfo'.static.findKFSXri(InstigatedBy.PlayerReplicationInfo);
     }
-    if (instigatorLRI != none && tempHealth == 0 && bBackstabbed) {
-        instigatorLRI.actions.accum(instigatorLRI.backstabs, 1);
+    if (instigatorRI != none && tempHealth == 0 && bBackstabbed) {
+        instigatorRI.actions.accum(instigatorRI.backstabs, 1);
     }
 
     super.TakeDamage(Damage, InstigatedBy, Hitlocation, Momentum, damageType, HitIndex);
@@ -29,14 +29,14 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         diffHealth-= tempHealth;
         tempHealth= 0;
     }
-    if (instigatorLRI != none) {
+    if (instigatorRI != none) {
         if (!decapCounted && bDecapitated) {
-            instigatorLRI.actions.accum(instigatorLRI.decapitations, 1);
+            instigatorRI.actions.accum(instigatorRI.decapitations, 1);
             decapCounted= true;
         }
     }
-    if (instigatorLRI != none) {
-        instigatorLRI.player.accum(instigatorLRI.damage, diffHealth);
+    if (instigatorRI != none) {
+        instigatorRI.player.accum(instigatorRI.damage, diffHealth);
     }
 }
 
@@ -48,17 +48,17 @@ function RemoveHead() {
 
 /** Copied from ZombieFleshPound */
 function StartCharging() {
-    local KFSXReplicationInfo targetLRI;
+    local KFSXReplicationInfo targetRI;
 
     super.StartCharging();
 
     if(bFrustrated) {
-        targetLRI= class'KFSXReplicationInfo'.static.findKFSXri(Pawn(FleshpoundZombieController(Controller).Target).PlayerReplicationInfo);
+        targetRI= class'KFSXReplicationInfo'.static.findKFSXri(Pawn(FleshpoundZombieController(Controller).Target).PlayerReplicationInfo);
     } else {
-        targetLRI= instigatorLRI;
+        targetRI= instigatorRI;
     }
-    if (Health > 0 && targetLRI != none) {
-        targetLRI.actions.accum(fleshpoundsRaged, 1);
+    if (Health > 0 && targetRI != none) {
+        targetRI.actions.accum(fleshpoundsRaged, 1);
     }
 }
 

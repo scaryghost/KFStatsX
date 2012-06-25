@@ -7,7 +7,7 @@ class ZombieHusk_KFSX extends KFChar.ZombieHusk;
 
 var class<Projectile> huskProjectile;
 var String husksStunned;
-var KFSXReplicationInfo instigatorLRI;
+var KFSXReplicationInfo instigatorRI;
 var float tempHealth;
 var bool decapCounted;
 
@@ -17,10 +17,10 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 
     prevHealth= Health;
     if (InstigatedBy != none) {
-        instigatorLRI= class'KFSXReplicationInfo'.static.findKFSXri(InstigatedBy.PlayerReplicationInfo);
+        instigatorRI= class'KFSXReplicationInfo'.static.findKFSXri(InstigatedBy.PlayerReplicationInfo);
     }
-    if (instigatorLRI != none && tempHealth == 0 && bBackstabbed) {
-        instigatorLRI.actions.accum(instigatorLRI.backstabs, 1);
+    if (instigatorRI != none && tempHealth == 0 && bBackstabbed) {
+        instigatorRI.actions.accum(instigatorRI.backstabs, 1);
     }
 
     super.TakeDamage(Damage, InstigatedBy, Hitlocation, Momentum, damageType, HitIndex);
@@ -30,14 +30,14 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
         diffHealth-= tempHealth;
         tempHealth= 0;
     }
-    if (instigatorLRI != none) {
+    if (instigatorRI != none) {
         if (!decapCounted && bDecapitated) {
-            instigatorLRI.actions.accum(instigatorLRI.decapitations, 1);
+            instigatorRI.actions.accum(instigatorRI.decapitations, 1);
             decapCounted= true;
         }
     }
-    if (instigatorLRI != none) {
-        instigatorLRI.player.accum(instigatorLRI.damage, diffHealth);
+    if (instigatorRI != none) {
+        instigatorRI.player.accum(instigatorRI.damage, diffHealth);
     }
 }
 
@@ -49,8 +49,8 @@ function RemoveHead() {
 
 function bool FlipOver() {
     if (super.FlipOver()) {
-        if (Health > 0 && instigatorLRI != none) {
-            instigatorLRI.actions.accum(husksStunned, 1);
+        if (Health > 0 && instigatorRI != none) {
+            instigatorRI.actions.accum(husksStunned, 1);
         }
         return true;
     }
