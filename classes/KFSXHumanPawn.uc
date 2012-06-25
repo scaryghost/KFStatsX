@@ -6,21 +6,26 @@
  */
 class KFSXHumanPawn extends KFHumanPawn;
 
-var String damageTaken, armorLost, timeAlive, cashSpent;
-var String healedSelf, receivedHeal, boltsRetrieved;
-var String deaths;
+var string damageTaken, armorLost, timeAlive, cashSpent;
+var string healedSelf, receivedHeal, boltsRetrieved, healDartsConnected, healedTeammates;
+var string deaths;
 var float prevHealth, prevShield;
 var KFSXReplicationInfo kfsxri;
 var int prevTime;
 
+/**
+ * If the Pawn touched a healing dart, tell the dart's instigator 
+ * to increment heal darts connected
+ */
 function Touch(Actor Other) {
     local KFSXReplicationInfo instigatorRI;
 
     super.Touch(Other);
-    if (Health < HealthMax && isHealingProjectile(Other) && KFSXHumanPawn(Other.Instigator) != Self) {
+    if (isHealingProjectile(Other) && KFSXHumanPawn(Other.Instigator) != Self) {
         instigatorRI= class'KFSXReplicationInfo'.static.findKFSXri(Other.Instigator.PlayerReplicationInfo);
-        instigatorRI.actions.accum(kfsxri.healDartsConnected, 1);
-        instigatorRI.actions.accum(kfsxri.healedTeammates, 1);
+        instigatorRI.actions.accum(healDartsConnected, 1);
+        if (Health < HealthMax)
+            instigatorRI.actions.accum(healedTeammates, 1);
     }
 }
 
@@ -83,7 +88,7 @@ function DeactivateSpawnProtection() {
             if (mode ==1)
                 itemName= healedSelf;
             else
-                itemName= kfsxri.healedTeammates;
+                itemName= healedTeammates;
             kfsxri.actions.accum(itemName,1);
             return;
         }
@@ -198,4 +203,6 @@ defaultproperties {
     receivedHeal= "Received Heal"
     deaths= "Deaths"
     boltsRetrieved= "Bolts Retrieved"
+    healDartsConnected= "Heal Darts Connected"
+    healedTeammates= "Healed Teammates"
 }

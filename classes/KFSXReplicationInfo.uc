@@ -8,8 +8,7 @@ class KFSXReplicationInfo extends ReplicationInfo
 
 var PlayerReplicationInfo ownerPRI;
 var String damage, welding;
-var String healedTeammates, healDartsConnected,
-            backstabs, decapitations;
+var String backstabs, decapitations;
 
 /** Map of values stored by this LRI */
 var SortedMap player, actions, weapons, kills, perks;
@@ -53,8 +52,6 @@ static function KFSXReplicationInfo findKFSXri(PlayerReplicationInfo pri) {
 
 defaultproperties {
     damage= "Damage"
-    healedTeammates= "Healed Teammates"
-    healDartsConnected= "Heal Darts Connected"
     welding= "Welding"
     backstabs= "Backstabs"
     decapitations= "Decapitations"
