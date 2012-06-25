@@ -17,13 +17,10 @@ function Touch(Actor Other) {
     local KFSXReplicationInfo instigatorRI;
 
     super.Touch(Other);
-    PlayerController(Controller).ClientMessage("Touch touch touch..."$Other.name);
     if (isHealingProjectile(Other) && KFSXHumanPawn(Other.Instigator) != Self) {
         instigatorRI= class'KFSXReplicationInfo'.static.findKFSXri(Other.Instigator.PlayerReplicationInfo);
         instigatorRI.actions.accum(kfsxri.healDartsConnected, 1);
         instigatorRI.actions.accum(kfsxri.healedTeammates, 1);
-    } else if (CrossbowArrow(Other) != none && Other.IsInState('OnWall')) {
-        kfsxri.actions.accum(boltsRetrieved, 1);
     }
 }
 

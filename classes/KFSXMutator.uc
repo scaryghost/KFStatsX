@@ -21,9 +21,6 @@ var() config string playerController;
 /** Semi colon separated list of available, supported custom controllers */
 var() config array<string> compatibleControllers;
 
-/** List of fire modes to replace */
-var array<Auxiliary.ReplacementPair> fireModeReplacement;
-
 /** Reference to the KFGameType object */
 var KFGameType gametype;
 /** Linked replication info class to attach to PRI */
@@ -43,6 +40,9 @@ var class<KFSXGameRules> kfStatsXRules;
 var class<RemoteServerLink> serverLinkClass;
 /** Link to the remote tracking server */
 var transient RemoteServerLink serverLink;
+
+/** List of fire modes to replace */
+var config array<Auxiliary.ReplacementPair> fireModeReplacement;
 
 function PostBeginPlay() {
 
@@ -187,6 +187,7 @@ defaultproperties {
     fireModeReplacement(1)=(oldClass="KFMod.HuskGunFire",NewClass="KFStatsX.HuskGunFire_KFSX")
     fireModeReplacement(2)=(oldClass="KFMod.WeldFire",NewClass="KFStatsX.WeldFire_KFSX")
     fireModeReplacement(3)=(oldClass="KFMod.UnWeldFire",NewClass="KFStatsX.UnWeldFire_KFSX")
+    fireModeReplacement(4)=(oldClass="KFMod.CrossbowFire",NewClass="KFStatsX.CrossbowFire_KFSX")
 
     kfsxRIClass= class'KFSXReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"
