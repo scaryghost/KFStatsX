@@ -14,7 +14,7 @@ var int prevTime;
 
 simulated function PostBeginPlay() {
     super.PostBeginPlay();
-    prevTime= PlayerController(Controller).GameReplicationInfo.ElapsedTime;
+    prevTime= Level.GRI.ElapsedTime;
 }
 
 /**
@@ -24,14 +24,14 @@ function Timer() {
     local int currTime, timeDiff;
 
     super.Timer();
-    currTime= PlayerController(Controller).GameReplicationInfo.ElapsedTime;
+    currTime= Level.GRI.ElapsedTime;
     PlayerController(Controller).ClientMessage(currTime);
     timeDiff= currTime - prevTime;
     if (lri != none) {
         lri.player.accum(timeAlive, timeDiff);
-    }
-    if (lri != none && KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill != none) {
-        lri.perks.accum(GetItemName(string(KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill)), timeDiff);
+        if (KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill != none) {
+            lri.perks.accum(GetItemName(string(KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill)), timeDiff);
+        }
     }
     prevTime= currTime;
 }
