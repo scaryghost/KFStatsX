@@ -1,11 +1,12 @@
 /**
- * Based class for the custom linked replication information 
- * used by each stat group
+ * Stores the custom stats information.  This does not extend from 
+ * LinkedReplicationInfo due to compatibility issues with ServerPerksV5
  * @author etsai (Scary Ghost)
  */
-class KFSXLinkedReplicationInfo extends LinkedReplicationInfo
+class KFSXReplicationInfo extends ReplicationInfo
     dependson(SortedMap);
 
+var PlayerReplicationInfo ownerPRI;
 var String damage, welding;
 var String healedTeammates, healDartsConnected,
             backstabs, decapitations;
@@ -16,7 +17,7 @@ var String playerIdHash;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority)
-        player, actions, weapons, kills;
+        player, actions, weapons, kills, ownerPRI;
 }
 
 function MatchStarting() {
@@ -37,12 +38,16 @@ event PostBeginPlay() {
     perks= Spawn(class'SortedMap');
 }
 
-static function KFSXLinkedReplicationInfo findKFSXlri(PlayerReplicationInfo pri) {
-    local LinkedReplicationInfo lri;
-    for(lri= pri.CustomReplicationInfo; lri != none; lri= lri.NextReplicationInfo) {
-        if (KFSXLinkedReplicationInfo(lri) != none)
-            return KFSXLinkedReplicationInfo(lri);
-    }
+static function KFSXReplicationInfo findKFSXlri(PlayerReplicationInfo pri) {
+    local KFSXReplicationInfo repInfo;
+
+    if (pri == none)
+        return none;
+
+    foreach pri.DynamicActors(Class'KFSXReplicationInfo', repInfo)
+        if (repInfo.ownerPRI == pri)
+            return repInfo;
+ 
     return none;
 }
 

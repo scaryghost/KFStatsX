@@ -6,11 +6,11 @@
 class MP5MHealingProjectile_KFSX extends MP5MHealinglProjectile;
 
 simulated function ProcessTouch(Actor Other, Vector HitLocation) {
-    local KFSXLinkedReplicationInfo lri;
+    local KFSXReplicationInfo lri;
 
     super.ProcessTouch(Other, HitLocation);
     if (KFPawn(Other) != none) {
-        lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(KFPawn(Other).PlayerReplicationInfo);
+        lri= class'KFSXReplicationInfo'.static.findKFSXlri(KFPawn(Other).PlayerReplicationInfo);
         lri.actions.accum(lri.healDartsConnected, 1);
         lri.actions.accum(lri.healedTeammates, 1);
     }

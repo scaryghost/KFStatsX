@@ -7,7 +7,7 @@ class ZombieScrake_KFSX extends KFChar.ZombieScrake;
 
 var String scrakesRaged, scrakesStunned;
 var bool rageCounted;
-var KFSXLinkedReplicationInfo instigatorLRI;
+var KFSXReplicationInfo instigatorLRI;
 var float tempHealth;
 var bool decapCounted;
 
@@ -17,7 +17,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 
     prevHealth= Health;
     if (InstigatedBy != none) {
-        instigatorLRI= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(InstigatedBy.PlayerReplicationInfo);
+        instigatorLRI= class'KFSXReplicationInfo'.static.findKFSXlri(InstigatedBy.PlayerReplicationInfo);
     }
     if (instigatorLRI != none && tempHealth == 0 && bBackstabbed) {
         instigatorLRI.actions.accum(instigatorLRI.backstabs, 1);

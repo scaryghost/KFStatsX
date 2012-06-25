@@ -10,10 +10,10 @@ simulated state OnWall {
     /**  Copied from KFMod.CrossbowArrow, added bolts retrieved stat */
     function ProcessTouch (Actor Other, vector HitLocation) {
         local Inventory inv;
-        local KFSXLinkedReplicationInfo lri;
+        local KFSXReplicationInfo lri;
 
         if( Pawn(Other)!=None && Pawn(Other).Inventory!=None ) {
-            lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(Pawn(Other).PlayerReplicationInfo);
+            lri= class'KFSXReplicationInfo'.static.findKFSXlri(Pawn(Other).PlayerReplicationInfo);
             for( inv=Pawn(Other).Inventory; inv!=None; inv=inv.Inventory ) {
                 if( Crossbow(Inv)!=None && Weapon(inv).AmmoAmount(0)<Weapon(inv).MaxAmmo(0) ) {
                     KFweapon(Inv).AddAmmo(1,0) ;

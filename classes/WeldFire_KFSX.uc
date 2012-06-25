@@ -7,10 +7,10 @@ class WeldFire_KFSX extends KFMod.WeldFire;
 simulated Function timer() {
     local KFDoorMover targetDoor;
     local float oldWeldStrength;
-    local KFSXLinkedReplicationInfo lri;
+    local KFSXReplicationInfo lri;
 
     targetDoor= GetDoor();
-    lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(Instigator.PlayerReplicationInfo);
+    lri= class'KFSXReplicationInfo'.static.findKFSXlri(Instigator.PlayerReplicationInfo);
     if (targetDoor != none) {
         oldWeldStrength= targetDoor.MyTrigger.WeldStrength;
     }

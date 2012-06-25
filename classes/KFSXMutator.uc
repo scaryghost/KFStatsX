@@ -26,7 +26,7 @@ var() config array<Auxiliary.ReplacementPair> fireModeReplacement;
 /** Reference to the KFGameType object */
 var KFGameType gametype;
 /** Linked replication info class to attach to PRI */
-var class<LinkedReplicationInfo> kfsxLRIClass;
+var class<KFSXReplicationInfo> kfsxRIClass;
 /** Stores the pairs of default monsters with their stats counterparts */
 var array<Auxiliary.ReplacementPair> monsterReplacement;
 /** End game boss and the fall back monster class */
@@ -54,8 +54,11 @@ function PostBeginPlay() {
     gameRules= Spawn(kfStatsXRules);
     gameType.PlayerControllerClass= class<PlayerController>(DynamicLoadObject(playerController, class'Class'));
     gameType.PlayerControllerClassName= playerController;
-    if (Level.NetMode != NM_Standalone && gameType.PlayerControllerClass != class'KFSXPlayerController') {
-        AddToPackageMap(string(gameType.PlayerControllerClass.Outer.name));
+    if (Level.NetMode != NM_Standalone) {
+        AddToPackageMap("KFStatsX");
+        if (gameType.PlayerControllerClass != class'KFSXPlayerController') {
+            AddToPackageMap(string(gameType.PlayerControllerClass.Outer.name));
+        }
     }
 
     //Replace all instances of the old specimens with the new ones 
@@ -101,16 +104,13 @@ function NotifyLogout(Controller Exiting) {
 function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
     local int i, j;
     local PlayerReplicationInfo pri;
-    local LinkedReplicationInfo lri;
+    local KFSXReplicationInfo lri;
 
     if (PlayerReplicationInfo(Other) != none && 
-        PlayerReplicationInfo(Other).Owner != none) {
-        
+            PlayerReplicationInfo(Other).Owner != none) {
         pri= PlayerReplicationInfo(Other);
-        lri= pri.spawn(kfsxLRIClass, pri.Owner);
-        lri.NextReplicationInfo= pri.CustomReplicationInfo;
-        pri.CustomReplicationInfo= lri;
-        return true;
+        lri= spawn(kfsxRIClass, pri.Owner);
+        lri.ownerPRI= pri;
     } else if (Weapon(Other) != none) {
         for(i= 0; i < ArrayCount(Weapon(Other).FireModeClass); i++) {
             for(j= 0; j < fireModeReplacement.Length; j++) {
@@ -119,11 +119,9 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
                             class<WeaponFire>(DynamicLoadObject(fireModeReplacement[j].newClass, class'Class'));
             }
         }
-
-        return true;
     }
 
-    return super.CheckReplacement(Other, bSuperRelevant);
+    return true;
 }
 
 static function FillPlayInfo(PlayInfo PlayInfo) {
@@ -165,12 +163,8 @@ static event string GetDescriptionText(string property) {
 
 defaultproperties {
     GroupName="KFStatX"
-    FriendlyName="~KFStatsX v1.0"
+    FriendlyName="KFStatsX v1.0"
     Description="Tracks statistics for each player, version 1.0"
-
-    bAddToServerPackages=true
-    RemoteRole=ROLE_SimulatedProxy
-    bAlwaysRelevant=true
 
     auxiliaryRef= class'Auxiliary'
     kfStatsXRules= class'KFSXGameRules'
@@ -196,7 +190,7 @@ defaultproperties {
     fireModeReplacement(5)=(oldClass="KFMod.MP5MAltFire",NewClass="KFStatsX.MP5MAltFire_KFSX")
     fireModeReplacement(6)=(oldClass="KFMod.CrossbowFire",NewClass="KFStatsX.CrossbowFire_KFSX")
 
-    kfsxLRIClass= class'KFSXLinkedReplicationInfo'
+    kfsxRIClass= class'KFSXReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"
     compatibleControllers(0)= "KFStatsX.KFSXPlayerController;Vanilla KF"
 }

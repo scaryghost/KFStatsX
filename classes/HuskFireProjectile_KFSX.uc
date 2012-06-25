@@ -24,7 +24,7 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius,
     local bool bAlreadyChecked;
 
     local KFHumanPawn humanVictim;
-    local KFSXLinkedReplicationInfo lri;
+    local KFSXReplicationInfo lri;
 
     if ( bHurtEntry )
         return;
@@ -77,7 +77,7 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius,
                 }
 //KFStatsX - 1
                 if (humanVictim != none) {
-                    lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(humanVictim.PlayerReplicationInfo);
+                    lri= class'KFSXReplicationInfo'.static.findKFSXlri(humanVictim.PlayerReplicationInfo);
                     lri.actions.accum(shotByHusk, 1);
                 }
 //KFStatsX - 1 End

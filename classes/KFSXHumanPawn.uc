@@ -9,33 +9,40 @@ class KFSXHumanPawn extends KFHumanPawn;
 var String damageTaken, armorLost, timeAlive, healedSelf, cashSpent, receivedHeal;
 var String deaths;
 var float prevHealth, prevShield;
-var KFSXLinkedReplicationInfo lri;
+var KFSXReplicationInfo lri;
 var int prevTime;
+
+simulated function PostBeginPlay() {
+    super.PostBeginPlay();
+    prevTime= PlayerController(Controller).GameReplicationInfo.ElapsedTime;
+}
 
 /**
  * Accumulate Time_Alive and perk time
  */
 function Timer() {
-    local int timeDiff;
+    local int currTime, timeDiff;
 
     super.Timer();
-    timeDiff= Level.GRI.ElapsedTime - prevTime;
+    currTime= PlayerController(Controller).GameReplicationInfo.ElapsedTime;
+    PlayerController(Controller).ClientMessage(currTime);
+    timeDiff= currTime - prevTime;
     if (lri != none) {
         lri.player.accum(timeAlive, timeDiff);
     }
     if (lri != none && KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill != none) {
         lri.perks.accum(GetItemName(string(KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill)), timeDiff);
     }
-    prevTime= Level.GRI.ElapsedTime;
+    prevTime= currTime;
 }
 
 /**
  * Pawn possessed by a controller.
- * Overridden to grab the player and hidden LRIs
+ * Overridden to grab the stat info
  */
 function PossessedBy(Controller C) {
     super.PossessedBy(C);
-    lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(PlayerReplicationInfo);
+    lri= class'KFSXReplicationInfo'.static.findKFSXlri(PlayerReplicationInfo);
 }
 
 function bool isMedicGun() {

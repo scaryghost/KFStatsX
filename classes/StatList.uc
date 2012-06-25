@@ -1,6 +1,6 @@
 /**
  * Vertical list of the stat values of the given 
- * KFSXLinkedReplicationInfo object
+ * KFSXReplicationInfo object
  * @author etsai (Scary Ghost)
  */
 class StatList extends GUIVertList
@@ -29,7 +29,7 @@ function InitList(SortedMap statsInfo) {
     SetIndex(0);
 
     for(i= 0; i < statsInfo.maxStatIndex; i++) {
-        if (statsInfo.keys[i] != class'KFSXLinkedReplicationInfo'.default.damage) {
+        if (statsInfo.keys[i] != class'KFSXReplicationInfo'.default.damage) {
             statDescriptions[itemCount]= statsInfo.keys[i];
             statValue[itemCount]= statsInfo.values[i];
             itemCount++;

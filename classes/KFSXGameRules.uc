@@ -34,7 +34,7 @@ function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> dam
 
 function ScoreKill(Controller Killer, Controller Killed) {
     local string itemName;
-    local KFSXLinkedReplicationInfo lri;
+    local KFSXReplicationInfo lri;
 
     Super.ScoreKill(Killer,Killed);
     if (KFMonsterController(Killer) != none && PlayerController(Killed) != none) {
@@ -51,7 +51,7 @@ function ScoreKill(Controller Killer, Controller Killed) {
             itemName= teammateDeathKey;
         }
         if (itemName != "") {
-            lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(Killer.PlayerReplicationInfo);
+            lri= class'KFSXReplicationInfo'.static.findKFSXlri(Killer.PlayerReplicationInfo);
             lri.kills.accum(itemName, 1);
         }
     }

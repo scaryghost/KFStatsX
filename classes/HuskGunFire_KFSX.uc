@@ -6,7 +6,7 @@ class HuskGunFire_KFSX extends HuskGunFire;
 
 function DoFireEffect() {
     local int fuelAmount;
-    local KFSXLinkedReplicationInfo lri;
+    local KFSXReplicationInfo lri;
 
     super.DoFireEffect();
     /** Use the same ammo formula as in HuskGunFire.ModeDoFire() */
@@ -15,6 +15,6 @@ function DoFireEffect() {
     } else {
         fuelAmount= 10;
     }
-    lri= class'KFSXLinkedReplicationInfo'.static.findKFSXlri(Instigator.PlayerReplicationInfo);
+    lri= class'KFSXReplicationInfo'.static.findKFSXlri(Instigator.PlayerReplicationInfo);
     lri.weapons.accum(Weapon.ItemName, fuelAmount);
 }
