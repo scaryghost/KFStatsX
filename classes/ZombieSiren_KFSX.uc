@@ -16,7 +16,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 
     prevHealth= Health;
     if (InstigatedBy != none) {
-        instigatorLRI= class'KFSXReplicationInfo'.static.findKFSXlri(InstigatedBy.PlayerReplicationInfo);
+        instigatorLRI= class'KFSXReplicationInfo'.static.findKFSXri(InstigatedBy.PlayerReplicationInfo);
     }
     if (instigatorLRI != none && tempHealth == 0 && bBackstabbed) {
         instigatorLRI.actions.accum(instigatorLRI.backstabs, 1);
@@ -48,7 +48,7 @@ function RemoveHead() {
 
 simulated function HurtRadius( float DamageAmount, float DamageRadius, class<DamageType> DamageType, 
         float Momentum, vector HitLocation ) {
-    local KFSXReplicationInfo lri;
+    local KFSXReplicationInfo kfsxri;
     local actor Victims;
     local float damageScale, dist;
     local vector dir;
@@ -102,8 +102,8 @@ simulated function HurtRadius( float DamageAmount, float DamageRadius, class<Dam
                 LAWProj(Victims) != none && LAWProj(Victims).bDisintegrated || 
                 PipeBombProjectile(Victims) != none && PipeBombProjectile(Victims).bDisintegrated ||
                 M79GrenadeProjectile(Victims) != none && M79GrenadeProjectile(Victims).bDisintegrated) {
-                lri= class'KFSXReplicationInfo'.static.findKFSXlri(Projectile(Victims).Instigator.PlayerReplicationInfo);
-                lri.actions.accum(explosivesDisintegrated, 1);
+                kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Projectile(Victims).Instigator.PlayerReplicationInfo);
+                kfsxri.actions.accum(explosivesDisintegrated, 1);
             }
 //KFStats - 2 End
             if (Instigator != None && Vehicle(Victims) != None && Vehicle(Victims).Health > 0)

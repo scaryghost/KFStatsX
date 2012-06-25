@@ -38,7 +38,7 @@ event PostBeginPlay() {
     perks= Spawn(class'SortedMap');
 }
 
-static function KFSXReplicationInfo findKFSXlri(PlayerReplicationInfo pri) {
+static function KFSXReplicationInfo findKFSXri(PlayerReplicationInfo pri) {
     local KFSXReplicationInfo repInfo;
 
     if (pri == none)

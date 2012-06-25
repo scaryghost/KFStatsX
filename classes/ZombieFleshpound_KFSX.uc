@@ -16,7 +16,7 @@ function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector M
 
     prevHealth= Health;
     if (InstigatedBy != none) {
-        instigatorLRI= class'KFSXReplicationInfo'.static.findKFSXlri(InstigatedBy.PlayerReplicationInfo);
+        instigatorLRI= class'KFSXReplicationInfo'.static.findKFSXri(InstigatedBy.PlayerReplicationInfo);
     }
     if (instigatorLRI != none && tempHealth == 0 && bBackstabbed) {
         instigatorLRI.actions.accum(instigatorLRI.backstabs, 1);
@@ -53,7 +53,7 @@ function StartCharging() {
     super.StartCharging();
 
     if(bFrustrated) {
-        targetLRI= class'KFSXReplicationInfo'.static.findKFSXlri(Pawn(FleshpoundZombieController(Controller).Target).PlayerReplicationInfo);
+        targetLRI= class'KFSXReplicationInfo'.static.findKFSXri(Pawn(FleshpoundZombieController(Controller).Target).PlayerReplicationInfo);
     } else {
         targetLRI= instigatorLRI;
     }

@@ -104,13 +104,13 @@ function NotifyLogout(Controller Exiting) {
 function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
     local int i, j;
     local PlayerReplicationInfo pri;
-    local KFSXReplicationInfo lri;
+    local KFSXReplicationInfo kfsxri;
 
     if (PlayerReplicationInfo(Other) != none && 
             PlayerReplicationInfo(Other).Owner != none) {
         pri= PlayerReplicationInfo(Other);
-        lri= spawn(kfsxRIClass, pri.Owner);
-        lri.ownerPRI= pri;
+        kfsxri= spawn(kfsxRIClass, pri.Owner);
+        kfsxri.ownerPRI= pri;
     } else if (Weapon(Other) != none) {
         for(i= 0; i < ArrayCount(Weapon(Other).FireModeClass); i++) {
             for(j= 0; j < fireModeReplacement.Length; j++) {

@@ -7,7 +7,7 @@ class PerksPanel extends StatsPanelBase;
 function ShowPanel(bool bShow) {
     if (statsInfo == none) {
         statsInfo= class'KFSXReplicationInfo'.static
-                .findKFSXlri(PlayerOwner().PlayerReplicationInfo).perks;
+                .findKFSXri(PlayerOwner().PlayerReplicationInfo).perks;
     }
     super.ShowPanel(bShow);
 }
