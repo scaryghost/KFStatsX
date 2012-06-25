@@ -42,7 +42,7 @@ var class<RemoteServerLink> serverLinkClass;
 var transient RemoteServerLink serverLink;
 
 /** List of fire modes to replace */
-var config array<Auxiliary.ReplacementPair> fireModeReplacement;
+var array<Auxiliary.ReplacementPair> fireModeReplacement;
 
 function PostBeginPlay() {
 
