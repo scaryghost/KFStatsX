@@ -6,12 +6,14 @@ class KFSXGameRules extends GameRules;
 
 /** Record of deaths from all players */
 var SortedMap deaths;
-/** Key for environment death (fall or world fire) */
-var String envDeathKey;
+/** key for environment death (fall or world fire) */
+var string envDeathKey;
 /** Key for self inflicted death */
-var String selfDeathKey;
+var string selfDeathKey;
 /** Key for teammate death */
-var String teammateDeathKey;
+var string teammateDeathKey;
+/** Key for swatted crawler */
+var string swattedCrawler;
 
 function PostBeginPlay() {
     NextGameRules = Level.Game.GameRulesModifiers;
@@ -21,10 +23,15 @@ function PostBeginPlay() {
 
 
 function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> damageType, vector HitLocation) {
+    local KFSXReplicationInfo kfsxri;
+
     if (!super.PreventDeath(Killed, Killer, damageType, HitLocation)) {
         if(KFHumanPawn(Killed) != none && 
                 (damageType == class'Engine.Fell' || damageType == class'Gameplay.Burned')) {
             deaths.accum(envDeathKey,1);
+        } else if (Killed.Physics == PHYS_Falling && class<DamTypeMelee>(damageType) != none ) {
+            kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
+            kfsxri.actions.accum(swattedCrawler, 1);
         }
         return false;
     }
@@ -61,4 +68,5 @@ defaultproperties {
     envDeathKey= "Environment"
     selfDeathKey= "Self"
     teammateDeathKey= "Teammate"
+    swattedCrawler= "Swatted Crawler"
 }
