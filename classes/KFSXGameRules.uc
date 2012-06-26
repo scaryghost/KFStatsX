@@ -14,6 +14,8 @@ var string selfDeathKey;
 var string teammateDeathKey;
 /** Key for swatted crawler */
 var string swattedCrawler;
+/** Key for player deaths */
+var string deathKey;
 
 function PostBeginPlay() {
     NextGameRules = Level.Game.GameRulesModifiers;
@@ -46,6 +48,8 @@ function ScoreKill(Controller Killer, Controller Killed) {
     Super.ScoreKill(Killer,Killed);
     if (KFMonsterController(Killer) != none && PlayerController(Killed) != none) {
         deaths.accum(Killer.Pawn.MenuName,1 );
+        kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killed.PlayerReplicationInfo);
+        kfsxri.player.accum(deathKey, 1);
     } else if (PlayerController(Killer) != none) {
         if (Killed.PlayerReplicationInfo == none || 
             Killer.PlayerReplicationInfo.Team != Killed.PlayerReplicationInfo.Team) {
@@ -69,4 +73,5 @@ defaultproperties {
     selfDeathKey= "Self"
     teammateDeathKey= "Teammate"
     swattedCrawler= "Swatted Crawler"
+    deathKey= "Deaths"
 }

@@ -8,7 +8,6 @@ class KFSXHumanPawn extends KFHumanPawn;
 
 var string damageTaken, armorLost, timeAlive, cashSpent;
 var string healedSelf, receivedHeal, boltsRetrieved, healDartsConnected, healedTeammates;
-var string deaths;
 var KFSXReplicationInfo kfsxri;
 var int prevTime;
 
@@ -144,14 +143,6 @@ function TakeBileDamage() {
     }
 }
 
-function Died(Controller Killer, class<DamageType> damageType, vector HitLocation) {
-    if (!Controller.IsInState('GameEnded')) {
-        kfsxri.player.accum(deaths, 1);
-    }
-
-    super.Died(Killer, damageType, HitLocation);
-}
-
 function ServerBuyWeapon( Class<Weapon> WClass ) {
     local float oldScore;
 
@@ -177,13 +168,11 @@ function ServerBuyKevlar() {
 }
 
 function bool GiveHealth(int HealAmount, int HealMax) {
-    local bool result;
-
-    result= super.GiveHealth(HealAmount, HealMax);
-    if (result) {
+    if (super.GiveHealth(HealAmount, HealMax)) {
         kfsxri.actions.accum(receivedHeal, 1);
+        return true;
     }
-    return result;
+    return false;
 }
 
 defaultproperties {
@@ -193,7 +182,6 @@ defaultproperties {
     healedSelf= "Healed Self"
     cashSpent= "Cash Spent"
     receivedHeal= "Received Heal"
-    deaths= "Deaths"
     boltsRetrieved= "Bolts Retrieved"
     healDartsConnected= "Heal Darts Connected"
     healedTeammates= "Healed Teammates"
