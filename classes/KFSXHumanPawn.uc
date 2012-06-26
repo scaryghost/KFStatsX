@@ -9,7 +9,6 @@ class KFSXHumanPawn extends KFHumanPawn;
 var string damageTaken, armorLost, timeAlive, cashSpent;
 var string healedSelf, receivedHeal, boltsRetrieved, healDartsConnected, healedTeammates;
 var string deaths;
-var float prevHealth, prevShield;
 var KFSXReplicationInfo kfsxri;
 var int prevTime;
 
@@ -114,16 +113,14 @@ simulated function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation
     local float oldShield;
 
     oldHealth= Health;
-    prevHealth= oldHealth;
     oldShield= ShieldStrength;
-    prevShield= oldShield;
 
     Super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType);
    
-    kfsxri.player.accum(damageTaken, oldHealth - fmax(Health,0.0));
-    kfsxri.player.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
-    prevHealth= 0;
-    prevShield= 0;
+    if (kfsxri != none && oldHealth > 0) {
+        kfsxri.player.accum(damageTaken, oldHealth - fmax(Health,0.0));
+        kfsxri.player.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
+    }
 }
 
 /**
@@ -136,14 +133,12 @@ function TakeBileDamage() {
     local float oldShield;
 
     oldHealth= Health;
-    prevHealth= oldHealth;
     oldShield= ShieldStrength;
-    prevShield= oldShield;
 
     Super(xPawn).TakeDamage(2+Rand(3), BileInstigator, Location, vect(0,0,0), class'DamTypeVomit');
     healthtoGive-=5;
 
-    if(kfsxri != none) {
+    if(kfsxri != none && oldHealth > 0) {
         kfsxri.player.accum(damageTaken, oldHealth - fmax(Health,0.0));
         kfsxri.player.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
     }
@@ -153,9 +148,6 @@ function Died(Controller Killer, class<DamageType> damageType, vector HitLocatio
     if (!Controller.IsInState('GameEnded')) {
         kfsxri.player.accum(deaths, 1);
     }
-
-    prevHealth= 0;
-    prevShield= 0;
 
     super.Died(Killer, damageType, HitLocation);
 }
