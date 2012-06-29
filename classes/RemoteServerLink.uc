@@ -106,7 +106,7 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
         class'KFSXMutator'.default.serverPwd $ separator $ kfsxri.playerIDHash $ separator;
 
     statMsgs[statMsgs.Length]= "0" $ separator $ "player" $ separator $ getStatValues(kfsxri.player);
-    statMsgs[statMsgs.Length]= "1" $ separator $ "weapon" $ separator $ getStatValues(kfsxri.weapons);
+    statMsgs[statMsgs.Length]= "1" $ separator $ "weapons" $ separator $ getStatValues(kfsxri.weapons);
     statMsgs[statMsgs.Length]= "2" $ separator $ "kills" $ separator $ getStatValues(kfsxri.kills);
     statMsgs[statMsgs.Length]= "3" $ separator $ "perks" $ separator $ getStatValues(kfsxri.perks);
     statMsgs[statMsgs.Length]= "4" $ separator $ "actions" $ separator $ getStatValues(kfsxri.actions);
