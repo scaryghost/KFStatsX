@@ -28,7 +28,7 @@ function Touch(Actor Other) {
 }
 
 function bool isHealingProjectile(Actor Other) {
-    return MP7MHealinglProjectile(Other) != none;
+    return MP7MHealinglProjectile(Other) != none || M7A3MHealinglProjectile(OtheR) != none;
 }
 
 simulated function PostBeginPlay() {
@@ -64,7 +64,7 @@ function PossessedBy(Controller C) {
 }
 
 function bool isMedicGun() {
-    return MP7MMedicGun(Weapon) != none;
+    return MP7MMedicGun(Weapon) != none || M7A3MMedicGun(Weapon) != none;
 }
 
 /**
