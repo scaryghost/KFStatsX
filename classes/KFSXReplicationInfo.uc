@@ -19,13 +19,15 @@ replication {
         player, actions, weapons, kills, ownerPRI;
 }
 
-function MatchStarting() {
-    super.MatchStarting();
+function Tick(float DeltaTime) {
+    super.Tick(DeltaTime);
     if (PlayerController(Owner) == Level.GetLocalPlayerController()) {
         playerIDHash= class'KFSXMutator'.default.localHostSteamId;
     } else {
         playerIDHash= PlayerController(Owner).GetPlayerIDHash();
     }
+
+    Disable('Tick');
 }
 
 event PostBeginPlay() {

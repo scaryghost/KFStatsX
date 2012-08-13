@@ -164,8 +164,8 @@ static event string GetDescriptionText(string property) {
 
 defaultproperties {
     GroupName="KFStatX"
-    FriendlyName="KFStatsX v1.0"
-    Description="Tracks statistics for each player, version 1.0"
+    FriendlyName="KFStatsX v1.0.1"
+    Description="Tracks statistics for each player, version 1.0.1"
 
     auxiliaryRef= class'Auxiliary'
     kfStatsXRules= class'KFSXGameRules'
