@@ -7,7 +7,7 @@ as enhancements to Game Stats Tab but I did not like how static everything was. 
 mutator from ground up and new features have made the mutator more resemble HLStatsX.
 
 +Version
-1.0
+1.0.1
 
 +Check Sum
 The check sum for the package is generated with the following command from the system folder:
