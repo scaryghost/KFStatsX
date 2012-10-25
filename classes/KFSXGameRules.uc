@@ -4,6 +4,7 @@
  */
 class KFSXGameRules extends GameRules;
 
+var array<Pawn> decappedPawns;
 /** Record of deaths from all players */
 var SortedMap deaths;
 /** key for environment death (fall or world fire) */
@@ -23,6 +24,45 @@ function PostBeginPlay() {
     deaths= Spawn(class'SortedMap');
 }
 
+private function bool contains(Pawn key) {
+    local int i;
+    for(i= 0; i < decappedPawns.length && decappedPawns[i] != key; i++);
+
+    return i < decappedPawns.length;
+}
+
+private function remove(Pawn key) {
+    local int i;
+    for(i= 0; i < decappedPawns.length && decappedPawns[i] != key; i++);
+
+    if (i < decappedPawns.length) {
+        decappedPawns.remove(i, 1);
+    }
+}
+
+function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn instigatedBy, vector HitLocation, 
+        out vector Momentum, class<DamageType> DamageType ) {
+    local KFSXReplicationInfo instigatorRI;
+    local int newDamage;
+
+    newDamage= super.NetDamage(OriginalDamage, Damage, injured, instigatedBy, HitLocation,  Momentum, DamageType);
+    if (instigatedBy != none) {
+        instigatorRI= class'KFSXReplicationInfo'.static.findKFSXri(instigatedBy.PlayerReplicationInfo);
+        if (instigatorRI != none) {
+            instigatorRI.player.accum(instigatorRI.damage, min(injured.Health, newDamage));
+            if (KFMonster(injured) != none) {
+                if (KFMonster(injured).bBackstabbed) {
+                    instigatorRI.actions.accum(instigatorRI.backstabs, 1);
+                }
+                if (!contains(injured) && KFMonster(injured).bDecapitated) {
+                    instigatorRI.actions.accum(instigatorRI.decapitations, 1);
+                    decappedPawns[decappedPawns.length]= injured;
+                }
+            }
+        }
+    }
+    return newDamage;
+}
 
 function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> damageType, vector HitLocation) {
     local KFSXReplicationInfo kfsxri;
@@ -35,6 +75,7 @@ function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> dam
             kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
             kfsxri.actions.accum(swattedCrawler, 1);
         }
+        remove(Killed);
         return false;
     }
     return true;
