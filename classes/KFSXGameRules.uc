@@ -43,6 +43,7 @@ private function remove(Pawn key) {
 function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn instigatedBy, vector HitLocation, 
         out vector Momentum, class<DamageType> DamageType ) {
     local KFSXReplicationInfo instigatorRI;
+    local ZombieFleshPound zfp;
     local int newDamage;
 
     newDamage= super.NetDamage(OriginalDamage, Damage, injured, instigatedBy, HitLocation,  Momentum, DamageType);
@@ -60,7 +61,14 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
                 }
             }
         }
+
+        zfp= ZombieFleshPound(injured);
+        if (zfp != none && newDamage < injured.Health && injured.IsInState('ZombieFleshPound') && 
+                zfp.TwoSecondDamageTotal + newDamage > zfp.RageDamageThreshold) {
+            instigatorRI.actions.accum(instigatorRI.fleshpoundsRaged, 1);
+        }
     }
+    
     return newDamage;
 }
 

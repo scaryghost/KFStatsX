@@ -114,6 +114,8 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
                             class<WeaponFire>(DynamicLoadObject(fireModeReplacement[j].newClass, class'Class'));
             }
         }
+    } else if (ZombieFleshPound(Other) != none) {
+        ZombieFleshPound(Other).ControllerClass= class'FleshpoundZombieController_KFSX';
     }
 
     return true;

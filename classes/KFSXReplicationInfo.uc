@@ -9,6 +9,7 @@ class KFSXReplicationInfo extends ReplicationInfo
 var PlayerReplicationInfo ownerPRI;
 var String damage, welding;
 var String backstabs, decapitations;
+var string fleshpoundsRaged;
 
 /** Map of values stored by this LRI */
 var SortedMap player, actions, weapons, kills, perks;
@@ -57,4 +58,5 @@ defaultproperties {
     welding= "Welding"
     backstabs= "Backstabs"
     decapitations= "Decapitations"
+    fleshpoundsRaged= "Fleshpounds Raged"
 }
