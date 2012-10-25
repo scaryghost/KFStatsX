@@ -79,7 +79,7 @@ function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> dam
         if(KFHumanPawn(Killed) != none && 
                 (damageType == class'Engine.Fell' || damageType == class'Gameplay.Burned')) {
             deaths.accum(envDeathKey,1);
-        } else if (Killed.Physics == PHYS_Falling && class<DamTypeMelee>(damageType) != none ) {
+        } else if (ZombieCrawler(Killed) != none && Killed.Physics == PHYS_Falling && class<DamTypeMelee>(damageType) != none ) {
             kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
             kfsxri.actions.accum(swattedCrawler, 1);
         }
