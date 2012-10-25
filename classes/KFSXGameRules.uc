@@ -63,7 +63,7 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
         }
 
         zfp= ZombieFleshPound(injured);
-        if (zfp != none && newDamage < injured.Health && injured.IsInState('ZombieFleshPound') && 
+        if (zfp != none && newDamage < injured.Health && (!injured.IsInState('BeginRaging') && !injured.IsInState('RageCharging')) && 
                 zfp.TwoSecondDamageTotal + newDamage > zfp.RageDamageThreshold) {
             instigatorRI.actions.accum(instigatorRI.fleshpoundsRaged, 1);
         }
