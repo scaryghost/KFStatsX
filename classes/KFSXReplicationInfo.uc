@@ -7,13 +7,12 @@ class KFSXReplicationInfo extends ReplicationInfo
     dependson(SortedMap);
 
 var PlayerReplicationInfo ownerPRI;
-var String damage, welding;
-var String backstabs, decapitations;
-var string fleshpoundsRaged;
+var string welding;
 
 /** Map of values stored by this LRI */
 var SortedMap player, actions, weapons, kills, perks;
-var String playerIdHash;
+var string playerIdHash;
+var string fleshpoundsRaged;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority)
@@ -54,9 +53,6 @@ static function KFSXReplicationInfo findKFSXri(PlayerReplicationInfo pri) {
 }
 
 defaultproperties {
-    damage= "Damage"
     welding= "Welding"
-    backstabs= "Backstabs"
-    decapitations= "Decapitations"
     fleshpoundsRaged= "Fleshpounds Raged"
 }

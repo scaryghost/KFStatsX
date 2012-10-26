@@ -29,11 +29,11 @@ function InitList(SortedMap statsInfo) {
     SetIndex(0);
 
     for(i= 0; i < statsInfo.maxStatIndex; i++) {
-        if (statsInfo.keys[i] != class'KFSXReplicationInfo'.default.damage) {
+//        if (statsInfo.keys[i] != class'KFSXReplicationInfo'.default.damage) {
             statDescriptions[itemCount]= statsInfo.keys[i];
             statValue[itemCount]= statsInfo.values[i];
             itemCount++;
-        }
+//        }
     }
 
     if ( bNotify ) {

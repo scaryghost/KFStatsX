@@ -4,7 +4,7 @@
  */
 class KFSXGameRules extends GameRules;
 
-var array<Pawn> decappedPawns;
+var array<Pawn> decappedPawns, ragedScrakes;
 /** Record of deaths from all players */
 var SortedMap deaths;
 /** key for environment death (fall or world fire) */
@@ -17,6 +17,11 @@ var string teammateDeathKey;
 var string swattedCrawler;
 /** Key for player deaths */
 var string deathKey;
+/** Key for scrakes stunned */
+var string scrakesStunned;
+var string scrakesRaged;
+var string backstabs, decapitations;
+var string damageKey;
 
 function PostBeginPlay() {
     NextGameRules = Level.Game.GameRulesModifiers;
@@ -24,19 +29,19 @@ function PostBeginPlay() {
     deaths= Spawn(class'SortedMap');
 }
 
-private function bool contains(Pawn key) {
+private function bool contains(array<Pawn> pawns, Pawn key) {
     local int i;
-    for(i= 0; i < decappedPawns.length && decappedPawns[i] != key; i++);
+    for(i= 0; i < pawns.length && pawns[i] != key; i++);
 
-    return i < decappedPawns.length;
+    return i < pawns.length;
 }
 
-private function remove(Pawn key) {
+private function remove(out array<Pawn> pawns, Pawn key) {
     local int i;
-    for(i= 0; i < decappedPawns.length && decappedPawns[i] != key; i++);
+    for(i= 0; i < pawns.length && pawns[i] != key; i++);
 
-    if (i < decappedPawns.length) {
-        decappedPawns.remove(i, 1);
+    if (i < pawns.length) {
+        pawns.remove(i, 1);
     }
 }
 
@@ -44,29 +49,40 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
         out vector Momentum, class<DamageType> DamageType ) {
     local KFSXReplicationInfo instigatorRI;
     local ZombieFleshPound zfp;
+    local ZombieScrake zsc;
     local int newDamage;
 
     newDamage= super.NetDamage(OriginalDamage, Damage, injured, instigatedBy, HitLocation,  Momentum, DamageType);
     if (instigatedBy != none) {
         instigatorRI= class'KFSXReplicationInfo'.static.findKFSXri(instigatedBy.PlayerReplicationInfo);
         if (instigatorRI != none) {
-            instigatorRI.player.accum(instigatorRI.damage, min(injured.Health, newDamage));
+            instigatorRI.player.accum(damageKey, min(injured.Health, newDamage));
             if (KFMonster(injured) != none) {
                 if (KFMonster(injured).bBackstabbed) {
-                    instigatorRI.actions.accum(instigatorRI.backstabs, 1);
+                    instigatorRI.actions.accum(backstabs, 1);
                 }
-                if (!contains(injured) && KFMonster(injured).bDecapitated) {
-                    instigatorRI.actions.accum(instigatorRI.decapitations, 1);
+                if (!contains(decappedPawns, injured) && KFMonster(injured).bDecapitated) {
+                    instigatorRI.actions.accum(decapitations, 1);
                     decappedPawns[decappedPawns.length]= injured;
+                }
+            }
+            zfp= ZombieFleshPound(injured);
+            zsc= ZombieScrake(injured);
+            if (zfp != none && newDamage < injured.Health && (!injured.IsInState('BeginRaging') && !injured.IsInState('RageCharging')) && 
+                    zfp.TwoSecondDamageTotal + newDamage > zfp.RageDamageThreshold) {
+                instigatorRI.actions.accum(instigatorRI.fleshpoundsRaged, 1);
+            } else if (zsc != none) {
+                if (newDamage < injured.Health && !contains(ragedScrakes, injured) && !zsc.bDecapitated && 
+                        (Level.Game.GameDifficulty < 5.0 && (zsc.Health - newDamage) / zsc.HealthMax < 0.5 || (zsc.Health - newDamage) / zsc.HealthMax < 0.75)) {
+                    instigatorRi.actions.accum(scrakesRaged, 1);
+                    ragedScrakes[ragedScrakes.length]= injured;
+                }
+                if (newDamage < injured.Health && newDamage * 1.5 >float(injured.default.Health)) {
+                    instigatorRi.actions.accum(scrakesStunned, 1);
                 }
             }
         }
 
-        zfp= ZombieFleshPound(injured);
-        if (zfp != none && newDamage < injured.Health && (!injured.IsInState('BeginRaging') && !injured.IsInState('RageCharging')) && 
-                zfp.TwoSecondDamageTotal + newDamage > zfp.RageDamageThreshold) {
-            instigatorRI.actions.accum(instigatorRI.fleshpoundsRaged, 1);
-        }
     }
     
     return newDamage;
@@ -83,7 +99,10 @@ function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> dam
             kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
             kfsxri.actions.accum(swattedCrawler, 1);
         }
-        remove(Killed);
+        remove(decappedPawns, Killed);
+        if (ZombieScrake(Killed) != none) {
+            remove(ragedScrakes, Killed);
+        }
         return false;
     }
     return true;
@@ -123,4 +142,9 @@ defaultproperties {
     teammateDeathKey= "Teammate"
     swattedCrawler= "Swatted Crawler"
     deathKey= "Deaths"
+    scrakesStunned= "Scrakes Stunned"
+    scrakesRaged= "Scrakes Raged"
+    backstabs= "Backstabs"
+    decapitations= "Decapitations"
+    damageKey= "Damage"
 }

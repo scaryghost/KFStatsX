@@ -167,9 +167,7 @@ defaultproperties {
     kfStatsXRules= class'KFSXGameRules'
     serverLinkClass= class'RemoteServerLink'
 
-    monsterReplacement(0)=(oldClass="KFChar.ZombieFleshPound",newClass="KFStatsX.ZombieFleshpound_KFSX")
-    monsterReplacement(1)=(oldClass="KFChar.ZombieHusk",newClass="KFStatsX.ZombieHusk_KFSX")
-    monsterReplacement(2)=(oldClass="KFChar.ZombieScrake",newClass="KFStatsX.ZombieScrake_KFSX")
+    monsterReplacement(0)=(oldClass="KFChar.ZombieHusk",newClass="KFStatsX.ZombieHusk_KFSX")
 
     fireModeReplacement(0)=(oldClass="KFMod.FragFire",NewClass="KFStatsX.FragFire_KFSX")
     fireModeReplacement(1)=(oldClass="KFMod.HuskGunFire",NewClass="KFStatsX.HuskGunFire_KFSX")
