@@ -66,13 +66,13 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
     local ZombieFleshPound zfp;
     local ZombieScrake zsc;
     local int newDamage;
-    local bool killingBlow;
+    local bool nonFatalBlow;
 
     newDamage= super.NetDamage(OriginalDamage, Damage, injured, instigatedBy, HitLocation,  Momentum, DamageType);
     if (instigatedBy != none) {
         instigatorRI= class'KFSXReplicationInfo'.static.findKFSXri(instigatedBy.PlayerReplicationInfo);
         if (instigatorRI != none) {
-            killingBlow= injured.Health < newDamage;
+            nonFatalBlow= newDamage < injured.Health;
             instigatorRI.player.accum(damageKey, min(injured.Health, newDamage));
             if (KFMonster(injured) != none) {
                 if (KFMonster(injured).bBackstabbed) {
@@ -85,19 +85,19 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
             }
             zfp= ZombieFleshPound(injured);
             zsc= ZombieScrake(injured);
-            if (zfp != none && killingBlow && (!injured.IsInState('BeginRaging') && !injured.IsInState('RageCharging')) && 
+            if (zfp != none && nonFatalBlow && (!injured.IsInState('BeginRaging') && !injured.IsInState('RageCharging')) && 
                     zfp.TwoSecondDamageTotal + newDamage > zfp.RageDamageThreshold) {
                 instigatorRI.actions.accum(instigatorRI.fleshpoundsRaged, 1);
             } else if (zsc != none) {
-                if (killingBlow && !contains(ragedScrakes, injured) && !zsc.bDecapitated && 
+                if (nonFatalBlow && !contains(ragedScrakes, injured) && !zsc.bDecapitated && 
                         (Level.Game.GameDifficulty < 5.0 && (zsc.Health - newDamage) < 0.5 * zsc.HealthMax || (zsc.Health - newDamage) < 0.75 * zsc.HealthMax)) {
                     instigatorRi.actions.accum(scrakesRaged, 1);
                     ragedScrakes[ragedScrakes.length]= injured;
                 }
-                if (killingBlow && newDamage * 1.5 > float(injured.default.Health)) {
+                if (nonFatalBlow && newDamage * 1.5 > float(injured.default.Health)) {
                     instigatorRI.actions.accum(scrakesStunned, 1);
                 }
-            } else if (ZombieHusk(injured) != none && killingBlow && (newDamage * 1.5 >float(injured.default.Health) || 
+            } else if (ZombieHusk(injured) != none && nonFatalBlow && (newDamage * 1.5 >float(injured.default.Health) || 
                     (damageType == class'DamTypeCrossbow' || damageType == class'DamTypeCrossbowHeadShot' ||
                     damageType == class'DamTypeWinchester' || damageType == class'DamTypeM14EBR'
                     || damageType == class'DamTypeM99HeadShot' || damageType == class'DamTypeM99SniperRifle' ) && newDamage > 200)) {

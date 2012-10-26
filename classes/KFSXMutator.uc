@@ -42,6 +42,8 @@ var transient RemoteServerLink serverLink;
 /** List of fire modes to replace */
 var array<ReplacePair> fireModeReplacement;
 
+var array<ZombieFleshPound> passiveFPs, frustratedFPs;
+
 function PostBeginPlay() {
 
     gameType= KFGameType(Level.Game);
@@ -65,6 +67,39 @@ function PostBeginPlay() {
         serverLink= spawn(serverLinkClass);
     }
 
+}
+
+function Tick(float DeltaTime) {
+    local int i, end;
+    local KFSXReplicationInfo targetRI;
+
+    end= passiveFPs.length;
+    while(i < end) {
+        if(passiveFPs[i] == none) {
+            passiveFPs.remove(i, 1);
+            end--;
+        } else if (passiveFPs[i].Controller.IsInState('WaitForAnim') && passiveFPs[i].bFrustrated) {
+            targetRI= class'KFSXReplicationInfo'.static.findKFSXri(Pawn(passiveFPs[i].Controller.Target).PlayerReplicationInfo);
+            targetRI.actions.accum(targetRI.fleshpoundsRaged, 1);
+            frustratedFPs[frustratedFPs.length]= passiveFPs[i];
+            passiveFPs.remove(i, 1);
+            end--;
+        }
+        i++;
+    }
+
+    end= frustratedFPs.length;
+    while(i < end) {
+        if (frustratedFPs[i] == none) {
+            frustratedFPs.remove(i, 1);
+            end--;
+        } else if (!frustratedFPs[i].IsInState('BeginRaging') && !frustratedFPs[i].IsInState('RageCharging')) {
+            passiveFPs[passiveFPs.length]= frustratedFPs[i];
+            frustratedFPs.remove(i, 1);
+            end--;
+        }
+        i++;
+    }
 }
 
 function NotifyLogout(Controller Exiting) {
@@ -94,7 +129,7 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
             }
         }
     } else if (ZombieFleshPound(Other) != none) {
-        ZombieFleshPound(Other).ControllerClass= class'FleshpoundZombieController_KFSX';
+        passiveFPs[passiveFPs.length]= ZombieFleshPound(Other);
     }
 
     return true;
