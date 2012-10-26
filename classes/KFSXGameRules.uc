@@ -23,6 +23,8 @@ var string scrakesRaged;
 var string backstabs, decapitations;
 var string damageKey;
 
+var KFSXMutator kfsxMut;
+
 function PostBeginPlay() {
     NextGameRules = Level.Game.GameRulesModifiers;
     Level.Game.GameRulesModifiers = Self;
@@ -43,6 +45,19 @@ private function remove(out array<Pawn> pawns, Pawn key) {
     if (i < pawns.length) {
         pawns.remove(i, 1);
     }
+}
+
+function bool CheckEndGame(PlayerReplicationInfo Winner, string Reason) {
+    local bool endGame;
+
+    endGame= super.CheckEndGame(Winner, Reason);
+    if (kfsxMut.serverLink != none && endGame && (KFGameType(Level.Game).WaveNum != KFGameType(Level.Game).InitialWave || KFGameType(Level.Game).bWaveInProgress)) {
+        kfsxMut.serverLink.broadcastMatchResults(deaths);
+        if (Level.NetMode != NM_DedicatedServer) {
+            kfsxMut.serverLink.broadcastPlayerStats(Level.GetLocalPlayerController().PlayerReplicationInfo);
+        }
+    }
+    return endGame;
 }
 
 function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn instigatedBy, vector HitLocation, 

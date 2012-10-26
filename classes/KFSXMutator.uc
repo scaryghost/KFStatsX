@@ -51,6 +51,7 @@ function PostBeginPlay() {
     }
 
     gameRules= Spawn(kfStatsXRules);
+    gameRules.kfsxMut= self;
     gameType.PlayerControllerClass= class<PlayerController>(DynamicLoadObject(playerController, class'Class'));
     gameType.PlayerControllerClassName= playerController;
     if (Level.NetMode != NM_Standalone) {
@@ -62,20 +63,8 @@ function PostBeginPlay() {
 
     if (broadcastStats) {
         serverLink= spawn(serverLinkClass);
-        SetTimer(1,true);
     }
 
-}
-
-function Timer() {
-    if (KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType != 0 &&
-        (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress)) {
-        serverLink.broadcastMatchResults(gameRules.deaths);
-        if (broadcastStats && Level.NetMode != NM_DedicatedServer) {
-            serverLink.broadcastPlayerStats(Level.GetLocalPlayerController().PlayerReplicationInfo);
-        }
-        SetTimer(0,false);
-    }
 }
 
 function NotifyLogout(Controller Exiting) {
