@@ -15,6 +15,9 @@ function DoFireEffect() {
     } else {
         fuelAmount= 10;
     }
+    if( Weapon.AmmoAmount(ThisModeNum) < fuelAmount ) {
+        fuelAmount= Weapon.AmmoAmount(ThisModeNum);
+    }
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Instigator.PlayerReplicationInfo);
     kfsxri.weapons.accum(Weapon.ItemName, fuelAmount);
 }
