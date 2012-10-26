@@ -18,7 +18,7 @@ var string swattedCrawler;
 /** Key for player deaths */
 var string deathKey;
 /** Key for scrakes stunned */
-var string scrakesStunned;
+var string scrakesStunned, husksStunned;
 var string scrakesRaged;
 var string backstabs, decapitations;
 var string damageKey;
@@ -78,8 +78,13 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
                     ragedScrakes[ragedScrakes.length]= injured;
                 }
                 if (newDamage < injured.Health && newDamage * 1.5 >float(injured.default.Health)) {
-                    instigatorRi.actions.accum(scrakesStunned, 1);
+                    instigatorRI.actions.accum(scrakesStunned, 1);
                 }
+            } else if (ZombieHusk(injured) != none && (newDamage < injured.Health && newDamage * 1.5 >float(injured.default.Health) || 
+                    (damageType == class'DamTypeCrossbow' || damageType == class'DamTypeCrossbowHeadShot' ||
+                    damageType == class'DamTypeWinchester' || damageType == class'DamTypeM14EBR'
+                    || damageType == class'DamTypeM99HeadShot' || damageType == class'DamTypeM99SniperRifle' ) && newDamage > 200)) {
+                    instigatorRI.actions.accum(husksStunned, 1);
             }
         }
 
@@ -147,4 +152,5 @@ defaultproperties {
     backstabs= "Backstabs"
     decapitations= "Decapitations"
     damageKey= "Damage"
+    husksStunned= "Husks Stunned"
 }

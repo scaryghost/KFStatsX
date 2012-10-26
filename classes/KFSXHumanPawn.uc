@@ -6,7 +6,7 @@
  */
 class KFSXHumanPawn extends KFHumanPawn;
 
-var string damageTaken, armorLost, timeAlive, cashSpent;
+var string damageTaken, armorLost, timeAlive, cashSpent, shotByHusk;
 var string healedSelf, receivedHeal, boltsRetrieved, healDartsConnected, healedTeammates;
 var KFSXReplicationInfo kfsxri;
 var int prevTime;
@@ -120,6 +120,9 @@ simulated function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation
         kfsxri.player.accum(damageTaken, oldHealth - fmax(Health,0.0));
         kfsxri.player.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
     }
+    if (ZombieHusk(InstigatedBy) != none && Momentum != vect(0,0,0) && damageType == class'HuskFireProjectile'.default.MyDamageType) {
+        kfsxri.player.accum(shotByHusk, 1);
+    }
 }
 
 /**
@@ -185,4 +188,5 @@ defaultproperties {
     boltsRetrieved= "Bolts Retrieved"
     healDartsConnected= "Heal Darts Connected"
     healedTeammates= "Healed Teammates"
+    shotByHusk= "Shot By Husk"
 }
