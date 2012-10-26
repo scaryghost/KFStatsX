@@ -18,6 +18,29 @@ var() config int txtR, txtG, txtB;
 var() config int alpha;
 var() config float txtScale;
 
+static function string formatTime(int seconds) {
+    local string timeStr;
+    local int i;
+    local array<int> timeValues;
+    
+    timeValues.Length= 3;
+    timeValues[0]= seconds / 3600;
+    timeValues[1]= seconds / 60;
+    timeValues[2]= seconds % 60;
+    for(i= 0; i < timeValues.Length; i++) {
+        if (timeValues[i] < 10) {
+            timeStr= timeStr$"0"$timeValues[i];
+        } else {
+            timeStr= timeStr$timeValues[i];
+        }
+        if (i < timeValues.Length-1) {
+            timeStr= timeStr$":";
+        }
+    }
+
+    return timeStr;
+}
+
 function bool PreDraw(Canvas Canvas) {
     return false;
 }
@@ -78,7 +101,7 @@ function DrawStat(Canvas Canvas, int CurIndex, float X, float Y,
 
     // Write stat value
     if (InStr(statDescriptions[CurIndex], "Time") != -1) {
-        S= class'Auxiliary'.static.formatTime(statValue[CurIndex]);
+        S= formatTime(statValue[CurIndex]);
     } else if (InStr(statDescriptions[CurIndex], "Cash") != -1) {
         S= "£" $ string(statValue[CurIndex]);
     } else {

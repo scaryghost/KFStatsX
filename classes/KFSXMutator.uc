@@ -3,8 +3,12 @@
  * @author etsai (Scary Ghost)
  */
 class KFSXMutator extends Mutator
-    config(KFStatsX)
-    dependson(Auxiliary);
+    config(KFStatsX);
+
+struct ReplacePair {
+    var class<Object> oldClass;
+    var class<Object> newClass;
+};
 
 /** True if the player and match stats should be saved remotely */
 var() config bool broadcastStats;
@@ -25,10 +29,6 @@ var() config array<string> compatibleControllers;
 var KFGameType gametype;
 /** Linked replication info class to attach to PRI */
 var class<KFSXReplicationInfo> kfsxRIClass;
-/** Stores the pairs of default monsters with their stats counterparts */
-var array<Auxiliary.ReplacementPair> monsterReplacement;
-/** Reference to the auxiliary class */
-var class<Auxiliary> auxiliaryRef;
 /** KFStatsX game rules object */
 var KFSXGameRules gameRules;
 /** Reference to the game rules used by KFStatsX */
@@ -40,7 +40,7 @@ var class<RemoteServerLink> serverLinkClass;
 var transient RemoteServerLink serverLink;
 
 /** List of fire modes to replace */
-var array<Auxiliary.ReplacementPair> fireModeReplacement;
+var array<ReplacePair> fireModeReplacement;
 
 function PostBeginPlay() {
 
@@ -59,16 +59,6 @@ function PostBeginPlay() {
             AddToPackageMap(string(gameType.PlayerControllerClass.Outer.name));
         }
     }
-
-    //Replace all instances of the old specimens with the new ones 
-    auxiliaryRef.static.replaceStandardMonsterClasses(gameType.StandardMonsterClasses, 
-            monsterReplacement);
-
-    //Replace the special squad arrays
-    auxiliaryRef.static.replaceSpecialSquad(gameType.ShortSpecialSquads, monsterReplacement);
-    auxiliaryRef.static.replaceSpecialSquad(gameType.NormalSpecialSquads, monsterReplacement);
-    auxiliaryRef.static.replaceSpecialSquad(gameType.LongSpecialSquads, monsterReplacement);
-    auxiliaryRef.static.replaceSpecialSquad(gameType.FinalSquads, monsterReplacement);
 
     if (broadcastStats) {
         serverLink= spawn(serverLinkClass);
@@ -109,9 +99,9 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
     } else if (Weapon(Other) != none) {
         for(i= 0; i < ArrayCount(Weapon(Other).FireModeClass); i++) {
             for(j= 0; j < fireModeReplacement.Length; j++) {
-                if (string(Weapon(Other).FireModeClass[i]) ~= fireModeReplacement[j].oldClass)
-                    Weapon(Other).FireModeClass[i]= 
-                            class<WeaponFire>(DynamicLoadObject(fireModeReplacement[j].newClass, class'Class'));
+                if (Weapon(Other).FireModeClass[i] == class<WeaponFire>(fireModeReplacement[j].oldClass)) {
+                    Weapon(Other).FireModeClass[i]= class<WeaponFire>(fireModeReplacement[j].newClass);
+                }
             }
         }
     } else if (ZombieFleshPound(Other) != none) {
@@ -163,15 +153,14 @@ defaultproperties {
     FriendlyName="KFStatsX v1.0.1"
     Description="Tracks statistics for each player, version 1.0.1"
 
-    auxiliaryRef= class'Auxiliary'
     kfStatsXRules= class'KFSXGameRules'
     serverLinkClass= class'RemoteServerLink'
 
-    fireModeReplacement(0)=(oldClass="KFMod.FragFire",NewClass="KFStatsX.FragFire_KFSX")
-    fireModeReplacement(1)=(oldClass="KFMod.HuskGunFire",NewClass="KFStatsX.HuskGunFire_KFSX")
-    fireModeReplacement(2)=(oldClass="KFMod.WeldFire",NewClass="KFStatsX.WeldFire_KFSX")
-    fireModeReplacement(3)=(oldClass="KFMod.UnWeldFire",NewClass="KFStatsX.UnWeldFire_KFSX")
-    fireModeReplacement(4)=(oldClass="KFMod.CrossbowFire",NewClass="KFStatsX.CrossbowFire_KFSX")
+    fireModeReplacement(0)=(oldClass=class'FragFire',NewClass=class'FragFire_KFSX')
+    fireModeReplacement(1)=(oldClass=class'HuskGunFire',NewClass=class'HuskGunFire_KFSX')
+    fireModeReplacement(2)=(oldClass=class'WeldFire',NewClass=class'WeldFire_KFSX')
+    fireModeReplacement(3)=(oldClass=class'UnWeldFire',NewClass=class'UnWeldFire_KFSX')
+    fireModeReplacement(4)=(oldClass=class'CrossbowFire',NewClass=class'CrossbowFire_KFSX')
 
     kfsxRIClass= class'KFSXReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"
