@@ -1,24 +1,21 @@
-/**
- * Custom crossbow arrow that tracks how many times a player picked it up
- * @author etsai (Scary Ghost)
- */
-class CrossbowArrow_KFSX extends KFMod.CrossbowArrow;
+class CrossbuzzsawBlade_KFSX extends KFMod.CrossbuzzsawBlade;
 
 var string statKey;
 
 simulated state OnWall {
-    /**  Copied from KFMod.CrossbowArrow, added bolts retrieved stat */
+    Ignores HitWall;
+
     function ProcessTouch (Actor Other, vector HitLocation) {
         local Inventory inv;
         local KFSXReplicationInfo kfsxri;
 
         if( Pawn(Other)!=None && Pawn(Other).Inventory!=None ) {
             for( inv=Pawn(Other).Inventory; inv!=None; inv=inv.Inventory ) {
-                if( Crossbow(Inv)!=None && Weapon(inv).AmmoAmount(0)<Weapon(inv).MaxAmmo(0) ) {
+                if( Crossbuzzsaw(Inv)!=None && Weapon(inv).AmmoAmount(0)<Weapon(inv).MaxAmmo(0) ) {
                     KFweapon(Inv).AddAmmo(1,0) ;
                     PlaySound(Sound'KF_InventorySnd.Ammo_GenericPickup', SLOT_Pain,2*TransientSoundVolume,,400);
-                    if(PlayerController(Pawn(Other).Controller) !=none) {
-                        PlayerController(Pawn(Other).Controller).ClientMessage( "You picked up a bolt" );
+                    if( PlayerController(Instigator.Controller)!=none ) {
+                        PlayerController(Instigator.Controller).ReceiveLocalizedMessage(class'KFmod.ProjectilePickupMessage',1);
                         kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Pawn(Other).PlayerReplicationInfo);
                         kfsxri.actions.accum(statKey, 1.0);
                     }
@@ -30,5 +27,5 @@ simulated state OnWall {
 }
 
 defaultproperties {
-    statKey= "Bolts Retrieved"
+    statKey= "Blade Retrieved"
 }
