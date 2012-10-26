@@ -120,8 +120,9 @@ simulated function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation
         kfsxri.player.accum(damageTaken, oldHealth - fmax(Health,0.0));
         kfsxri.player.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
     }
+    //Does not work on TestMap
     if (ZombieHusk(InstigatedBy) != none && Momentum != vect(0,0,0) && damageType == class'HuskFireProjectile'.default.MyDamageType) {
-        kfsxri.player.accum(shotByHusk, 1);
+        kfsxri.actions.accum(shotByHusk, 1);
     }
 }
 

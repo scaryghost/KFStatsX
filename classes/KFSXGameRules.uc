@@ -80,7 +80,7 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
                 if (newDamage < injured.Health && newDamage * 1.5 >float(injured.default.Health)) {
                     instigatorRI.actions.accum(scrakesStunned, 1);
                 }
-            } else if (ZombieHusk(injured) != none && (newDamage < injured.Health && newDamage * 1.5 >float(injured.default.Health) || 
+            } else if (ZombieHusk(injured) != none && newDamage < injured.Health && (newDamage * 1.5 >float(injured.default.Health) || 
                     (damageType == class'DamTypeCrossbow' || damageType == class'DamTypeCrossbowHeadShot' ||
                     damageType == class'DamTypeWinchester' || damageType == class'DamTypeM14EBR'
                     || damageType == class'DamTypeM99HeadShot' || damageType == class'DamTypeM99SniperRifle' ) && newDamage > 200)) {
