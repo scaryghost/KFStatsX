@@ -47,19 +47,6 @@ private function remove(out array<Pawn> pawns, Pawn key) {
     }
 }
 
-function bool CheckEndGame(PlayerReplicationInfo Winner, string Reason) {
-    local bool endGame;
-
-    endGame= super.CheckEndGame(Winner, Reason);
-    if (kfsxMut.serverLink != none && endGame && (KFGameType(Level.Game).WaveNum != KFGameType(Level.Game).InitialWave || KFGameType(Level.Game).bWaveInProgress)) {
-        kfsxMut.serverLink.broadcastMatchResults(deaths);
-        if (Level.NetMode != NM_DedicatedServer) {
-            kfsxMut.serverLink.broadcastPlayerStats(Level.GetLocalPlayerController().PlayerReplicationInfo);
-        }
-    }
-    return endGame;
-}
-
 function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn instigatedBy, vector HitLocation, 
         out vector Momentum, class<DamageType> DamageType ) {
     local KFSXReplicationInfo instigatorRI;

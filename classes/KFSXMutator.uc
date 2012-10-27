@@ -65,6 +65,7 @@ function PostBeginPlay() {
 
     if (broadcastStats) {
         serverLink= spawn(serverLinkClass);
+        SetTimer(1,true);
     }
 
 }
@@ -99,6 +100,17 @@ function Tick(float DeltaTime) {
             end--;
         }
         i++;
+    }
+}
+
+function Timer() {
+    if (KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType != 0 &&
+        (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress)) {
+        serverLink.broadcastMatchResults(gameRules.deaths);
+        if (broadcastStats && Level.NetMode != NM_DedicatedServer) {
+            serverLink.broadcastPlayerStats(Level.GetLocalPlayerController().PlayerReplicationInfo);
+        }
+        SetTimer(0,false);
     }
 }
 
