@@ -27,5 +27,5 @@ simulated state OnWall {
 }
 
 defaultproperties {
-    statKey= "Blade Retrieved"
+    statKey= "Blades Retrieved"
 }
