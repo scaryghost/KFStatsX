@@ -7,7 +7,7 @@
 class KFSXHumanPawn extends KFHumanPawn;
 
 var string damageTaken, armorLost, timeAlive, cashSpent, shotByHusk;
-var string healedSelf, receivedHeal, boltsRetrieved, healDartsConnected, healedTeammates;
+var string healedSelf, receivedHeal, healDartsConnected, healedTeammates;
 var KFSXReplicationInfo kfsxri;
 var int prevTime;
 
@@ -186,7 +186,6 @@ defaultproperties {
     healedSelf= "Healed Self"
     cashSpent= "Cash Spent"
     receivedHeal= "Received Heal"
-    boltsRetrieved= "Bolts Retrieved"
     healDartsConnected= "Heal Darts Connected"
     healedTeammates= "Healed Teammates"
     shotByHusk= "Shot By Husk"
