@@ -19,10 +19,6 @@ If the output does not match any of the hashes in this README, you do not have a
 1.0.1   dbe26bdd5e126251acfa8cec82f9cc82
 1.0     6ea3bd489c574ab046a431cfaf391aa3
 
-+Download
-https://dl.dropbox.com/u/16251678/KFStatsX_v1.0.1.zip
-https://dl.dropbox.com/u/16251678/KFStatsX_v1.0.zip
-
 +Install
 Copy the contents of the system folder to your Killing Floor system folder.  By default, mutator will provide an 
 in game panel of statistics for each player but will not braodcast the accumulated stats to a remote server.  The panel 
