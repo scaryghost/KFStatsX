@@ -56,6 +56,7 @@ function PostBeginPlay() {
     gameRules.kfsxMut= self;
     gameType.PlayerControllerClass= class<PlayerController>(DynamicLoadObject(playerController, class'Class'));
     gameType.PlayerControllerClassName= playerController;
+    gameType.LoginMenuClass= "KFStatsX.KFSXInvasionLoginMenu";
     if (Level.NetMode != NM_Standalone) {
         AddToPackageMap("KFStatsX");
         if (gameType.PlayerControllerClass != class'KFSXPlayerController') {
