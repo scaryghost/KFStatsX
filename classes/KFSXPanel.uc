@@ -5,7 +5,7 @@ struct SliderStrPair {
     var String str;
 };
 
-var automated moComboBox categories;
+var automated moComboBox categories, players;
 var automated StatListBox lb_StatSelect;
 var array<SortedMap> statsInfo;
 var automated moSlider sl_bgR, sl_bgG, sl_bgB,
@@ -21,8 +21,14 @@ function ShowPanel(bool bShow) {
     }
 }
 
+function fillStatsInfo(KFSXReplicationInfo kfsxRI) {
+    statsInfo[0]= kfsxRi.player;
+    statsInfo[1]= kfsxRi.actions;
+    statsInfo[2]= kfsxRi.weapons;
+    statsInfo[3]= kfsxRi.kills;
+}
+
 function InitComponent(GUIController MyController, GUIComponent MyOwner) {
-    local KFSXReplicationInfo kfsxRI;
     local int i;
 
     super.InitComponent(MyController, MyOwner);
@@ -51,6 +57,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
 
     sb_Specs.Caption= "Filters";
     sb_Specs.ManageComponent(categories);
+    sb_Specs.ManageComponent(players);
 
     sb_Options.Caption= "Settings";
     for(i= 0; i < sliders.Length; i++) {
@@ -62,11 +69,13 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
     categories.AddItem("Weapons");
     categories.AddItem("Kills");
 
-    kfsxRI= class'KFSXReplicationInfo'.static.findKFSXri(PlayerOwner().PlayerReplicationInfo);
-    statsInfo[0]= kfsxRi.player;
-    statsInfo[1]= kfsxRi.actions;
-    statsInfo[2]= kfsxRi.weapons;
-    statsInfo[3]= kfsxRi.kills;
+    fillStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(PlayerOwner().PlayerReplicationInfo));
+    for(i= 0; i < PlayerOwner().GameReplicationInfo.PRIArray.Length; i++) {
+        players.AddItem(PlayerOwner().GameReplicationInfo.PRIArray[i].PlayerName);
+        if (PlayerOwner().GameReplicationInfo.PRIArray[i] == PlayerOwner().PlayerReplicationInfo) {
+            players.SetIndex(i);
+        }
+    }
 }
 
 function InternalOnLoadINI(GUIComponent sender, string s) {
@@ -85,8 +94,12 @@ function InternalOnLoadINI(GUIComponent sender, string s) {
 function InternalOnChange(GUIComponent sender) {
     local int i;
     local String command;
+    local KFSXReplicationInfo kfsxRI;
 
     if (sender == categories) {
+        ShowPanel(true);
+    } else if (sender == players) {
+        fillStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(PlayerOwner().GameReplicationInfo.PRIArray[players.GetIndex()]));
         ShowPanel(true);
     } else {
         while(i < sliders.Length && sender != sliders[i].slider) {
@@ -120,6 +133,17 @@ defaultproperties {
         OnChange=KFSXPanel.InternalOnChange
     End Object
     categories=moComboBox'KFSXPanel.CategoryComboBox'
+
+    Begin Object Class=moComboBox Name=PlayerComboBox
+        bReadOnly=True
+        ComponentJustification=TXTA_Left
+        Caption="Player"
+        IniOption="@Internal"
+        Hint="View stats for all players"
+        TabOrder=3
+        OnChange=KFSXPanel.InternalOnChange
+    End Object
+    players=moComboBox'KFSXPanel.PlayerComboBox'
 
     Begin Object Class=StatListBox Name=StatSelectList
         WinTop=0.070063
