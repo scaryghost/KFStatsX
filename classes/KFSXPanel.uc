@@ -48,27 +48,26 @@ defaultproperties {
         IniDefault="Player"
         Hint="KFStatsX stat categories"
         WinTop=0.0222944
-        WinLeft=0.528997
+        WinLeft=0.25
         WinWidth=0.419297
         TabOrder=3
         OnChange=KFSXPanel.InternalOnChange
     End Object
     categories=moComboBox'KFSXPanel.CategoryComboBox'
 
-    Begin Object Class=GUISectionBackground Name=BGStats
+    Begin Object Class=AltSectionBackground Name=BGStats
         bFillClient=True
-        Caption="Stats"
-        WinTop=0.014063
+        WinTop=0.064063
         WinLeft=0.019240
         WinWidth=0.961520
-        WinHeight=0.946032
+        WinHeight=0.846032
         OnPreDraw=BGStats.InternalPreDraw
     End Object
     i_BGStats=GUISectionBackground'KFSXPanel.BGStats'
 
     Begin Object Class=StatListBox Name=StatSelectList
         OnCreateComponent=StatSelectList.InternalOnCreateComponent
-        WinTop=0.157760
+        WinTop=0.070063
         WinLeft=0.029240
         WinWidth=0.941520
         WinHeight=0.792836
