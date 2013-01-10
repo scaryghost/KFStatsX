@@ -12,6 +12,8 @@ struct ReplacePair {
 
 /** True if the player and match stats should be saved remotely */
 var() config bool broadcastStats;
+/** True if the KFStatsX tab should be added to the mid game menu */
+var() config bool addMidGameTab;
 /** Port of the remote server */
 var() config int serverPort;
 /** Remote server address */
@@ -55,7 +57,9 @@ function PostBeginPlay() {
     gameRules= Spawn(kfStatsXRules);
     gameType.PlayerControllerClass= class<PlayerController>(DynamicLoadObject(playerController, class'Class'));
     gameType.PlayerControllerClassName= playerController;
-    gameType.LoginMenuClass= "KFStatsX.KFSXInvasionLoginMenu";
+    if (addMidGameTab) {
+        gameType.LoginMenuClass= "KFStatsX.KFSXInvasionLoginMenu";
+    }
     if (Level.NetMode != NM_Standalone) {
         AddToPackageMap("KFStatsX");
         if (gameType.PlayerControllerClass != class'KFSXPlayerController') {
@@ -90,6 +94,7 @@ function Tick(float DeltaTime) {
     }
 
     end= frustratedFPs.length;
+    i= 0;
     while(i < end) {
         if (frustratedFPs[i] == none) {
             frustratedFPs.remove(i, 1);
@@ -159,6 +164,7 @@ static function FillPlayInfo(PlayInfo PlayInfo) {
     }
     PlayInfo.AddSetting("KFStatsX", "playerController", "Compatability", 0, 1, "Select", controllers, "Xb",,true);
     PlayInfo.AddSetting("KFStatsX", "broadcastStats", "Broadcast Statistics", 0, 0, "Check");
+    PlayInfo.AddSetting("KFStatsX", "addMidGameTab", "Add Mid Game Tab", 0, 0, "Check");
     PlayInfo.AddSetting("KFStatsX", "localHostSteamId", "Local Host Steam ID", 0, 0, "Text", "128",,,true);
     PlayInfo.AddSetting("KFStatsX", "serverAddress", "Remote Server Address", 0, 0, "Text", "128");
     PlayInfo.AddSetting("KFStatsX", "serverPort", "Remote Server Port", 0, 0, "Text");
@@ -168,7 +174,9 @@ static function FillPlayInfo(PlayInfo PlayInfo) {
 static event string GetDescriptionText(string property) {
     switch(property) {
         case "broadcastStats":
-            return "Check if the mutator should broadcast the stats to a remote server";
+            return "Select if the mutator should broadcast the stats to a remote server";
+        case "addMidGameTab":
+            return "Select to add the KFStatsX tab to the esc (mid game) menu.  Leave blank if another mutator has its own (e.g. ServerPerks)";
         case "localHostSteamId":
             return "Local host's steamid64.  Only used for solo or listen server games by the host.";
         case "serverAddress":
@@ -186,8 +194,8 @@ static event string GetDescriptionText(string property) {
 
 defaultproperties {
     GroupName="KFStatX"
-    FriendlyName="KFStatsX v2.0.1"
-    Description="Tracks statistics for each player, version 2.0.1"
+    FriendlyName="KFStatsX v2.1"
+    Description="Tracks statistics for each player, version 2.1"
 
     kfStatsXRules= class'KFSXGameRules'
     serverLinkClass= class'RemoteServerLink'
@@ -199,6 +207,7 @@ defaultproperties {
     fireModeReplacement(4)=(oldClass=class'CrossbowFire',NewClass=class'CrossbowFire_KFSX')
     fireModeReplacement(5)=(oldClass=class'CrossbuzzsawFire',NewClass=class'CrossbuzzsawFire_KFSX')
 
+    addMidGameTab= true
     kfsxRIClass= class'KFSXReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"
     compatibleControllers(0)= "KFStatsX.KFSXPlayerController;Vanilla KF"
