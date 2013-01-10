@@ -1,7 +1,6 @@
-class KFSXPanel extends MidGamePanel;
+class KFSXPanel extends KFGui.KFTab_MidGameVoiceChat;
 
 var automated moComboBox categories;
-var automated GUISectionBackground i_BGStats, i_bgFilters, i_bgSettings;
 var automated StatListBox lb_StatSelect;
 var array<SortedMap> statsInfo;
 var automated moSlider sl_bgR, sl_bgG, sl_bgB,
@@ -25,16 +24,21 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
     local KFSXReplicationInfo kfsxRI;
     super.InitComponent(MyController, MyOwner);
 
-    i_bgStats.ManageComponent(lb_StatSelect);
-    i_bgFilters.ManageComponent(categories);
-    i_bgSettings.ManageComponent(sl_bgR);
-    i_bgSettings.ManageComponent(sl_bgG);
-    i_bgSettings.ManageComponent(sl_bgB);
-    i_bgSettings.ManageComponent(sl_txtR);
-    i_bgSettings.ManageComponent(sl_txtG);
-    i_bgSettings.ManageComponent(sl_txtB);
-    i_bgSettings.ManageComponent(sl_alpha);
-    i_bgSettings.ManageComponent(sl_txtScale);
+    sb_Players.Caption= "Stats";
+    sb_Players.ManageComponent(lb_StatSelect);
+
+    sb_Specs.Caption= "Filters";
+    sb_Specs.ManageComponent(categories);
+
+    sb_Options.Caption= "Settings";
+    sb_Options.ManageComponent(sl_bgR);
+    sb_Options.ManageComponent(sl_bgG);
+    sb_Options.ManageComponent(sl_bgB);
+    sb_Options.ManageComponent(sl_txtR);
+    sb_Options.ManageComponent(sl_txtG);
+    sb_Options.ManageComponent(sl_txtB);
+    sb_Options.ManageComponent(sl_alpha);
+    sb_Options.ManageComponent(sl_txtScale);
 
     categories.AddItem("Player");
     categories.AddItem("Actions");
@@ -136,6 +140,13 @@ defaultproperties {
     setProp= "set KFStatsX.StatList"
     getProp= "get KFStatsX.StatList"
 
+    lb_Players= None
+    lb_Specs= None
+    ch_NoVoiceChat= None
+    ch_NoSpeech= None
+    ch_NoText= None
+    ch_Ban= None
+
     Begin Object Class=moComboBox Name=CategoryComboBox
         bReadOnly=True
         ComponentJustification=TXTA_Left
@@ -160,52 +171,6 @@ defaultproperties {
         WinHeight=0.792836
     End Object
     lb_StatSelect=StatListBox'KFSXPanel.StatSelectList'
-
-    Begin Object Class=AltSectionBackground Name=PlayersBackground
-        Caption="Stats"
-        LeftPadding=0.000000
-        RightPadding=0.000000
-        TopPadding=0.000000
-        BottomPadding=0.000000
-        WinTop=0.029674
-        WinLeft=0.019240
-        WinWidth=0.457166
-        WinHeight=0.798982
-        bBoundToParent=True
-        bScaleToParent=True
-        OnPreDraw=PlayersBackground.InternalPreDraw
-    End Object
-    i_bgStats=PlayersBackground
-
-    Begin Object Class=AltSectionBackground Name=SpecBackground
-        Caption="Filters"
-        LeftPadding=0.000000
-        RightPadding=0.000000
-        TopPadding=0.000000
-        BottomPadding=0.000000
-        WinTop=0.029674
-        WinLeft=0.486700
-        WinWidth=0.491566
-        WinHeight=0.369766
-        bBoundToParent=True
-        bScaleToParent=True
-        OnPreDraw=SpecBackground.InternalPreDraw
-    End Object
-    i_bgFilters=SpecBackground
-
-    Begin Object Class=AltSectionBackground Name=OptionBackground
-        Caption="Settings"
-        TopPadding=0.040000
-        BottomPadding=0.000000
-        WinTop=0.413209
-        WinLeft=0.486700
-        WinWidth=0.490282
-        WinHeight=0.415466
-        bBoundToParent=True
-        bScaleToParent=True
-        OnPreDraw=OptionBackground.InternalPreDraw
-    End Object
-    i_bgSettings=OptionBackground
 
     Begin Object Class=moSlider Name=BackgroundRedSlider
         MaxValue=255
