@@ -3,6 +3,7 @@ class KFSXPanel extends MidGamePanel;
 var automated moComboBox categories;
 var automated GUISectionBackground i_BGStats;
 var automated StatListBox lb_StatSelect;
+var array<SortedMap> statsInfo;
 
 function ShowPanel(bool bShow) {
     super.ShowPanel(bShow);
@@ -10,12 +11,12 @@ function ShowPanel(bool bShow) {
     EnableComponent(categories);
 
     if (bShow) {
-        lb_StatSelect.statListObj.InitList(class'KFSXReplicationInfo'.static
-                .findKFSXri(PlayerOwner().PlayerReplicationInfo).player);
+        lb_StatSelect.statListObj.InitList(statsInfo[categories.GetIndex()]);
     }
 }
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner) {
+    local KFSXReplicationInfo kfsxRI;
     super.InitComponent(MyController, MyOwner);
 
     categories.AddItem("Player");
@@ -23,6 +24,18 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
     categories.AddItem("Weapons");
     categories.AddItem("Kills");
     i_BGStats.ManageComponent(lb_StatSelect.statListObj);
+
+    kfsxRI= class'KFSXReplicationInfo'.static.findKFSXri(PlayerOwner().PlayerReplicationInfo);
+    statsInfo[0]= kfsxRi.player;
+    statsInfo[1]= kfsxRi.actions;
+    statsInfo[2]= kfsxRi.weapons;
+    statsInfo[3]= kfsxRi.kills;
+}
+
+function InternalOnChange(GUIComponent sender) {
+    if (sender == categories) {
+        ShowPanel(true);
+    }
 }
 
 defaultproperties {
@@ -38,6 +51,7 @@ defaultproperties {
         WinLeft=0.528997
         WinWidth=0.419297
         TabOrder=3
+        OnChange=KFSXPanel.InternalOnChange
     End Object
     categories=moComboBox'KFSXPanel.CategoryComboBox'
 
