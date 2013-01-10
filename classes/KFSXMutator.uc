@@ -53,7 +53,6 @@ function PostBeginPlay() {
     }
 
     gameRules= Spawn(kfStatsXRules);
-    gameRules.kfsxMut= self;
     gameType.PlayerControllerClass= class<PlayerController>(DynamicLoadObject(playerController, class'Class'));
     gameType.PlayerControllerClassName= playerController;
     gameType.LoginMenuClass= "KFStatsX.KFSXInvasionLoginMenu";

@@ -23,8 +23,6 @@ var string scrakesRaged;
 var string backstabs, decapitations;
 var string damageKey;
 
-var KFSXMutator kfsxMut;
-
 function PostBeginPlay() {
     NextGameRules = Level.Game.GameRulesModifiers;
     Level.Game.GameRulesModifiers = Self;
