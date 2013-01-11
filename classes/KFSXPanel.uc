@@ -94,7 +94,6 @@ function InternalOnLoadINI(GUIComponent sender, string s) {
 function InternalOnChange(GUIComponent sender) {
     local int i;
     local String command;
-    local KFSXReplicationInfo kfsxRI;
 
     if (sender == categories) {
         ShowPanel(true);
