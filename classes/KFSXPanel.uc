@@ -12,6 +12,7 @@ var automated moSlider sl_bgR, sl_bgG, sl_bgB,
         sl_txtR, sl_txtG, sl_txtB, sl_alpha, sl_txtScale;
 var array<SliderStrPair> sliders;
 var String statListClass;
+var PlayerReplicationInfo lastSelected;
 
 function ShowPanel(bool bShow) {
     super.ShowPanel(bShow);
@@ -69,25 +70,30 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
     categories.AddItem("Weapons");
     categories.AddItem("Kills");
 
-    fillStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(PlayerOwner().PlayerReplicationInfo));
-    for(i= 0; i < PlayerOwner().GameReplicationInfo.PRIArray.Length; i++) {
-        players.AddItem(PlayerOwner().GameReplicationInfo.PRIArray[i].PlayerName);
-        if (PlayerOwner().GameReplicationInfo.PRIArray[i] == PlayerOwner().PlayerReplicationInfo) {
-            players.SetIndex(i);
-        }
-    }
+    lastSelected= PlayerOwner().PlayerReplicationInfo;
 }
 
 function InternalOnLoadINI(GUIComponent sender, string s) {
     local int i;
     local String command;
 
-    while(i < sliders.Length && sender != sliders[i].slider) {
-        i++;
-    }
-    if (i < sliders.Length) {
-        command= "get" @ statListClass @ sliders[i].str;
-        sliders[i].slider.SetComponentValue(float(PlayerOwner().ConsoleCommand(command)), true);
+    if (sender == players) {
+        players.ResetComponent();
+        for(i= 0; i < PlayerOwner().GameReplicationInfo.PRIArray.Length; i++) {
+            players.AddItem(PlayerOwner().GameReplicationInfo.PRIArray[i].PlayerName);
+            if (PlayerOwner().GameReplicationInfo.PRIArray[i] == lastSelected) {
+                players.SetIndex(i);
+            }
+        }
+        fillStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
+    } else {
+        while(i < sliders.Length && sender != sliders[i].slider) {
+            i++;
+        }
+        if (i < sliders.Length) {
+            command= "get" @ statListClass @ sliders[i].str;
+            sliders[i].slider.SetComponentValue(float(PlayerOwner().ConsoleCommand(command)), true);
+        }
     }
 }
 
@@ -98,7 +104,8 @@ function InternalOnChange(GUIComponent sender) {
     if (sender == categories) {
         ShowPanel(true);
     } else if (sender == players) {
-        fillStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(PlayerOwner().GameReplicationInfo.PRIArray[players.GetIndex()]));
+        lastSelected= PlayerOwner().GameReplicationInfo.PRIArray[players.GetIndex()];
+        fillStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
         ShowPanel(true);
     } else {
         while(i < sliders.Length && sender != sliders[i].slider) {
@@ -141,6 +148,7 @@ defaultproperties {
         Hint="View stats for all players"
         TabOrder=3
         OnChange=KFSXPanel.InternalOnChange
+        OnLoadINI=KFSXPanel.InternalOnLoadINI
     End Object
     players=moComboBox'KFSXPanel.PlayerComboBox'
 
