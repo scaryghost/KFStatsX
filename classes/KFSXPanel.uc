@@ -8,25 +8,20 @@ struct SliderStrPair {
 var automated moComboBox categories, players;
 var automated StatListBox lb_StatSelect;
 var array<SortedMap> statsInfo;
-var automated moSlider sl_bgR, sl_bgG, sl_bgB,
-        sl_txtR, sl_txtG, sl_txtB, sl_alpha, sl_txtScale;
+var automated moSlider sl_bgR, sl_bgG, sl_bgB, sl_txtR, sl_txtG, sl_txtB, sl_alpha, sl_txtScale;
 var array<SliderStrPair> sliders;
 var String statListClass;
 var PlayerReplicationInfo lastSelected;
 
-function ShowPanel(bool bShow) {
-    super.ShowPanel(bShow);
-
-    if (bShow) {
-        lb_StatSelect.statListObj.InitList(statsInfo[categories.GetIndex()]);
-    }
-}
-
 function fillStatsInfo(KFSXReplicationInfo kfsxRI) {
-    statsInfo[0]= kfsxRi.player;
-    statsInfo[1]= kfsxRi.actions;
-    statsInfo[2]= kfsxRi.weapons;
-    statsInfo[3]= kfsxRi.kills;
+    if (kfsxRI == None) {
+        return;
+    }
+    statsInfo[0]= kfsxRI.player;
+    statsInfo[1]= kfsxRI.actions;
+    statsInfo[2]= kfsxRI.weapons;
+    statsInfo[3]= kfsxRI.kills;
+    lb_StatSelect.statListObj.InitList(statsInfo[categories.GetIndex()]);
 }
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner) {
@@ -52,7 +47,6 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
     sliders[7].slider= sl_txtScale;
     sliders[7].str= "txtScale";
 
-
     sb_Players.Caption= "Stats";
     sb_Players.ManageComponent(lb_StatSelect);
     sb_Players.UnManageComponent(lb_Players);
@@ -60,7 +54,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
     sb_Specs.Caption= "Filters";
     sb_Specs.ManageComponent(categories);
     sb_Specs.ManageComponent(players);
-    sb_Specs.UnMAnageComponent(lb_Specs);
+    sb_Specs.UnManageComponent(lb_Specs);
 
     sb_Options.Caption= "Settings";
     for(i= 0; i < sliders.Length; i++) {
@@ -71,8 +65,6 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
     categories.AddItem("Actions");
     categories.AddItem("Weapons");
     categories.AddItem("Kills");
-
-    lastSelected= PlayerOwner().PlayerReplicationInfo;
 }
 
 function InternalOnLoadINI(GUIComponent sender, string s) {
@@ -80,11 +72,14 @@ function InternalOnLoadINI(GUIComponent sender, string s) {
     local String command;
 
     if (sender == players) {
+        if (lastSelected == None) {
+            lastSelected= PlayerOwner().PlayerReplicationInfo;
+        }
         players.ResetComponent();
         for(i= 0; i < PlayerOwner().GameReplicationInfo.PRIArray.Length; i++) {
             players.AddItem(PlayerOwner().GameReplicationInfo.PRIArray[i].PlayerName);
             if (PlayerOwner().GameReplicationInfo.PRIArray[i] == lastSelected) {
-                players.SetIndex(i);
+                players.SilentSetIndex(i);
             }
         }
         fillStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
@@ -104,11 +99,10 @@ function InternalOnChange(GUIComponent sender) {
     local String command;
 
     if (sender == categories) {
-        ShowPanel(true);
+        lb_StatSelect.statListObj.InitList(statsInfo[categories.GetIndex()]);
     } else if (sender == players) {
         lastSelected= PlayerOwner().GameReplicationInfo.PRIArray[players.GetIndex()];
         fillStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
-        ShowPanel(true);
     } else {
         while(i < sliders.Length && sender != sliders[i].slider) {
             i++;
@@ -133,6 +127,7 @@ defaultproperties {
 
     Begin Object Class=moComboBox Name=CategoryComboBox
         bReadOnly=True
+        bAlwaysNotify=True
         ComponentJustification=TXTA_Left
         Caption="Category"
         IniOption="@Internal"
@@ -145,6 +140,7 @@ defaultproperties {
 
     Begin Object Class=moComboBox Name=PlayerComboBox
         bReadOnly=True
+        bAlwaysNotify=True
         ComponentJustification=TXTA_Left
         Caption="Player"
         IniOption="@Internal"

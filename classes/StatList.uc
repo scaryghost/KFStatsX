@@ -51,6 +51,10 @@ function InitList(SortedMap statsInfo) {
     itemCount= 0;
     SetIndex(0);
 
+    if (statsInfo == None) {
+        return;
+    }
+
     for(i= 0; i < statsInfo.maxStatIndex; i++) {
         if (statsInfo.keys[i] != class'KFSXGameRules'.default.damageKey || 
                 statsInfo.keys[i] == class'KFSXGameRules'.default.damageKey && 
