@@ -55,10 +55,12 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
 
     sb_Players.Caption= "Stats";
     sb_Players.ManageComponent(lb_StatSelect);
+    sb_Players.UnManageComponent(lb_Players);
 
     sb_Specs.Caption= "Filters";
     sb_Specs.ManageComponent(categories);
     sb_Specs.ManageComponent(players);
+    sb_Specs.UnMAnageComponent(lb_Specs);
 
     sb_Options.Caption= "Settings";
     for(i= 0; i < sliders.Length; i++) {
@@ -118,11 +120,12 @@ function InternalOnChange(GUIComponent sender) {
     }
 }
 
+function FillPlayerLists() {
+}
+
 defaultproperties {
     statListClass= "KFStatsX.StatList"
 
-    lb_Players= None
-    lb_Specs= None
     ch_NoVoiceChat= None
     ch_NoSpeech= None
     ch_NoText= None
