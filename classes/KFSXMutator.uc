@@ -47,7 +47,6 @@ var array<ReplacePair> fireModeReplacement;
 var array<ZombieFleshPound> passiveFPs, frustratedFPs;
 
 function PostBeginPlay() {
-
     gameType= KFGameType(Level.Game);
     if (gameType == none) {
         Destroy();
@@ -80,7 +79,7 @@ function Tick(float DeltaTime) {
 
     end= passiveFPs.length;
     while(i < end) {
-        if(passiveFPs[i] == none) {
+        if(passiveFPs[i] == None || passiveFPs[i].Controller == None) {
             passiveFPs.remove(i, 1);
             end--;
         } else if (passiveFPs[i].Controller.IsInState('WaitForAnim') && passiveFPs[i].bFrustrated) {
