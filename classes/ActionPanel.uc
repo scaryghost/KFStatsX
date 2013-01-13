@@ -4,10 +4,11 @@
  */
 class ActionPanel extends StatsPanelBase;
 
-function ShowPanel(bool bShow) {
-    if (statsInfo == none) {
-        statsInfo= class'KFSXReplicationInfo'.static
-                .findKFSXri(PlayerOwner().PlayerReplicationInfo).actions;
-    }
-    super.ShowPanel(bShow);
+function InitComponent(GUIController MyController, GUIComponent MyComponent) {
+    super.InitComponent(MyController, MyComponent);
+    statsInfo= class'KFSXReplicationInfo'.static.findKFSXri(PlayerOwner().PlayerReplicationInfo).actions;
+}
+
+function updateStatsInfo(KFSXReplicationInfo kfsxRI) {
+    statsInfo= kfsxRI.actions;
 }

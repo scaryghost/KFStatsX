@@ -13,10 +13,12 @@ var SortedMap statsInfo;
 function ShowPanel(bool bShow) {
     super.ShowPanel(bShow);
 
-    if (bShow && statsInfo != none) {
+    if (bShow) {
         lb_StatSelect.statListObj.InitList(statsInfo);
     }
 }
+
+function updateStatsInfo(KFSXReplicationInfo kfsxRI);
 
 defaultproperties {
     Begin Object Class=GUISectionBackground Name=BGStats

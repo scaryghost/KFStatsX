@@ -4,10 +4,11 @@
  */
 class WeaponStatsPanel extends StatsPanelBase;
 
-function ShowPanel(bool bShow) {
-    if (statsInfo == none) {
-        statsInfo= class'KFSXReplicationInfo'.static
-                .findKFSXri(PlayerOwner().PlayerReplicationInfo).weapons;
-    }
-    super.ShowPanel(bShow);
+function InitComponent(GUIController MyController, GUIComponent MyComponent) {
+    super.InitComponent(MyController, MyComponent);
+    statsInfo= class'KFSXReplicationInfo'.static.findKFSXri(PlayerOwner().PlayerReplicationInfo).weapons;
+}
+
+function updateStatsInfo(KFSXReplicationInfo kfsxRI) {
+    statsInfo= kfsxRI.weapons;
 }
