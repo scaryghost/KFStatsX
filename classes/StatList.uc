@@ -58,7 +58,8 @@ function InitList(SortedMap statsInfo) {
     for(i= 0; i < statsInfo.maxStatIndex; i++) {
         if (statsInfo.keys[i] != class'KFSXGameRules'.default.damageKey || 
                 statsInfo.keys[i] == class'KFSXGameRules'.default.damageKey && 
-                !KFGameReplicationInfo(PlayerOwner().GameReplicationInfo).bWaveInProgress) {
+                (!KFGameReplicationInfo(PlayerOwner().GameReplicationInfo).bWaveInProgress || 
+                KFGameReplicationInfo(PlayerOwner().GameReplicationInfo).EndGameType != 0)) {
             statDescriptions[itemCount]= statsInfo.keys[i];
             statValue[itemCount]= statsInfo.values[i];
             itemCount++;
