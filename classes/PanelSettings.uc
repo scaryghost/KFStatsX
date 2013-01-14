@@ -5,8 +5,7 @@
 class PanelSettings extends MidGamePanel;
 
 var automated GUISectionBackground i_BGText, i_BGBackground;
-var automated moSlider sl_bgR, sl_bgG, sl_bgB, 
-        sl_txtR, sl_txtG, sl_txtB, sl_alpha, sl_txtScale;
+var automated moSlider sl_bgR, sl_bgG, sl_bgB,sl_txtR, sl_txtG, sl_txtB, sl_alpha, sl_txtScale;
 
 var() noexport transient int bgR, bgG, bgB, txtR, txtG, txtB, alpha;
 var() noexport float txtScale;
@@ -16,14 +15,14 @@ var string setProp, getProp;
 function ShowPanel(bool bShow) {
     super.ShowPanel(bShow);
 
-    EnableComponent(sl_bgR);
-    EnableComponent(sl_bgG);
-    EnableComponent(sl_bgB);
-    EnableComponent(sl_txtR);
-    EnableComponent(sl_txtG);
-    EnableComponent(sl_txtB);
-    EnableComponent(sl_alpha);
-    EnableComponent(sl_txtScale);
+    i_BGBackground.ManageComponent(sl_bgR);
+    i_BGBackground.ManageComponent(sl_bgG);
+    i_BGBackground.ManageComponent(sl_bgB);
+    i_BGBackground.ManageComponent(sl_alpha);
+    i_BGText.ManageComponent(sl_txtR);
+    i_BGText.ManageComponent(sl_txtG);
+    i_BGText.ManageComponent(sl_txtB);
+    i_BGText.ManageComponent(sl_txtScale);
 }
 
 function InternalOnLoadINI(GUIComponent Sender, string s) {
@@ -113,7 +112,7 @@ defaultproperties {
     Begin Object Class=GUISectionBackground Name=BGBackground
         bFillClient=True
         Caption="Background"
-        WinTop=0.012063
+        WinTop=0.058063
         WinLeft=0.02
         WinWidth=0.45
         WinHeight=0.250
@@ -124,7 +123,7 @@ defaultproperties {
     Begin Object Class=GUISectionBackground Name=BGText
         bFillClient=True
         Caption="Text"
-        WinTop=0.012063
+        WinTop=0.058063
         WinLeft=0.53
         WinWidth=0.45
         WinHeight=0.250
@@ -142,9 +141,6 @@ defaultproperties {
         IniOption="@Internal"
         IniDefault="0"
         Hint="Adjust the red value of the stat background color"
-        WinTop=0.06
-        WinLeft=0.045
-        WinWidth=0.40
         TabOrder=2
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
@@ -161,9 +157,6 @@ defaultproperties {
         IniOption="@Internal"
         IniDefault="0"
         Hint="Adjust the green value of the stat background color"
-        WinTop=0.09
-        WinLeft=0.045
-        WinWidth=0.40
         TabOrder=2
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
@@ -180,9 +173,6 @@ defaultproperties {
         IniOption="@Internal"
         IniDefault="0"
         Hint="Adjust the blue value of the stat background color"
-        WinTop=0.12
-        WinLeft=0.045
-        WinWidth=0.40
         TabOrder=2
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
@@ -199,9 +189,6 @@ defaultproperties {
         IniOption="@Internal"
         IniDefault="255"
         Hint="Adjust the red value of the stat text color"
-        WinTop=0.06
-        WinLeft=0.555
-        WinWidth=0.40
         TabOrder=2
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
@@ -218,9 +205,6 @@ defaultproperties {
         IniOption="@Internal"
         IniDefault="255"
         Hint="Adjust the green value of the stat text color"
-        WinTop=0.09
-        WinLeft=0.555
-        WinWidth=0.40
         TabOrder=2
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
@@ -237,9 +221,6 @@ defaultproperties {
         IniOption="@Internal"
         IniDefault="255"
         Hint="Adjust the blue value of the stat text color"
-        WinTop=0.12
-        WinLeft=0.555
-        WinWidth=0.40
         TabOrder=2
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
@@ -256,9 +237,6 @@ defaultproperties {
         IniOption="@Internal"
         IniDefault="255"
         Hint="Adjust alpha of the stat panel"
-        WinTop=0.15
-        WinLeft=0.045
-        WinWidth=0.40
         TabOrder=2
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI
@@ -275,9 +253,6 @@ defaultproperties {
         IniOption="@Internal"
         IniDefault="1"
         Hint="Adjust text size of the stat panel"
-        WinTop=0.15
-        WinLeft=0.555
-        WinWidth=0.40
         TabOrder=2
         OnChange=PanelSettings.InternalOnChange
         OnLoadINI=PanelSettings.InternalOnLoadINI

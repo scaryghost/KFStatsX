@@ -16,7 +16,7 @@ function SetTitle() {
 }
 
 function InternalOnChange(GUIComponent sender) {
-    if (sender == players) {
+    if (sender == players && StatsPanelBase(c_Main.ActiveTab.MyPanel) != None) {
         StatsPanelBase(c_Main.ActiveTab.MyPanel).updateStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
     }
 }
@@ -35,7 +35,9 @@ function InternalOnLoadINI(GUIComponent sender, string s) {
                 players.SilentSetIndex(i);
             }
         }
-        StatsPanelBase(c_Main.ActiveTab.MyPanel).updateStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
+        if (StatsPanelBase(c_Main.ActiveTab.MyPanel) != None) {
+            StatsPanelBase(c_Main.ActiveTab.MyPanel).updateStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
+        }
     }
 }
 
