@@ -55,10 +55,15 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
     sb_Players.ManageComponent(lb_StatSelect);
     sb_Players.UnManageComponent(lb_Players);
 
+    /** 
+     * This is purely for combo box placement.  The 
+     * lb_Specs variable will not be visible in the window
+     */
     sb_Specs.Caption= "Filters";
+    sb_Specs.UnManageComponent(lb_Specs);
     sb_Specs.ManageComponent(categories);
     sb_Specs.ManageComponent(players);
-    sb_Specs.UnManageComponent(lb_Specs);
+    sb_Specs.ManageComponent(lb_Specs);
 
     sb_Options.Caption= "Settings";
     for(i= 0; i < sliders.Length; i++) {
