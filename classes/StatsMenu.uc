@@ -40,19 +40,6 @@ function InternalOnLoadINI(GUIComponent sender, string s) {
 }
 
 defaultproperties {
-    Begin Object Class=GUITabControl Name=StatsMenuTC
-        bDockPanels=True
-        BackgroundStyleName="TabBackground"
-        WinTop=0.026336
-        WinLeft=0.012500
-        WinWidth=0.974999
-        WinHeight=0.055000
-        bScaleToParent=True
-        bAcceptsInput=True
-        OnActivate=LoginMenuTC.InternalOnActivate
-    End Object
-    c_Main=GUITabControl'StatsMenu.StatsMenuTC'
-
     Begin Object Class=moComboBox Name=PlayerComboBox
         bReadOnly=True
         bAlwaysNotify=True
@@ -61,12 +48,14 @@ defaultproperties {
         IniOption="@Internal"
         Hint="View stats for all players"
         TabOrder=3
+        WinTop= 0.085
+        WinLeft=0.25
         OnChange=StatsMenu.InternalOnChange
         OnLoadINI=StatsMenu.InternalOnLoadINI
     End Object
     players=moComboBox'StatsMenu.PlayerComboBox'
 
-    WinHeight=0.8125
+    WinHeight=0.9
     Panels(0)=(ClassName="KFStatsX.PlayerStatsPanel",Caption="Player",Hint="General player information")
     Panels(1)=(ClassName="KFStatsX.ActionPanel",Caption="Actions",Hint="Player actions")
     Panels(2)=(ClassName="KFStatsX.WeaponStatsPanel",Caption="Weapons",Hint="Weapons usage")

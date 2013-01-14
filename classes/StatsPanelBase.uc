@@ -24,17 +24,17 @@ defaultproperties {
     Begin Object Class=GUISectionBackground Name=BGStats
         bFillClient=True
         Caption="Stats"
-        WinTop=0.014063
+        WinTop=0.058063
         WinLeft=0.019240
         WinWidth=0.961520
-        WinHeight=0.946032
+        WinHeight=0.896032
         OnPreDraw=BGPerks.InternalPreDraw
     End Object
     i_BGStats=GUISectionBackground'StatsPanelBase.BGStats'
 
     Begin Object Class=StatListBox Name=StatSelectList
         OnCreateComponent=StatSelectList.InternalOnCreateComponent
-        WinTop=0.057760
+        WinTop=0.097760
         WinLeft=0.029240
         WinWidth=0.941520
         WinHeight=0.892836
