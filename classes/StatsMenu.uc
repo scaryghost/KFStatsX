@@ -15,9 +15,24 @@ function SetTitle() {
     WindowName= default.WindowName;
 }
 
+function updateStats(PlayerReplicationInfo playerRI) {
+    local int i;
+    local KFSXReplicationInfo kfsxRI;
+
+    kfsxRI= class'KFSXReplicationInfo'.static.findKFSXri(playerRI);
+    if (kfsxRI != None) {
+        for(i= 0; i < c_Main.TabStack.Length; i++) {
+            if (StatsPanelBase(c_Main.TabStack[i].MyPanel) != None) {
+                StatsPanelBase(c_Main.TabStack[i].MyPanel).updateStatsInfo(kfsxRI);
+            }
+        }
+    }
+}
+
 function InternalOnChange(GUIComponent sender) {
-    if (sender == players && StatsPanelBase(c_Main.ActiveTab.MyPanel) != None) {
-        StatsPanelBase(c_Main.ActiveTab.MyPanel).updateStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
+    if (sender == players) {
+        lastSelected= PlayerOwner().GameReplicationInfo.PRIArray[players.GetIndex()];
+        updateStats(lastSelected);
     }
 }
 
@@ -35,9 +50,7 @@ function InternalOnLoadINI(GUIComponent sender, string s) {
                 players.SilentSetIndex(i);
             }
         }
-        if (StatsPanelBase(c_Main.ActiveTab.MyPanel) != None) {
-            StatsPanelBase(c_Main.ActiveTab.MyPanel).updateStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
-        }
+        updateStats(lastSelected);
     }
 }
 
