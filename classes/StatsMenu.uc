@@ -61,7 +61,7 @@ defaultproperties {
         ComponentJustification=TXTA_Left
         Caption="Player"
         IniOption="@Internal"
-        Hint="View stats for all players"
+        Hint="View stats for selected player"
         TabOrder=3
         WinTop= 0.085
         WinLeft=0.25

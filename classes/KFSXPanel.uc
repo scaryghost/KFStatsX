@@ -148,7 +148,7 @@ defaultproperties {
         ComponentJustification=TXTA_Left
         Caption="Player"
         IniOption="@Internal"
-        Hint="View stats for all players"
+        Hint="View stats for selected player"
         TabOrder=3
         OnChange=KFSXPanel.InternalOnChange
         OnLoadINI=KFSXPanel.InternalOnLoadINI
@@ -172,9 +172,6 @@ defaultproperties {
         IniOption="@Internal"
         IniDefault="0"
         Hint="Adjust the red value of the stat background color"
-        WinTop=0.15
-        WinLeft=0.712188
-        WinWidth=0.291445
         TabOrder=2
         OnChange=KFSXPanel.InternalOnChange
         OnLoadINI=KFSXPanel.InternalOnLoadINI
