@@ -1,3 +1,7 @@
+/**
+ * Panel class for the KFStatsX tab.  This class borrows its look and feel from the communications tab
+ * @author etsai (Scary Ghost)
+ */
 class KFSXPanel extends KFGui.KFTab_MidGameVoiceChat;
 
 struct SliderStrPair {
