@@ -18,7 +18,7 @@ simulated state OnWall {
                     KFweapon(Inv).AddAmmo(1,0) ;
                     PlaySound(Sound'KF_InventorySnd.Ammo_GenericPickup', SLOT_Pain,2*TransientSoundVolume,,400);
                     if(PlayerController(Pawn(Other).Controller) !=none) {
-                        PlayerController(Pawn(Other).Controller).ClientMessage( "You picked up a bolt" );
+                        PlayerController(Pawn(Other).Controller).ReceiveLocalizedMessage(class'KFmod.ProjectilePickupMessage',0);
                         kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Pawn(Other).PlayerReplicationInfo);
                         kfsxri.actions.accum(statKey, 1.0);
                     }
