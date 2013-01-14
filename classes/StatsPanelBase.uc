@@ -10,15 +10,9 @@ var automated GUISectionBackground i_BGStats;
 var automated StatListBox lb_StatSelect;
 var SortedMap statsInfo;
 
-function ShowPanel(bool bShow) {
-    super.ShowPanel(bShow);
-
-    if (bShow) {
-        lb_StatSelect.statListObj.InitList(statsInfo);
-    }
+function updateStatsInfo(KFSXReplicationInfo kfsxRI) {
+    lb_StatSelect.statListObj.InitList(statsInfo);
 }
-
-function updateStatsInfo(KFSXReplicationInfo kfsxRI);
 
 defaultproperties {
     Begin Object Class=GUISectionBackground Name=BGStats

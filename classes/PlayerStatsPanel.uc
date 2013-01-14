@@ -11,4 +11,5 @@ function InitComponent(GUIController MyController, GUIComponent MyComponent) {
 
 function updateStatsInfo(KFSXReplicationInfo kfsxRI) {
     statsInfo= kfsxRI.player;
+    super.updateStatsInfo(kfsxRI);
 }
