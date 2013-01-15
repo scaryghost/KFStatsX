@@ -36,11 +36,12 @@ For clients, it is recommended to only copy the .int file to the system folder, 
 This will prevent conflicts with future updates to the mod.
 
 ## Usage
-By default, an extra tab will be present in the ESC menu title "KFStatsX".  The tab's panel will provide a statistical 
-summary for all players on the server.  Because someone mutators (e.g. ServerPerks) also add their own tabs, the 
-KFStatsX tab can be disabled to provide compatibility with such mutators.  Instead, a separate in game panel dedicated 
-to KFStatsX can be openned to provide the same statistics.  The panel can be opened with the console command "ingamestats". 
-For convenience, a button can be bound in the "Controls" menu, under the KFStatsX section or directly to the command:
+By default, an extra tab will be present in the ESC menu titled "KFStatsX".  The tab's panel will provide a statistical 
+summary for all players on the server.  Because some mutators (e.g. ServerPerks) also add their own tabs, the KFStatsX 
+tab can be disabled by unchecking the mid game tab setting, providing compatibility with such mutators.  Alternatively, 
+a separate in game panel dedicated to KFStatsX can be openned to provide the same information.  The panel can be opened 
+with the console command "ingamestats". For convenience, a button can be bound in the "Controls" menu, under the 
+KFStatsX section or with the console command:
 
     set input ${key} ingamestats
 
