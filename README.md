@@ -4,6 +4,9 @@ KFStatsX
 ## Author
 Scary Ghost
 
+## Release Notes
+https://github.com/scaryghost/KFStatsX/wiki/Release-KFStatsX-2.1
+
 ## About
 Provides advanced statistics about a player's performance and tracks game information for each match.  This started out 
 as enhancements to Game Stats Tab but I did not like how static everything was.  Eventually, I decided to rebuild the 
