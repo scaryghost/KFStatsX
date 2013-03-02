@@ -47,7 +47,7 @@ function InternalOnLoadINI(GUIComponent sender, string s) {
         players.ResetComponent();
         validPris.Length= 0;
         for(i= 0; i < PlayerOwner().GameReplicationInfo.PRIArray.Length; i++) {
-            if (!PlayerOwner().GameReplicationInfo.PRIArray[i].bIsSpectator) {
+            if (!PlayerOwner().GameReplicationInfo.PRIArray[i].bOnlySpectator) {
                 players.AddItem(PlayerOwner().GameReplicationInfo.PRIArray[i].PlayerName);
                 if (PlayerOwner().GameReplicationInfo.PRIArray[i] == lastSelected) {
                     players.SilentSetIndex(validPris.Length);
