@@ -7,12 +7,13 @@ class KFSXReplicationInfo extends ReplicationInfo
     dependson(SortedMap);
 
 var PlayerReplicationInfo ownerPRI;
-var string welding;
+var string welding, timeSpectating;
 
 /** Map of values stored by this LRI */
 var SortedMap player, actions, weapons, kills, perks;
 var string playerIdHash;
 var string fleshpoundsRaged;
+var int prevTime;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority)
@@ -28,6 +29,19 @@ function Tick(float DeltaTime) {
     }
 
     Disable('Tick');
+    SetTimer(1.0, true);
+}
+
+function Timer() {
+    local int currTime, timeDiff;
+
+    super.Timer();
+    currTime= Level.GRI.ElapsedTime;
+    timeDiff= currTime - prevTime;
+    if (ownerPRI.bOnlySpectator) {
+        player.accum(timeSpectating, timeDiff);
+    }
+    prevTime= currTime;
 }
 
 event PostBeginPlay() {
@@ -37,6 +51,7 @@ event PostBeginPlay() {
     kills= Spawn(class'SortedMap');
     actions= Spawn(class'SortedMap');
     perks= Spawn(class'SortedMap');
+    prevTime= Level.GRI.ElapsedTime;
 }
 
 static function KFSXReplicationInfo findKFSXri(PlayerReplicationInfo pri) {
@@ -55,4 +70,5 @@ static function KFSXReplicationInfo findKFSXri(PlayerReplicationInfo pri) {
 defaultproperties {
     welding= "Welding"
     fleshpoundsRaged= "Fleshpounds Raged"
+    timeSpectating= "Time Spectating"
 }
