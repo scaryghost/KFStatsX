@@ -12,14 +12,17 @@ function SetPawnClass(string inClass, string inCharacter) {
     PawnClass= Class'KFSXHumanPawn';
 }
 
-function EnterStartState() {
-    Super.EnterStartState();
-    if (!addedInteraction && Viewport(Player) != None) {
+simulated event PlayerTick(float DeltaTime) {
+    super.PlayerTick(DeltaTime);
+    if (Role < ROLE_Authority && !addedInteraction && Viewport(Player) != None) {
         Player.InteractionMaster.AddInteraction(interactionName, Player);
         addedInteraction= true;
     }
 }
 
+function EnterStartState() {
+    Super.EnterStartState();
+}
 
 /**
  * Custom console command to bring up the stats menu

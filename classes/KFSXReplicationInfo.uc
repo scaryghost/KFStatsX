@@ -27,7 +27,6 @@ function Tick(float DeltaTime) {
     } else {
         playerIDHash= PlayerController(Owner).GetPlayerIDHash();
     }
-
     Disable('Tick');
     SetTimer(1.0, true);
 }
@@ -38,7 +37,7 @@ function Timer() {
     super.Timer();
     currTime= Level.GRI.ElapsedTime;
     timeDiff= currTime - prevTime;
-    if (ownerPRI.bOnlySpectator) {
+    if (ownerPRI != none && ownerPRI.bOnlySpectator) {
         player.accum(timeSpectating, timeDiff);
     }
     prevTime= currTime;
