@@ -6,6 +6,7 @@ class StatsMenu extends KFInvasionLoginMenu;
 
 var automated moComboBox players;
 var PlayerReplicationInfo lastSelected;
+var array<PlayerReplicationInfo> validPris;
 
 function InitComponent(GUIController MyController, GUIComponent MyComponent) {
     super(UT2K4PlayerLoginMenu).InitComponent(MyController, MyComponent);
@@ -31,7 +32,7 @@ function updateStats(PlayerReplicationInfo playerRI) {
 
 function InternalOnChange(GUIComponent sender) {
     if (sender == players) {
-        lastSelected= PlayerOwner().GameReplicationInfo.PRIArray[players.GetIndex()];
+        lastSelected= validPris[players.GetIndex()];
         updateStats(lastSelected);
     }
 }
@@ -44,10 +45,14 @@ function InternalOnLoadINI(GUIComponent sender, string s) {
             lastSelected= PlayerOwner().PlayerReplicationInfo;
         }
         players.ResetComponent();
+        validPris.Length= 0;
         for(i= 0; i < PlayerOwner().GameReplicationInfo.PRIArray.Length; i++) {
-            players.AddItem(PlayerOwner().GameReplicationInfo.PRIArray[i].PlayerName);
-            if (PlayerOwner().GameReplicationInfo.PRIArray[i] == lastSelected) {
-                players.SilentSetIndex(i);
+            if (!PlayerOwner().GameReplicationInfo.PRIArray[i].bIsSpectator) {
+                players.AddItem(PlayerOwner().GameReplicationInfo.PRIArray[i].PlayerName);
+                if (PlayerOwner().GameReplicationInfo.PRIArray[i] == lastSelected) {
+                    players.SilentSetIndex(validPris.Length);
+                }
+                validPris[validPris.Length]= PlayerOwner().GameReplicationInfo.PRIArray[i];
             }
         }
         updateStats(lastSelected);

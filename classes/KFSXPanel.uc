@@ -16,6 +16,7 @@ var automated moSlider sl_bgR, sl_bgG, sl_bgB, sl_txtR, sl_txtG, sl_txtB, sl_alp
 var array<SliderStrPair> sliders;
 var String statListClass;
 var PlayerReplicationInfo lastSelected;
+var array<PlayerReplicationInfo> validPris;
 
 function fillStatsInfo(KFSXReplicationInfo kfsxRI) {
     if (kfsxRI == None) {
@@ -85,10 +86,14 @@ function InternalOnLoadINI(GUIComponent sender, string s) {
             lastSelected= PlayerOwner().PlayerReplicationInfo;
         }
         players.ResetComponent();
+        validPris.Length= 0;
         for(i= 0; i < PlayerOwner().GameReplicationInfo.PRIArray.Length; i++) {
-            players.AddItem(PlayerOwner().GameReplicationInfo.PRIArray[i].PlayerName);
-            if (PlayerOwner().GameReplicationInfo.PRIArray[i] == lastSelected) {
-                players.SilentSetIndex(i);
+            if (!PlayerOwner().GameReplicationInfo.PRIArray[i].bIsSpectator) {
+                players.AddItem(PlayerOwner().GameReplicationInfo.PRIArray[i].PlayerName);
+                if (PlayerOwner().GameReplicationInfo.PRIArray[i] == lastSelected) {
+                    players.SilentSetIndex(validPris.Length);
+                }
+                validPris[validPris.Length]= PlayerOwner().GameReplicationInfo.PRIArray[i];
             }
         }
         fillStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
@@ -110,7 +115,8 @@ function InternalOnChange(GUIComponent sender) {
     if (sender == categories) {
         lb_StatSelect.statListObj.InitList(statsInfo[categories.GetIndex()]);
     } else if (sender == players) {
-        lastSelected= PlayerOwner().GameReplicationInfo.PRIArray[players.GetIndex()];
+        lastSelected= validPris[players.GetIndex()];
+        log("KFSXPanel- index"@players.GetIndex()@validPris.Length);
         fillStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
     } else {
         while(i < sliders.Length && sender != sliders[i].slider) {
