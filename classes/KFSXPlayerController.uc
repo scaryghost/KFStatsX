@@ -14,7 +14,7 @@ function SetPawnClass(string inClass, string inCharacter) {
 
 simulated event PlayerTick(float DeltaTime) {
     super.PlayerTick(DeltaTime);
-    if (Role < ROLE_Authority && !addedInteraction && Viewport(Player) != None) {
+    if (!addedInteraction && (Level.NetMode == NM_DedicatedServer && Role < ROLE_Authority || Level.NetMode != NM_DedicatedServer)) {
         Player.InteractionMaster.AddInteraction(interactionName, Player);
         addedInteraction= true;
     }
