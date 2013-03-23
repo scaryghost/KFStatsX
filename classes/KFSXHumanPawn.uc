@@ -6,6 +6,7 @@
  */
 class KFSXHumanPawn extends KFHumanPawn;
 
+var bool signalToss;
 var string damageTaken, armorLost, timeAlive, cashSpent, shotByHusk;
 var string healedSelf, receivedHeal, healDartsConnected, healedTeammates;
 var KFSXReplicationInfo kfsxri;
@@ -34,6 +35,27 @@ function bool isHealingProjectile(Actor Other) {
 simulated function PostBeginPlay() {
     super.PostBeginPlay();
     prevTime= Level.GRI.ElapsedTime;
+}
+
+simulated function Tick(float DeltaTime) {
+    local KFPlayerReplicationInfo kfPRI;
+    local class<Projectile> nadeType;
+
+    if (Role == ROLE_Authority) {
+        if (!signalToss && bThrowingNade) {
+            kfPRI= KFPlayerReplicationInfo(PlayerReplicationInfo);
+            if (kfPRI != none && kfPRI.ClientVeteranSkill != none) {
+                nadeType= kfPRI.ClientVeteranSkill.Static.GetNadeType(kfPRI);
+            } else {
+                nadeType= class'Nade';
+            }
+            kfsxri.weapons.accum(GetItemName(string(nadeType)), 1);
+            signalToss= true;
+        } else if (signalToss && !bThrowingNade) {
+            signalToss= false;
+        }
+    }
+    super.Tick(DeltaTime);
 }
 
 /**
