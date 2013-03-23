@@ -6,11 +6,11 @@
  */
 class KFSXHumanPawn extends KFHumanPawn;
 
-var bool signalToss;
+var bool signalToss, signalFire;
 var string damageTaken, armorLost, timeAlive, cashSpent, shotByHusk;
 var string healedSelf, receivedHeal, healDartsConnected, healedTeammates;
 var KFSXReplicationInfo kfsxri;
-var int prevTime;
+var int prevTime, prevHuskgunAmmo;
 
 /**
  * If the Pawn touched a healing dart, tell the dart's instigator 
@@ -53,6 +53,17 @@ simulated function Tick(float DeltaTime) {
             signalToss= true;
         } else if (signalToss && !bThrowingNade) {
             signalToss= false;
+        }
+        if (signalFire && Huskgun(Weapon) != none && prevHuskgunAmmo < Weapon.AmmoAmount(0)) {
+            prevHuskgunAmmo= Weapon.AmmoAmount(0);
+        }
+        if (!signalFire && Weapon.IsFiring()) {
+            if (Huskgun(Weapon) != none) {
+                prevHuskgunAmmo= Weapon.AmmoAmount(0);
+            }
+            signalFire= true;
+        } else if (signalFire && !Weapon.IsFiring()) {
+            signalFire= false;
         }
     }
     super.Tick(DeltaTime);
@@ -99,7 +110,11 @@ function DeactivateSpawnProtection() {
     local float load;
     super.DeactivateSpawnProtection();
     
-    if (Weapon.isFiring() && Welder(Weapon) == none && Huskgun(Weapon) == none) {
+    if (prevHuskgunAmmo != 0 && Huskgun(Weapon) != none) {
+        load= prevHuskgunAmmo - Weapon.AmmoAmount(0);
+        prevHuskgunAmmo= 0;
+    }
+    if (load != 0 || (Weapon.isFiring() && Welder(Weapon) == none)) {
         itemName= Weapon.ItemName;
         if (Weapon.GetFireMode(1).bIsFiring)
             mode= 1;
@@ -115,7 +130,7 @@ function DeactivateSpawnProtection() {
 
         if (KFMeleeGun(Weapon) != none || (mode == 1 && (isMedicGun() || ZEDGun(Weapon) != none))) {
             load= 1;
-        } else {
+        } else if (load == 0) {
             load= Weapon.GetFireMode(mode).Load;
         }
 
