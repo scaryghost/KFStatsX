@@ -31,7 +31,7 @@ function PostBeginPlay() {
     local array<string> parts;
     local int i;
 
-    udpPort= bindPort(class'KFSXMutator'.default.serverPort+1, true);
+    udpPort= BindPort();
     if (udpPort > 0) Resolve(class'KFSXMutator'.default.serverAddress);
 
     gametype= KFGameType(Level.Game);
@@ -52,7 +52,7 @@ event Resolved(IpAddr addr) {
  * Initialize matchData with map name, difficulty, and length
  */
 function MatchStarting() {
-    matchData= Left(string(Level), InStr(string(Level), ".")) $ separator;
+    matchData= locs(Left(string(Level), InStr(string(Level), "."))) $ separator;
     matchData$= difficulties[int(Level.Game.GameDifficulty)] $ separator;
     matchData$= lengths[KFGameType(Level.Game).KFGameLength] $ separator;
 }

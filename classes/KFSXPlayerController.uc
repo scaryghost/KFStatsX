@@ -20,10 +20,6 @@ simulated event PlayerTick(float DeltaTime) {
     }
 }
 
-function EnterStartState() {
-    Super.EnterStartState();
-}
-
 /**
  * Custom console command to bring up the stats menu
  */
