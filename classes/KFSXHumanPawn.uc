@@ -9,6 +9,7 @@ class KFSXHumanPawn extends KFHumanPawn;
 var bool signalToss, signalFire;
 var string damageTaken, armorLost, timeAlive, cashSpent, shotByHusk;
 var string healedSelf, receivedHeal, healDartsConnected, healedTeammates;
+var string boltsRetrieved, bladesRetrieved;
 var KFSXReplicationInfo kfsxri;
 var int prevTime, prevHuskgunAmmo;
 
@@ -17,6 +18,7 @@ var int prevTime, prevHuskgunAmmo;
  * to increment heal darts connected
  */
 function Touch(Actor Other) {
+    local Inventory inv;
     local KFSXReplicationInfo instigatorRI;
 
     super.Touch(Other);
@@ -25,6 +27,17 @@ function Touch(Actor Other) {
         instigatorRI.actions.accum(healDartsConnected, 1);
         if (Health < HealthMax)
             instigatorRI.actions.accum(healedTeammates, 1);
+    }
+    if (Other.IsInState('OnWall') && (CrossbowArrow(Other) != none || CrossbuzzsawBlade(Other) != none)) {
+        for (inv= Inventory; inv != None; inv= inv.Inventory) {
+            if (Weapon(inv).AmmoAmount(0) < Weapon(inv).MaxAmmo(0)) {
+                if (Crossbow(Inv) != None) {
+                    kfsxri.actions.accum(boltsRetrieved, 1.0);
+                } else if (Crossbuzzsaw(inv) != None) {
+                    kfsxri.actions.accum(bladesRetrieved, 1.0);
+                }
+            }
+    }
     }
 }
 
@@ -225,4 +238,6 @@ defaultproperties {
     healDartsConnected= "Heal Darts Connected"
     healedTeammates= "Healed Teammates"
     shotByHusk= "Shot By Husk"
+    boltsRetrieved= "Bolts Retrieved"
+    bladesRetrieved= "Blades Retrieved"
 }

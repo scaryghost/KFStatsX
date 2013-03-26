@@ -193,8 +193,6 @@ defaultproperties {
 
     fireModeReplacement(0)=(oldClass=class'WeldFire',NewClass=class'WeldFire_KFSX')
     fireModeReplacement(1)=(oldClass=class'UnWeldFire',NewClass=class'UnWeldFire_KFSX')
-    fireModeReplacement(2)=(oldClass=class'CrossbowFire',NewClass=class'CrossbowFire_KFSX')
-    fireModeReplacement(3)=(oldClass=class'CrossbuzzsawFire',NewClass=class'CrossbuzzsawFire_KFSX')
 
     kfsxRIClass= class'KFSXReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"
