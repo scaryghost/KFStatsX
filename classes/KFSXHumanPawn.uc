@@ -28,16 +28,16 @@ function Touch(Actor Other) {
         if (Health < HealthMax)
             instigatorRI.actions.accum(healedTeammates, 1);
     }
-    if (Other.IsInState('OnWall') && (CrossbowArrow(Other) != none || CrossbuzzsawBlade(Other) != none)) {
+    if (Other.IsInState('OnWall')) {
         for (inv= Inventory; inv != None; inv= inv.Inventory) {
             if (Weapon(inv).AmmoAmount(0) < Weapon(inv).MaxAmmo(0)) {
-                if (Crossbow(Inv) != None) {
+                if (CrossbowArrow(Other) != none && Crossbow(Inv) != None) {
                     kfsxri.actions.accum(boltsRetrieved, 1.0);
-                } else if (Crossbuzzsaw(inv) != None) {
+                } else if (CrossbuzzsawBlade(Other) != none && Crossbuzzsaw(inv) != None) {
                     kfsxri.actions.accum(bladesRetrieved, 1.0);
                 }
             }
-    }
+        }
     }
 }
 
