@@ -1,11 +1,13 @@
 KFStatsX
 ========
+Visit the project page to see the README in a formatted view:  
+https://github.com/scaryghost/KFStatsX
 
 ## Author
 Scary Ghost
 
 ## Release Notes
-https://github.com/scaryghost/KFStatsX/wiki/Release-KFStatsX-2.1
+https://github.com/scaryghost/KFStatsX/wiki/Release-KFStatsX-3.0
 
 ## About
 Provides advanced statistics about a player's performance and tracks game information for each match.  This started out 
@@ -13,7 +15,7 @@ as enhancements to Game Stats Tab but I did not like how static everything was. 
 mutator from ground up and new features have made the mutator more resemble HLStatsX.
 
 ## Version
-2.1
+3.0
 
 ## Check Sum
 The check sum for the package is generated with the following command from the system folder:
@@ -35,19 +37,12 @@ listened server or a solo game, enter in the steamid64 number of the local host.
 game will not properly retrieve the local hosts's steamid64.  Your steamid64 number can be converted from your community 
 url at http://steamidconverter.com/.
 
-For clients, it is recommended to only copy the .int file to the system folder, and d/l the .u file from the server. 
-This will prevent conflicts with future updates to the mod.
+See the TWI thread for information on accumulating statistics:  
+http://forums.tripwireinteractive.com/showthread.php?t=83045
 
 ## Usage
-By default, an extra tab will be present in the ESC menu titled "KFStatsX".  The tab's panel will provide a statistical 
-summary for all players on the server.  Because some mutators (e.g. ServerPerks) also add their own tabs, the KFStatsX 
-tab can be disabled by unchecking the mid game tab setting, providing compatibility with such mutators.  Alternatively, 
-a separate in game panel dedicated to KFStatsX can be openned to provide the same information.  The panel can be opened 
-with the console command "ingamestats". For convenience, a button can be bound in the "Controls" menu, under the 
-KFStatsX section or with the console command:
-
-    set input ${key} ingamestats
-
+An extra tab will be present in the ESC menu titled "KFStatsX".  The tab's panel will provide a statistical summary for 
+all players on the server.  
 
 ## Special Thanks
     Marco - ServerPerks was instrumental in helping me understand how to setup 
