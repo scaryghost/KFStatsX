@@ -14,15 +14,14 @@ var KFSXReplicationInfo kfsxri;
 var int prevTime, prevHuskgunAmmo;
 
 /**
- * If the Pawn touched a healing dart, tell the dart's instigator 
- * to increment heal darts connected
+ * If the Pawn touched a healing dart, arrow, or blade, increment appropriate stats
  */
 function Touch(Actor Other) {
     local Inventory inv;
     local KFSXReplicationInfo instigatorRI;
 
     super.Touch(Other);
-    if (isHealingProjectile(Other) && KFSXHumanPawn(Other.Instigator) != Self) {
+    if (MP7MHealinglProjectile(Other) != none && KFSXHumanPawn(Other.Instigator) != Self) {
         instigatorRI= class'KFSXReplicationInfo'.static.findKFSXri(Other.Instigator.PlayerReplicationInfo);
         instigatorRI.actions.accum(healDartsConnected, 1);
         if (Health < HealthMax)
@@ -39,10 +38,6 @@ function Touch(Actor Other) {
             }
         }
     }
-}
-
-function bool isHealingProjectile(Actor Other) {
-    return MP7MHealinglProjectile(Other) != none || M7A3MHealinglProjectile(OtheR) != none;
 }
 
 simulated function PostBeginPlay() {
@@ -109,10 +104,6 @@ function PossessedBy(Controller C) {
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(PlayerReplicationInfo);
 }
 
-function bool isMedicGun() {
-    return MP7MMedicGun(Weapon) != none || M7A3MMedicGun(Weapon) != none;
-}
-
 /**
  * Called whenever a weapon is fired.  
  * This function tracks usage for every weapon except the Welder and Huskgun
@@ -141,13 +132,13 @@ function DeactivateSpawnProtection() {
             return;
         }
 
-        if (KFMeleeGun(Weapon) != none || (mode == 1 && (isMedicGun() || ZEDGun(Weapon) != none))) {
+        if (KFMeleeGun(Weapon) != none || (mode == 1 && (KFMedicGun(Weapon) != none || ZEDGun(Weapon) != none))) {
             load= 1;
         } else if (load == 0) {
             load= Weapon.GetFireMode(mode).Load;
         }
 
-        if (mode == 1 && (isMedicGun() || (KFWeapon(Weapon) != none && KFWeapon(Weapon).bHasSecondaryAmmo))) {
+        if (mode == 1 && (KFMedicGun(Weapon) != none || (KFWeapon(Weapon) != none && KFWeapon(Weapon).bHasSecondaryAmmo))) {
             itemName$= " Alt";
         }
 
