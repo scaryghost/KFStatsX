@@ -29,8 +29,8 @@ function Touch(Actor Other) {
     }
     if (Other.IsInState('OnWall')) {
         for (inv= Inventory; inv != None; inv= inv.Inventory) {
-            if (Weapon(inv).AmmoAmount(0) < Weapon(inv).MaxAmmo(0)) {
-                if (CrossbowArrow(Other) != none && Crossbow(Inv) != None) {
+            if (Weapon(inv) != none && Weapon(inv).AmmoAmount(0) < Weapon(inv).MaxAmmo(0)) {
+                if (CrossbowArrow(Other) != none && Crossbow(inv) != None) {
                     kfsxri.actions.accum(boltsRetrieved, 1.0);
                 } else if (CrossbuzzsawBlade(Other) != none && Crossbuzzsaw(inv) != None) {
                     kfsxri.actions.accum(bladesRetrieved, 1.0);
@@ -65,12 +65,12 @@ simulated function Tick(float DeltaTime) {
         if (signalFire && Huskgun(Weapon) != none && prevHuskgunAmmo < Weapon.AmmoAmount(0)) {
             prevHuskgunAmmo= Weapon.AmmoAmount(0);
         }
-        if (!signalFire && Weapon.IsFiring()) {
+        if (!signalFire && Weapon != None && Weapon.IsFiring()) {
             if (Huskgun(Weapon) != none) {
                 prevHuskgunAmmo= Weapon.AmmoAmount(0);
             }
             signalFire= true;
-        } else if (signalFire && !Weapon.IsFiring()) {
+        } else if (signalFire && Weapon != None && !Weapon.IsFiring()) {
             signalFire= false;
         }
     }
