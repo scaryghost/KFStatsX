@@ -9,10 +9,6 @@ class StatList extends GUIList
 // Display
 var texture InfoBackground;
 
-// State
-var array<string> statDescriptions;
-var array<int>  statValue;
-
 var() config int bgR, bgG, bgB;
 var() config int txtR, txtG, txtB;
 var() config int alpha;
@@ -45,36 +41,6 @@ function bool PreDraw(Canvas Canvas) {
     return false;
 }
 
-function InitList(SortedMap statsInfo) {
-    local int i;
-    // Update the ItemCount and select the first item
-    itemCount= 0;
-    SetIndex(0);
-
-    if (statsInfo == None) {
-        return;
-    }
-
-    for(i= 0; i < statsInfo.maxStatIndex; i++) {
-        if (statsInfo.keys[i] != class'KFSXGameRules'.default.damageKey || 
-                statsInfo.keys[i] == class'KFSXGameRules'.default.damageKey && 
-                (!KFGameReplicationInfo(PlayerOwner().GameReplicationInfo).bWaveInProgress || 
-                KFGameReplicationInfo(PlayerOwner().GameReplicationInfo).EndGameType != 0)) {
-            statDescriptions[itemCount]= statsInfo.keys[i];
-            statValue[itemCount]= statsInfo.values[i];
-            itemCount++;
-        }
-    }
-
-    if ( bNotify ) {
-        CheckLinkedObjects(Self);
-    }
-
-    if ( MyScrollBar != none ) {
-        MyScrollBar.AlignThumb();
-    }
-}
-
 function DrawStat(Canvas Canvas, int CurIndex, float X, float Y, 
         float Width, float Height, bool bSelected, bool bPending) {
     local float TempX, TempY;
@@ -100,19 +66,19 @@ function DrawStat(Canvas Canvas, int CurIndex, float X, float Y,
     Canvas.SetDrawColor(txtR, txtG, txtB, alpha);
 
     // Write stat name
-    Canvas.TextSize(statDescriptions[CurIndex],TempWidth,TempHeight);
+    Canvas.TextSize(Elements[CurIndex].Item,TempWidth,TempHeight);
     TempX += Width*0.1f;
     TempY += (Height-TempHeight)*0.5f;
     Canvas.SetPos(TempX, TempY);
-    Canvas.DrawText(statDescriptions[CurIndex]);
+    Canvas.DrawText(Elements[CurIndex].Item);
 
     // Write stat value
-    if (InStr(statDescriptions[CurIndex], "Time") != -1) {
-        S= formatTime(statValue[CurIndex]);
-    } else if (InStr(statDescriptions[CurIndex], "Cash") != -1) {
-        S= "£" $ string(statValue[CurIndex]);
+    if (InStr(Elements[CurIndex].Item, "Time") != -1) {
+        S= formatTime(int(Elements[CurIndex].ExtraStrData));
+    } else if (InStr(Elements[CurIndex].Item, "Cash") != -1) {
+        S= "£" $ Elements[CurIndex].ExtraStrData;
     } else {
-        S = string(statValue[CurIndex]);
+        S = Elements[CurIndex].ExtraStrData;
     }
     Canvas.TextSize(S,TempWidth,TempHeight);
     Canvas.SetPos(X + Width*0.88f - TempWidth, TempY);

@@ -10,7 +10,7 @@ struct SliderStrPair {
 };
 
 var automated moComboBox categories, players;
-var automated GUIListBoxBase lb_StatSelect;
+var automated GUIListBox statBox;
 var array<SortedMap> statsInfo;
 var automated moSlider sl_bgR, sl_bgG, sl_bgB, sl_txtR, sl_txtG, sl_txtB, sl_alpha, sl_txtScale;
 var array<SliderStrPair> sliders;
@@ -26,7 +26,20 @@ function fillStatsInfo(KFSXReplicationInfo kfsxRI) {
     statsInfo[1]= kfsxRI.actions;
     statsInfo[2]= kfsxRI.weapons;
     statsInfo[3]= kfsxRI.kills;
-    StatList(lb_StatSelect.MyList).InitList(statsInfo[categories.GetIndex()]);
+    fillList(statsInfo[categories.GetIndex()]);
+}
+
+function fillList(SortedMap stats) {
+    local int i;
+    local GUIListElem elem;
+
+    statBox.List.bInitializeList= true;
+    statBox.List.Clear();
+    for(i= 0; i < stats.MaxStatIndex; i++) {
+        elem.Item= stats.keys[i];
+        elem.ExtraStrData= string(int(stats.values[i]));
+        statBox.List.AddElement(elem);
+    }
 }
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner) {
@@ -53,7 +66,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
     sliders[7].str= "txtScale";
 
     sb_Players.Caption= "Stats";
-    sb_Players.ManageComponent(lb_StatSelect);
+    sb_Players.ManageComponent(statBox);
     sb_Players.UnManageComponent(lb_Players);
 
     /** 
@@ -113,10 +126,9 @@ function InternalOnChange(GUIComponent sender) {
     local String command;
 
     if (sender == categories) {
-        StatList(lb_StatSelect.MyList).InitList(statsInfo[categories.GetIndex()]);
+        fillList(statsInfo[categories.GetIndex()]);
     } else if (sender == players) {
         lastSelected= validPris[players.GetIndex()];
-        log("KFSXPanel- index"@players.GetIndex()@validPris.Length);
         fillStatsInfo(class'KFSXReplicationInfo'.static.findKFSXri(lastSelected));
     } else {
         while(i < sliders.Length && sender != sliders[i].slider) {
@@ -173,7 +185,7 @@ defaultproperties {
         WinHeight=0.792836
         DefaultListClass="KFStatsX.StatList"
     End Object
-    lb_StatSelect=GUIListBox'KFSXPanel.StatSelectList'
+    statBox=GUIListBox'KFSXPanel.StatSelectList'
 
     Begin Object Class=moSlider Name=BackgroundRedSlider
         MaxValue=255
