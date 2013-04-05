@@ -3,7 +3,7 @@
  * KFSXReplicationInfo object
  * @author etsai (Scary Ghost)
  */
-class StatList extends GUIVertList
+class StatList extends GUIList
     config;
 
 // Display

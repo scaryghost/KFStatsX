@@ -10,7 +10,7 @@ struct SliderStrPair {
 };
 
 var automated moComboBox categories, players;
-var automated StatListBox lb_StatSelect;
+var automated GUIListBoxBase lb_StatSelect;
 var array<SortedMap> statsInfo;
 var automated moSlider sl_bgR, sl_bgG, sl_bgB, sl_txtR, sl_txtG, sl_txtB, sl_alpha, sl_txtScale;
 var array<SliderStrPair> sliders;
@@ -26,7 +26,7 @@ function fillStatsInfo(KFSXReplicationInfo kfsxRI) {
     statsInfo[1]= kfsxRI.actions;
     statsInfo[2]= kfsxRI.weapons;
     statsInfo[3]= kfsxRI.kills;
-    lb_StatSelect.statListObj.InitList(statsInfo[categories.GetIndex()]);
+    StatList(lb_StatSelect.MyList).InitList(statsInfo[categories.GetIndex()]);
 }
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner) {
@@ -113,7 +113,7 @@ function InternalOnChange(GUIComponent sender) {
     local String command;
 
     if (sender == categories) {
-        lb_StatSelect.statListObj.InitList(statsInfo[categories.GetIndex()]);
+        StatList(lb_StatSelect.MyList).InitList(statsInfo[categories.GetIndex()]);
     } else if (sender == players) {
         lastSelected= validPris[players.GetIndex()];
         log("KFSXPanel- index"@players.GetIndex()@validPris.Length);
@@ -166,13 +166,14 @@ defaultproperties {
     End Object
     players=moComboBox'KFSXPanel.PlayerComboBox'
 
-    Begin Object Class=StatListBox Name=StatSelectList
+    Begin Object Class=GUIListBox Name=StatSelectList
         WinTop=0.070063
         WinLeft=0.029240
         WinWidth=0.941520
         WinHeight=0.792836
+        DefaultListClass="KFStatsX.StatList"
     End Object
-    lb_StatSelect=StatListBox'KFSXPanel.StatSelectList'
+    lb_StatSelect=GUIListBox'KFSXPanel.StatSelectList'
 
     Begin Object Class=moSlider Name=BackgroundRedSlider
         MaxValue=255
