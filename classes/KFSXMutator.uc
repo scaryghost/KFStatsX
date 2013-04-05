@@ -55,7 +55,7 @@ function PostBeginPlay() {
     gameType.PlayerControllerClass= class<PlayerController>(DynamicLoadObject(playerController, class'Class'));
     gameType.PlayerControllerClassName= playerController;
     if (Level.NetMode != NM_Standalone) {
-        AddToPackageMap("KFStatsX");
+        AddToPackageMap();
         if (gameType.PlayerControllerClass != class'KFSXPlayerController') {
             AddToPackageMap(string(gameType.PlayerControllerClass.Outer.name));
         }
@@ -78,7 +78,7 @@ function Tick(float DeltaTime) {
             passiveFPs.remove(i, 1);
             end--;
         } else if (passiveFPs[i].Controller.IsInState('WaitForAnim') && passiveFPs[i].bFrustrated) {
-            targetRI= class'KFSXReplicationInfo'.static.findKFSXri(Pawn(passiveFPs[i].Controller.Target).PlayerReplicationInfo);
+            targetRI= kfsxRIClass.static.findKFSXri(Pawn(passiveFPs[i].Controller.Target).PlayerReplicationInfo);
             targetRI.actions.accum(targetRI.fleshpoundsRaged, 1);
             frustratedFPs[frustratedFPs.length]= passiveFPs[i];
             passiveFPs.remove(i, 1);
@@ -185,8 +185,8 @@ static event string GetDescriptionText(string property) {
 
 defaultproperties {
     GroupName="KFStatX"
-    FriendlyName="KFStatsX v2.1"
-    Description="Tracks statistics for each player, version 2.1"
+    FriendlyName="KFStatsX v3.0"
+    Description="Tracks statistics for each player and match"
 
     kfStatsXRules= class'KFSXGameRules'
     serverLinkClass= class'RemoteServerLink'
