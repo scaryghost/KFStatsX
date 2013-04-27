@@ -99,8 +99,7 @@ function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> dam
     local KFSXReplicationInfo kfsxri;
 
     if (!super.PreventDeath(Killed, Killer, damageType, HitLocation)) {
-        if(KFHumanPawn(Killed) != none && 
-                (damageType == class'Engine.Fell' || damageType == class'Gameplay.Burned')) {
+        if(KFHumanPawn(Killed) != none && (damageType == class'Engine.Fell' || damageType == class'Gameplay.Burned')) {
             deaths.accum(envDeathKey,1);
         } else if (ZombieCrawler(Killed) != none && Killed.Physics == PHYS_Falling && class<DamTypeMelee>(damageType) != none ) {
             kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
@@ -121,25 +120,22 @@ function ScoreKill(Controller Killer, Controller Killed) {
     local KFSXReplicationInfo kfsxri;
 
     Super.ScoreKill(Killer,Killed);
-    if (KFMonsterController(Killer) != none && PlayerController(Killed) != none) {
-        deaths.accum(Killer.Pawn.MenuName,1 );
+    if (PlayerController(Killed) != none) {
         kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killed.PlayerReplicationInfo);
         kfsxri.player.accum(deathKey, 1);
-    } else if (PlayerController(Killer) != none) {
-        if (Killed.PlayerReplicationInfo == none || 
-            Killer.PlayerReplicationInfo.Team != Killed.PlayerReplicationInfo.Team) {
-            itemName= Killed.Pawn.MenuName;
-        } else if (Killer == Killed) {
-            deaths.accum(selfDeathKey, 1);
+        if (Killer == Killed) {
             itemName= selfDeathKey;
         } else if (Killer.PlayerReplicationInfo.Team == Killed.PlayerReplicationInfo.Team) { 
-            deaths.accum(teammateDeathKey, 1);
             itemName= teammateDeathKey;
         }
         if (itemName != "") {
             kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
             kfsxri.kills.accum(itemName, 1);
+            deaths.accum(itemName, 1);
         }
+    } else if (KFMonsterController(Killed) != none) {
+        kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
+        kfsxri.kills.accum(Killed.Pawn.MenuName, 1);
     }
 }
 
