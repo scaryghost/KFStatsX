@@ -125,6 +125,9 @@ function ScoreKill(Controller Killer, Controller Killed) {
         kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killed.PlayerReplicationInfo);
         kfsxri.player.accum(deathKey, 1);
 
+        if (KFGameType(Level.Game).WaveNum == KFGameType(Level.Game).FinalWave) {
+            kfsxri.survivedFinale= 0;
+        }
         if (Killer == Killed) {
             itemName= selfDeathKey;
         } else if (Killer.PlayerReplicationInfo != none && Killer.PlayerReplicationInfo.Team == Killed.PlayerReplicationInfo.Team) { 

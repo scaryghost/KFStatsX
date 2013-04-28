@@ -14,6 +14,7 @@ var SortedMap player, actions, weapons, kills, perks;
 var string playerIdHash;
 var string fleshpoundsRaged;
 var int prevTime;
+var byte survivedFinale;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority)
@@ -70,4 +71,6 @@ defaultproperties {
     welding= "Welding"
     fleshpoundsRaged= "Fleshpounds Raged"
     timeSpectating= "Time Spectating"
+
+    survivedFinale= 1
 }

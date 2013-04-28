@@ -117,11 +117,12 @@ function string getStatValues(SortedMap stats) {
 function broadcastPlayerStats(PlayerReplicationInfo pri) {
     local string baseMsg;
     local array<string> statMsgs, resultParts;
-    local int index;
+    local int index, realWaveNum, timeConn;
     local KFSXReplicationInfo kfsxri;
 
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(pri);
-    kfsxri.player.put("Time Connected", Level.GRI.ElapsedTime - pri.StartTime);
+    timeConn= Level.GRI.ElapsedTime - pri.StartTime;
+    kfsxri.player.put("Time Connected", timeConn);
     baseMsg= playerProtocol $ "," $ playerProtocolVersion $ "," $ 
         class'KFSXMutator'.default.serverPwd $ packetSeparator $ kfsxri.playerIDHash $ packetSeparator;
 
@@ -131,14 +132,18 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     statMsgs[statMsgs.Length]= "3" $ packetSeparator $ "perks" $ packetSeparator $ getStatValues(kfsxri.perks);
     statMsgs[statMsgs.Length]= "4" $ packetSeparator $ "actions" $ packetSeparator $ getStatValues(kfsxri.actions);
 
+    realWaveNum= KFGameType(Level.Game).WaveNum + 1;
     resultParts[0]= "5";
     resultParts[1]= "match";
     resultParts[2]= mapName;
     resultParts[3]= difficulty;
     resultParts[4]= length;
     resultParts[5]= string(KFGameReplicationInfo(Level.GRI).EndGameType);
-    resultParts[6]= string(KFGameType(Level.Game).WaveNum + 1);
-    resultPArts[7]= "_close";
+    resultParts[6]= string(realWaveNum);
+    resultParts[7]= string(realWaveNum >= KFGameType(Level.Game).FinalWave);
+    resultParts[8]= string(kfsxri.survivedFinale);
+    resultParts[9]= string(timeConn);
+    resultPArts[10]= "_close";
 
     statMsgs[statMsgs.Length]= join(resultParts, packetSeparator);
     for(index= 0; index < statMsgs.Length; index++) {
