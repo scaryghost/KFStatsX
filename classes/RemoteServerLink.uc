@@ -140,7 +140,7 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     resultParts[4]= length;
     resultParts[5]= string(KFGameReplicationInfo(Level.GRI).EndGameType);
     resultParts[6]= string(realWaveNum);
-    resultParts[7]= string(realWaveNum >= KFGameType(Level.Game).FinalWave);
+    resultParts[7]= string(byte(realWaveNum >= KFGameType(Level.Game).FinalWave));
     resultParts[8]= string(kfsxri.survivedFinale);
     resultParts[9]= string(timeConn);
     resultPArts[10]= "_close";
