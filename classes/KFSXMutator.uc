@@ -26,7 +26,7 @@ var() config string playerController;
 var() config array<string> compatibleControllers;
 
 /** Reference to the KFGameType object */
-var KFGameType gametype;
+var KFGameType gameType;
 /** Linked replication info class to attach to PRI */
 var class<KFSXReplicationInfo> kfsxRIClass;
 /** KFStatsX game rules object */
@@ -43,6 +43,8 @@ var transient RemoteServerLink serverLink;
 var array<ReplacePair> fireModeReplacement;
 
 var array<ZombieFleshPound> passiveFPs, frustratedFPs;
+var SortedMap perks;
+var bool broadcastedWaveEnd;
 
 function PostBeginPlay() {
     gameType= KFGameType(Level.Game);
@@ -62,8 +64,9 @@ function PostBeginPlay() {
     }
 
     if (broadcastStats) {
-        serverLink= spawn(serverLinkClass);
-        SetTimer(1,true);
+        serverLink= Spawn(serverLinkClass);
+        perks= Spawn(class'SortedMap');
+        SetTimer(1, true);
     }
 
 }
@@ -103,10 +106,32 @@ function Tick(float DeltaTime) {
 }
 
 function Timer() {
-    if (KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType != 0 &&
+    local Controller C;
+
+    if (broadcastStats && !broadcastedWaveEnd && !gameType.bWaveInProgress) {
+        serverLink.broadcastWaveInfo(gameRules.deaths, gameType.WaveNum, "deaths");
+        serverLink.broadcastWaveInfo(gameRules.kills, gameType.WaveNum, "kills");
+        gameRules.deaths.clear();
+        gameRules.kills.clear();
+        broadcastedWaveEnd= !broadcastedWaveEnd;
+    } else if (broadcastStats && broadcastedWaveEnd && gameType.bWaveInProgress) {
+        for(C= Level.ControllerList; C != none; C= C.NextController) {
+            if (PlayerController(C) != none && KFPlayerReplicationInfo(C.PlayerReplicationInfo) != none) {
+                perks.accum(GetItemName(string(KFPlayerReplicationInfo(C.PlayerReplicationInfo).ClientVeteranSkill)), 1);
+            }
+        }
+        serverLink.broadcastWaveInfo(perks, gameType.WaveNum + 1, "perks");
+        perks.clear();
+        broadcastedWaveEnd= !broadcastedWaveEnd;
+    }
+    if (broadcastStats && KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType != 0 &&
         (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress)) {
-        serverLink.broadcastMatchResults(gameRules.deaths);
-        if (broadcastStats && Level.NetMode != NM_DedicatedServer) {
+        if (KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType == 1) {
+            serverLink.broadcastWaveInfo(gameRules.deaths, gameType.WaveNum + 1, "deaths");
+            serverLink.broadcastWaveInfo(gameRules.kills, gameType.WaveNum + 1, "kills");
+        }
+        serverLink.broadcastMatchResults();
+        if (Level.NetMode != NM_DedicatedServer) {
             serverLink.broadcastPlayerStats(Level.GetLocalPlayerController().PlayerReplicationInfo);
         }
         SetTimer(0,false);
@@ -197,4 +222,6 @@ defaultproperties {
     kfsxRIClass= class'KFSXReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"
     compatibleControllers(0)= "KFStatsX.KFSXPlayerController;Vanilla KF"
+
+    broadcastedWaveEnd= true
 }

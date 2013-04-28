@@ -6,7 +6,7 @@ class KFSXGameRules extends GameRules;
 
 var array<Pawn> decappedPawns, ragedScrakes;
 /** Record of deaths from all players */
-var SortedMap deaths;
+var SortedMap deaths, kills;
 /** key for environment death (fall or world fire) */
 var string envDeathKey;
 /** Key for self inflicted death */
@@ -27,6 +27,7 @@ function PostBeginPlay() {
     NextGameRules = Level.Game.GameRulesModifiers;
     Level.Game.GameRulesModifiers = Self;
     deaths= Spawn(class'SortedMap');
+    kills= Spawn(class'SortedMap');
 }
 
 private function bool contains(array<Pawn> pawns, Pawn key) {
@@ -123,19 +124,27 @@ function ScoreKill(Controller Killer, Controller Killed) {
     if (PlayerController(Killed) != none) {
         kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killed.PlayerReplicationInfo);
         kfsxri.player.accum(deathKey, 1);
+
         if (Killer == Killed) {
             itemName= selfDeathKey;
-        } else if (Killer.PlayerReplicationInfo.Team == Killed.PlayerReplicationInfo.Team) { 
+        } else if (Killer.PlayerReplicationInfo != none && Killer.PlayerReplicationInfo.Team == Killed.PlayerReplicationInfo.Team) { 
             itemName= teammateDeathKey;
+        } else if (KFMonsterController(Killer) != none) {
+            itemName= Killer.Pawn.MenuName;
         }
+
         if (itemName != "") {
             kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
             kfsxri.kills.accum(itemName, 1);
             deaths.accum(itemName, 1);
+            if (KFMonsterController(Killer) == none) {
+                kills.accum(itemName, 1);
+            }
         }
-    } else if (KFMonsterController(Killed) != none) {
+    } else if (KFMonsterController(Killed) != none && PlayerController(Killer) != none) {
         kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
         kfsxri.kills.accum(Killed.Pawn.MenuName, 1);
+        kills.accum(Killed.Pawn.MenuName, 1);
     }
 }
 

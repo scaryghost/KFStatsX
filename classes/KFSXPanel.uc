@@ -35,7 +35,7 @@ function fillList(SortedMap stats) {
 
     statBox.List.bInitializeList= true;
     statBox.List.Clear();
-    for(i= 0; i < stats.MaxStatIndex; i++) {
+    for(i= 0; i < stats.maxStatIndex; i++) {
         elem.Item= stats.keys[i];
         elem.ExtraStrData= string(int(stats.values[i]));
         statBox.List.AddElement(elem);

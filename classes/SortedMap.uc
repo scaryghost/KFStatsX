@@ -124,3 +124,8 @@ function accum(String key, float value) {
     }
     values[indices[index].index]+= value;
 }
+
+function clear() {
+    maxStatIndex= 0;
+    indices.Length= 0;
+}
