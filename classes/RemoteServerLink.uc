@@ -68,12 +68,12 @@ function broadcastMatchResults() {
 
     matchParts[0]= matchHeader;
     matchParts[1]= "result";
-    matchParts[2]= mapName;
-    matchParts[3]= difficulty;
-    matchParts[4]= length;
-    matchParts[5]= string(Level.GRI.ElapsedTime);
-    matchParts[6]= string(KFGameReplicationInfo(Level.GRI).EndGameType);
-    matchParts[7]= string(KFGameType(Level.Game).WaveNum + 1);
+    matchParts[2]= difficulty;
+    matchParts[3]= length;
+    matchParts[4]= string(KFGameType(Level.Game).WaveNum + 1);
+    matchParts[5]= mapName;
+    matchParts[6]= string(Level.GRI.ElapsedTime);
+    matchParts[7]= string(KFGameReplicationInfo(Level.GRI).EndGameType);
     matchParts[8]= "_close";
     SendText(serverAddr, join(matchParts, packetSeparator));
 }    
