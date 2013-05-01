@@ -111,17 +111,18 @@ function Timer() {
     if (broadcastStats && !broadcastedWaveEnd && !gameType.bWaveInProgress) {
         serverLink.broadcastWaveInfo(gameRules.deaths, gameType.WaveNum, "deaths");
         serverLink.broadcastWaveInfo(gameRules.kills, gameType.WaveNum, "kills");
+        serverLink.broadcastWaveInfo(perks, gameType.WaveNum, "perks");
         gameRules.deaths.clear();
         gameRules.kills.clear();
+        perks.clear();
         broadcastedWaveEnd= !broadcastedWaveEnd;
     } else if (broadcastStats && broadcastedWaveEnd && gameType.bWaveInProgress) {
         for(C= Level.ControllerList; C != none; C= C.NextController) {
-            if (PlayerController(C) != none && KFPlayerReplicationInfo(C.PlayerReplicationInfo) != none) {
+            if (C.bIsPlayer && C.Pawn != none && KFPlayerReplicationInfo(C.PlayerReplicationInfo) != none && 
+                KFPlayerReplicationInfo(C.PlayerReplicationInfo).ClientVeteranSkill != none) {
                 perks.accum(GetItemName(string(KFPlayerReplicationInfo(C.PlayerReplicationInfo).ClientVeteranSkill)), 1);
             }
         }
-        serverLink.broadcastWaveInfo(perks, gameType.WaveNum + 1, "perks");
-        perks.clear();
         broadcastedWaveEnd= !broadcastedWaveEnd;
     }
     if (broadcastStats && KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType != 0 &&
@@ -129,6 +130,7 @@ function Timer() {
         if (KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType == 1) {
             serverLink.broadcastWaveInfo(gameRules.deaths, gameType.WaveNum + 1, "deaths");
             serverLink.broadcastWaveInfo(gameRules.kills, gameType.WaveNum + 1, "kills");
+            serverLink.broadcastWaveInfo(perks, gameType.WaveNum + 1, "perks");
         }
         serverLink.broadcastMatchResults();
         if (Level.NetMode != NM_DedicatedServer) {

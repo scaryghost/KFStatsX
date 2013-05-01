@@ -119,6 +119,7 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     local array<string> statMsgs, resultParts;
     local int index, realWaveNum, timeConn;
     local KFSXReplicationInfo kfsxri;
+    local bool reachedFinale;
 
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(pri);
     timeConn= Level.GRI.ElapsedTime - pri.StartTime;
@@ -133,6 +134,7 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     statMsgs[statMsgs.Length]= "4" $ packetSeparator $ "actions" $ packetSeparator $ getStatValues(kfsxri.actions);
 
     realWaveNum= KFGameType(Level.Game).WaveNum + 1;
+    reachedFinale= realWaveNum > KFGameType(Level.Game).FinalWave;
     resultParts[0]= "5";
     resultParts[1]= "match";
     resultParts[2]= mapName;
@@ -140,8 +142,8 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     resultParts[4]= length;
     resultParts[5]= string(KFGameReplicationInfo(Level.GRI).EndGameType);
     resultParts[6]= string(realWaveNum);
-    resultParts[7]= string(byte(realWaveNum > KFGameType(Level.Game).FinalWave));
-    resultParts[8]= string(kfsxri.survivedFinale);
+    resultParts[7]= string(byte(reachedFinale));
+    resultParts[8]= string(byte(!pri.bOnlySpectator && kfsxri.survivedFinale && reachedFinale));
     resultParts[9]= string(timeConn);
     resultPArts[10]= "_close";
 

@@ -126,7 +126,7 @@ function ScoreKill(Controller Killer, Controller Killed) {
         kfsxri.player.accum(deathKey, 1);
 
         if (KFGameType(Level.Game).WaveNum == KFGameType(Level.Game).FinalWave) {
-            kfsxri.survivedFinale= 0;
+            kfsxri.survivedFinale= false;
         }
         if (Killer == Killed) {
             itemName= selfDeathKey;
