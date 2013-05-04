@@ -100,10 +100,11 @@ function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> dam
     local KFSXReplicationInfo kfsxri;
 
     if (!super.PreventDeath(Killed, Killer, damageType, HitLocation)) {
+        kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
         if(KFHumanPawn(Killed) != none && (damageType == class'Engine.Fell' || damageType == class'Gameplay.Burned')) {
             deaths.accum(envDeathKey,1);
+            kfsxri.deaths.accum(envDeathKey, 1);
         } else if (ZombieCrawler(Killed) != none && Killed.Physics == PHYS_Falling && class<DamTypeMelee>(damageType) != none ) {
-            kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
             kfsxri.actions.accum(swattedCrawler, 1);
         }
         remove(decappedPawns, Killed);
@@ -137,9 +138,13 @@ function ScoreKill(Controller Killer, Controller Killed) {
         }
 
         if (itemName != "") {
+            //kfsxri points to the killed controller
+            deaths.accum(itemName, 1);
+            kfsxri.deaths.accum(itemName, 1);
+
+            //Here kfsxri now points to the killer controller
             kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
             kfsxri.kills.accum(itemName, 1);
-            deaths.accum(itemName, 1);
             if (KFMonsterController(Killer) == none) {
                 kills.accum(itemName, 1);
             }

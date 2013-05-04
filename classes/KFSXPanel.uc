@@ -26,6 +26,7 @@ function fillStatsInfo(KFSXReplicationInfo kfsxRI) {
     statsInfo[1]= kfsxRI.actions;
     statsInfo[2]= kfsxRI.weapons;
     statsInfo[3]= kfsxRI.kills;
+    statsInfo[4]= kfsxRI.deaths;
     fillList(statsInfo[categories.GetIndex()]);
 }
 
@@ -88,6 +89,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
     categories.AddItem("Actions");
     categories.AddItem("Weapons");
     categories.AddItem("Kills");
+    categories.AddItem("Deaths");
 }
 
 function InternalOnLoadINI(GUIComponent sender, string s) {

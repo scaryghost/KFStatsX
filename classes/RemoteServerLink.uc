@@ -124,6 +124,9 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(pri);
     timeConn= Level.GRI.ElapsedTime - pri.StartTime;
     kfsxri.player.put("Time Connected", timeConn);
+    if (KFPlayerReplicationInfo(pri) != none) {
+        kfsxri.player.put("Assists", KFPlayerReplicationInfo(pri).KillAssists);
+    }
     baseMsg= playerProtocol $ "," $ playerProtocolVersion $ "," $ 
         class'KFSXMutator'.default.serverPwd $ packetSeparator $ kfsxri.playerIDHash $ packetSeparator;
 
@@ -132,10 +135,11 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     statMsgs[statMsgs.Length]= "2" $ packetSeparator $ "kills" $ packetSeparator $ getStatValues(kfsxri.kills);
     statMsgs[statMsgs.Length]= "3" $ packetSeparator $ "perks" $ packetSeparator $ getStatValues(kfsxri.perks);
     statMsgs[statMsgs.Length]= "4" $ packetSeparator $ "actions" $ packetSeparator $ getStatValues(kfsxri.actions);
+    statMsgs[statMsgs.Length]= "5" $ packetSeparator $ "deaths" $ packetSeparator $ getStatValues(kfsxri.deaths);
 
     realWaveNum= KFGameType(Level.Game).WaveNum + 1;
     reachedFinale= realWaveNum > KFGameType(Level.Game).FinalWave;
-    resultParts[0]= "5";
+    resultParts[0]= "6";
     resultParts[1]= "match";
     resultParts[2]= mapName;
     resultParts[3]= difficulty;
