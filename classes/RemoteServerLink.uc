@@ -117,13 +117,11 @@ function string getStatValues(SortedMap stats) {
 function broadcastPlayerStats(PlayerReplicationInfo pri) {
     local string baseMsg;
     local array<string> statMsgs, resultParts;
-    local int index, realWaveNum, timeConn;
+    local int index, realWaveNum;
     local KFSXReplicationInfo kfsxri;
     local bool reachedFinale;
 
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(pri);
-    timeConn= Level.GRI.ElapsedTime - pri.StartTime;
-    kfsxri.player.put("Time Connected", timeConn);
     if (KFPlayerReplicationInfo(pri) != none) {
         kfsxri.player.put("Assists", KFPlayerReplicationInfo(pri).KillAssists);
     }
@@ -148,7 +146,7 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     resultParts[6]= string(realWaveNum);
     resultParts[7]= string(byte(reachedFinale));
     resultParts[8]= string(byte(!pri.bOnlySpectator && kfsxri.survivedFinale && reachedFinale));
-    resultParts[9]= string(timeConn);
+    resultParts[9]= string(Level.GRI.ElapsedTime - pri.StartTime);
     resultPArts[10]= "_close";
 
     statMsgs[statMsgs.Length]= join(resultParts, packetSeparator);
