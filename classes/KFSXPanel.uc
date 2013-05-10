@@ -22,7 +22,7 @@ function fillStatsInfo(KFSXReplicationInfo kfsxRI) {
     if (kfsxRI == None) {
         return;
     }
-    statsInfo[0]= kfsxRI.player;
+    statsInfo[0]= kfsxRI.summary;
     statsInfo[1]= kfsxRI.actions;
     statsInfo[2]= kfsxRI.weapons;
     statsInfo[3]= kfsxRI.kills;
@@ -85,7 +85,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner) {
         sb_Options.ManageComponent(sliders[i].slider);
     }
 
-    categories.AddItem("Player");
+    categories.AddItem("Summary");
     categories.AddItem("Actions");
     categories.AddItem("Weapons");
     categories.AddItem("Kills");

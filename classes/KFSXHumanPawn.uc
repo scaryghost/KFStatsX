@@ -87,7 +87,7 @@ function Timer() {
     currTime= Level.GRI.ElapsedTime;
     timeDiff= currTime - prevTime;
     if (kfsxri != none) {
-        kfsxri.player.accum(timeAlive, timeDiff);
+        kfsxri.summary.accum(timeAlive, timeDiff);
         if (KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill != none) {
             kfsxri.perks.accum(GetItemName(string(KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill)), timeDiff);
         }
@@ -157,8 +157,8 @@ simulated function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation
     Super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType);
    
     if (kfsxri != none && oldHealth > 0) {
-        kfsxri.player.accum(damageTaken, oldHealth - fmax(Health,0.0));
-        kfsxri.player.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
+        kfsxri.summary.accum(damageTaken, oldHealth - fmax(Health,0.0));
+        kfsxri.summary.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
     }
     //Does not work on TestMap
     if (ZombieHusk(InstigatedBy) != none && Momentum != vect(0,0,0) && damageType == class'HuskFireProjectile'.default.MyDamageType) {
@@ -182,8 +182,8 @@ function TakeBileDamage() {
     healthtoGive-=5;
 
     if(kfsxri != none && oldHealth > 0) {
-        kfsxri.player.accum(damageTaken, oldHealth - fmax(Health,0.0));
-        kfsxri.player.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
+        kfsxri.summary.accum(damageTaken, oldHealth - fmax(Health,0.0));
+        kfsxri.summary.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
     }
 }
 
@@ -192,7 +192,7 @@ function ServerBuyWeapon( Class<Weapon> WClass ) {
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyWeapon(WClass);
-    kfsxri.player.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
+    kfsxri.summary.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
 }
 
 function ServerBuyAmmo( Class<Ammunition> AClass, bool bOnlyClip ) {
@@ -200,7 +200,7 @@ function ServerBuyAmmo( Class<Ammunition> AClass, bool bOnlyClip ) {
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyAmmo(AClass, bOnlyClip);
-    kfsxri.player.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
+    kfsxri.summary.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
 }
 
 function ServerBuyKevlar() {
@@ -208,7 +208,7 @@ function ServerBuyKevlar() {
 
     oldScore= PlayerReplicationInfo.Score;
     super.ServerBuyKevlar();
-    kfsxri.player.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
+    kfsxri.summary.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
 }
 
 function bool GiveHealth(int HealAmount, int HealMax) {

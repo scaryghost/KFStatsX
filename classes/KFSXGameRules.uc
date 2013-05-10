@@ -59,7 +59,7 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
         instigatorRI= class'KFSXReplicationInfo'.static.findKFSXri(instigatedBy.PlayerReplicationInfo);
         if (instigatorRI != none) {
             nonFatalBlow= newDamage < injured.Health;
-            instigatorRI.player.accum(damageKey, min(injured.Health, newDamage));
+            instigatorRI.summary.accum(damageKey, min(injured.Health, newDamage));
             if (KFMonster(injured) != none) {
                 if (KFMonster(injured).bBackstabbed) {
                     instigatorRI.actions.accum(backstabs, 1);
@@ -124,7 +124,7 @@ function ScoreKill(Controller Killer, Controller Killed) {
     Super.ScoreKill(Killer,Killed);
     if (PlayerController(Killed) != none) {
         kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killed.PlayerReplicationInfo);
-        kfsxri.player.accum(deathKey, 1);
+        kfsxri.summary.accum(deathKey, 1);
 
         if (KFGameType(Level.Game).WaveNum == KFGameType(Level.Game).FinalWave) {
             kfsxri.survivedFinale= false;

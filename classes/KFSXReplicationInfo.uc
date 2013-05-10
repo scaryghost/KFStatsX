@@ -10,7 +10,7 @@ var PlayerReplicationInfo ownerPRI;
 var string welding, timeSpectating;
 
 /** Map of values stored by this LRI */
-var SortedMap player, actions, weapons, kills, perks, deaths;
+var SortedMap summary, actions, weapons, kills, perks, deaths;
 var string playerIdHash;
 var string fleshpoundsRaged;
 var int prevTime;
@@ -18,7 +18,7 @@ var bool survivedFinale;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority)
-        player, actions, weapons, kills, deaths, ownerPRI;
+        summary, actions, weapons, kills, deaths, ownerPRI;
 }
 
 function Tick(float DeltaTime) {
@@ -39,14 +39,14 @@ function Timer() {
     currTime= Level.GRI.ElapsedTime;
     timeDiff= currTime - prevTime;
     if (ownerPRI != none && ownerPRI.bOnlySpectator) {
-        player.accum(timeSpectating, timeDiff);
+        summary.accum(timeSpectating, timeDiff);
     }
     prevTime= currTime;
 }
 
 event PostBeginPlay() {
     super.PostBeginPlay();
-    player= Spawn(class'SortedMap');
+    summary= Spawn(class'SortedMap');
     weapons= Spawn(class'SortedMap');
     kills= Spawn(class'SortedMap');
     actions= Spawn(class'SortedMap');

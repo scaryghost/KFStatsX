@@ -16,6 +16,6 @@ simulated Function timer() {
     }
     super.timer();
     if (targetDoor != none && kfsxri != none) {
-        kfsxri.player.accum(kfsxri.welding, oldWeldStrength - targetDoor.MyTrigger.WeldStrength);
+        kfsxri.summary.accum(kfsxri.welding, oldWeldStrength - targetDoor.MyTrigger.WeldStrength);
     }
 }

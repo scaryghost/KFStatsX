@@ -123,12 +123,12 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
 
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(pri);
     if (KFPlayerReplicationInfo(pri) != none) {
-        kfsxri.player.put("Assists", KFPlayerReplicationInfo(pri).KillAssists);
+        kfsxri.summary.put("Assists", KFPlayerReplicationInfo(pri).KillAssists);
     }
     baseMsg= playerProtocol $ "," $ playerProtocolVersion $ "," $ 
         class'KFSXMutator'.default.serverPwd $ packetSeparator $ kfsxri.playerIDHash $ packetSeparator;
 
-    statMsgs[statMsgs.Length]= "0" $ packetSeparator $ "player" $ packetSeparator $ getStatValues(kfsxri.player);
+    statMsgs[statMsgs.Length]= "0" $ packetSeparator $ "summary" $ packetSeparator $ getStatValues(kfsxri.summary);
     statMsgs[statMsgs.Length]= "1" $ packetSeparator $ "weapons" $ packetSeparator $ getStatValues(kfsxri.weapons);
     statMsgs[statMsgs.Length]= "2" $ packetSeparator $ "kills" $ packetSeparator $ getStatValues(kfsxri.kills);
     statMsgs[statMsgs.Length]= "3" $ packetSeparator $ "perks" $ packetSeparator $ getStatValues(kfsxri.perks);
