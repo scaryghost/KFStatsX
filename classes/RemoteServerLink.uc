@@ -26,6 +26,7 @@ var string playerProtocolVersion;
 
 var array<string> difficulties, lengths;
 var string matchHeader, playerHeader;
+var string killsKey, assistsKey;
 
 function PostBeginPlay() {
     local KFGameType gametype;
@@ -111,8 +112,8 @@ function string getStatValues(SortedMap stats) {
 }
 
 /**
- * Broadcast the stats from the custom linked replication info objects
- * @param   pc  The controller to save
+ * Broadcast the stat objects from the custom replication info tied to the given pri
+ * @param   pri  The PlayerReplicationInfo object to save
  */
 function broadcastPlayerStats(PlayerReplicationInfo pri) {
     local string baseMsg;
@@ -123,8 +124,9 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
 
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(pri);
     if (KFPlayerReplicationInfo(pri) != none) {
-        kfsxri.summary.put("Assists", KFPlayerReplicationInfo(pri).KillAssists);
+        kfsxri.summary.put(assistsKey, KFPlayerReplicationInfo(pri).KillAssists);
     }
+    kfsxri.summary.put(killsKey, pri.Kills);
     baseMsg= playerProtocol $ "," $ playerProtocolVersion $ "," $ 
         class'KFSXMutator'.default.serverPwd $ packetSeparator $ kfsxri.playerIDHash $ packetSeparator;
 
@@ -174,4 +176,7 @@ defaultproperties {
     matchProtocolVersion= "2";
     playerProtocol= "kfstatsx-player";
     playerProtocolVersion= "2";
+
+    killsKey= "Kills"
+    assistsKey= "Kill Assists"
 }

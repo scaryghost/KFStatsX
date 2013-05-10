@@ -9,7 +9,7 @@ class KFSXHumanPawn extends KFHumanPawn;
 var bool signalToss, signalFire;
 var string damageTaken, armorLost, timeAlive, cashSpent, shotByHusk;
 var string healedSelf, receivedHeal, healDartsConnected, healedTeammates;
-var string boltsRetrieved, bladesRetrieved;
+var string boltsRetrieved, bladesRetrieved, grabbedByClot, pukedOn;
 var KFSXReplicationInfo kfsxri;
 var int prevTime, prevHuskgunAmmo;
 
@@ -104,6 +104,11 @@ function PossessedBy(Controller C) {
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(PlayerReplicationInfo);
 }
 
+function DisableMovement(float DisableDuration) {
+    super.DisableMovement(DisableDuration);
+    kfsxri.actions.accum(grabbedByClot, 1);
+}
+
 /**
  * Called whenever a weapon is fired.  
  * This function tracks usage for every weapon except the Welder and Huskgun
@@ -146,8 +151,7 @@ function DeactivateSpawnProtection() {
     }
 }
 
-simulated function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, 
-        Vector Momentum, class<DamageType> damageType, optional int HitIndex) {
+simulated function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> damageType, optional int HitIndex) {
     local float oldHealth;
     local float oldShield;
 
@@ -163,6 +167,8 @@ simulated function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation
     //Does not work on TestMap
     if (ZombieHusk(InstigatedBy) != none && Momentum != vect(0,0,0) && damageType == class'HuskFireProjectile'.default.MyDamageType) {
         kfsxri.actions.accum(shotByHusk, 1);
+    } else if (damageType == class'KFBloatVomit'.default.MyDamageType) {
+        kfsxri.actions.accum(pukedOn, 1);
     }
 }
 
@@ -231,4 +237,6 @@ defaultproperties {
     shotByHusk= "Shot By Husk"
     boltsRetrieved= "Bolts Retrieved"
     bladesRetrieved= "Blades Retrieved"
+    grabbedByClot= "Grabbed By Clot"
+    pukedOn= "Puked On"
 }
