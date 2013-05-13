@@ -79,6 +79,9 @@ function broadcastMatchResults() {
     SendText(serverAddr, join(matchParts, packetSeparator));
 }    
 
+/**
+ * Send wave specific stats to the remote server
+ */
 function broadcastWaveInfo(SortedMap stats, int wave, string group) {
     local array<string> packetParts;
 
@@ -87,8 +90,9 @@ function broadcastWaveInfo(SortedMap stats, int wave, string group) {
     packetParts[2]= difficulty;
     packetParts[3]= length;
     packetParts[4]= string(wave);
-    packetParts[5]= getStatValues(stats);
-    packetParts[6]= "_close";
+    packetParts[5]= mapName;
+    packetParts[6]= getStatValues(stats);
+    packetParts[7]= "_close";
     SendText(serverAddr, join(packetParts, packetSeparator));
 }
 
