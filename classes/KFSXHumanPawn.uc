@@ -158,17 +158,18 @@ simulated function TakeDamage( int Damage, Pawn InstigatedBy, Vector Hitlocation
     oldHealth= Health;
     oldShield= ShieldStrength;
 
+    //Does not work on TestMap
+    if (ZombieHusk(InstigatedBy) != none && Momentum != vect(0,0,0) && damageType == class'HuskFireProjectile'.default.MyDamageType) {
+        kfsxri.actions.accum(shotByHusk, 1);
+    } else if (damageType == class'KFBloatVomit'.default.MyDamageType && BileCount != 7) {
+        kfsxri.actions.accum(pukedOn, 1);
+    }
+
     Super.TakeDamage(Damage,instigatedBy,hitlocation,momentum,damageType);
    
     if (kfsxri != none && oldHealth > 0) {
         kfsxri.summary.accum(damageTaken, oldHealth - fmax(Health,0.0));
         kfsxri.summary.accum(armorLost, oldShield - fmax(ShieldStrength,0.0));
-    }
-    //Does not work on TestMap
-    if (ZombieHusk(InstigatedBy) != none && Momentum != vect(0,0,0) && damageType == class'HuskFireProjectile'.default.MyDamageType) {
-        kfsxri.actions.accum(shotByHusk, 1);
-    } else if (damageType == class'KFBloatVomit'.default.MyDamageType) {
-        kfsxri.actions.accum(pukedOn, 1);
     }
 }
 
