@@ -7,7 +7,7 @@ class KFSXReplicationInfo extends ReplicationInfo
     dependson(SortedMap);
 
 var PlayerReplicationInfo ownerPRI;
-var string welding, timeSpectating;
+var string timeSpectating;
 
 /** Map of values stored by this LRI */
 var SortedMap summary, actions, weapons, kills, perks, deaths;
@@ -69,7 +69,6 @@ static function KFSXReplicationInfo findKFSXri(PlayerReplicationInfo pri) {
 }
 
 defaultproperties {
-    welding= "Welding"
     fleshpoundsRaged= "Fleshpounds Raged"
     timeSpectating= "Time Spectating"
 

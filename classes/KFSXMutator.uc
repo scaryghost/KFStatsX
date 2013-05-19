@@ -39,9 +39,6 @@ var class<RemoteServerLink> serverLinkClass;
 /** Link to the remote tracking server */
 var transient RemoteServerLink serverLink;
 
-/** List of fire modes to replace */
-var array<ReplacePair> fireModeReplacement;
-
 var array<ZombieFleshPound> passiveFPs, frustratedFPs;
 var SortedMap perks;
 var bool broadcastedWaveEnd;
@@ -149,7 +146,6 @@ function NotifyLogout(Controller Exiting) {
 }
 
 function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
-    local int i, j;
     local PlayerReplicationInfo pri;
     local KFSXReplicationInfo kfsxri;
 
@@ -158,14 +154,6 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
         pri= PlayerReplicationInfo(Other);
         kfsxri= spawn(kfsxRIClass, pri.Owner);
         kfsxri.ownerPRI= pri;
-    } else if (Weapon(Other) != none) {
-        for(i= 0; i < ArrayCount(Weapon(Other).FireModeClass); i++) {
-            for(j= 0; j < fireModeReplacement.Length; j++) {
-                if (Weapon(Other).FireModeClass[i] == class<WeaponFire>(fireModeReplacement[j].oldClass)) {
-                    Weapon(Other).FireModeClass[i]= class<WeaponFire>(fireModeReplacement[j].newClass);
-                }
-            }
-        }
     } else if (ZombieFleshPound(Other) != none) {
         passiveFPs[passiveFPs.length]= ZombieFleshPound(Other);
     }
@@ -217,9 +205,6 @@ defaultproperties {
 
     kfStatsXRules= class'KFSXGameRules'
     serverLinkClass= class'RemoteServerLink'
-
-    fireModeReplacement(0)=(oldClass=class'WeldFire',NewClass=class'WeldFire_KFSX')
-    fireModeReplacement(1)=(oldClass=class'UnWeldFire',NewClass=class'UnWeldFire_KFSX')
 
     kfsxRIClass= class'KFSXReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"

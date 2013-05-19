@@ -9,9 +9,9 @@ class KFSXHumanPawn extends KFHumanPawn;
 var bool signalToss, signalFire;
 var string damageTaken, armorLost, timeAlive, cashSpent, shotByHusk;
 var string healedSelf, receivedHeal, healDartsConnected, healedTeammates;
-var string boltsRetrieved, bladesRetrieved, grabbedByClot, pukedOn;
+var string boltsRetrieved, bladesRetrieved, grabbedByClot, pukedOn, welding, healing;
 var KFSXReplicationInfo kfsxri;
-var int prevTime, prevHuskgunAmmo;
+var int prevTime, prevHuskgunAmmo, prevWeldStat, prevHealStat;
 
 /**
  * If the Pawn touched a healing dart, arrow, or blade, increment appropriate stats
@@ -73,6 +73,16 @@ simulated function Tick(float DeltaTime) {
         } else if (signalFire && Weapon != None && !Weapon.IsFiring()) {
             signalFire= false;
         }
+        if (KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements) != none) {
+            if (prevWeldStat < KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).WeldingPointsStat.Value) {
+                kfsxri.summary.accum(welding, KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).WeldingPointsStat.Value - prevWeldStat);
+                prevWeldStat= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).WeldingPointsStat.Value;
+            }
+            if (prevHealStat < KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).DamageHealedStat.Value) {
+                kfsxri.summary.accum(healing, KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).DamageHealedStat.Value - prevHealStat);
+                prevHealStat= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).DamageHealedStat.Value;
+            }
+        }
     }
     super.Tick(DeltaTime);
 }
@@ -102,6 +112,10 @@ function Timer() {
 function PossessedBy(Controller C) {
     super.PossessedBy(C);
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(PlayerReplicationInfo);
+    if (KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements) != none) {
+        prevWeldStat= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).WeldingPointsStat.Value;
+        prevHealStat= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).DamageHealedStat.Value;
+    }
 }
 
 function DisableMovement(float DisableDuration) {
@@ -240,4 +254,6 @@ defaultproperties {
     bladesRetrieved= "Blades Retrieved"
     grabbedByClot= "Grabbed By Clot"
     pukedOn= "Puked On"
+    welding= "Welding"
+    healing= "Healing"
 }
