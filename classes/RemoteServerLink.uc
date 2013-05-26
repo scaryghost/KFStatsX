@@ -122,42 +122,45 @@ function string getStatValues(SortedMap stats) {
 function broadcastPlayerStats(PlayerReplicationInfo pri) {
     local string baseMsg;
     local array<string> statMsgs, resultParts;
-    local int index, realWaveNum;
+    local int index, realWaveNum, timeConnected;
     local KFSXReplicationInfo kfsxri;
     local bool reachedFinale;
 
-    kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(pri);
-    if (KFPlayerReplicationInfo(pri) != none) {
-        kfsxri.summary.put(assistsKey, KFPlayerReplicationInfo(pri).KillAssists);
-    }
-    kfsxri.summary.put(killsKey, pri.Kills);
-    baseMsg= playerProtocol $ "," $ playerProtocolVersion $ "," $ 
-        class'KFSXMutator'.default.serverPwd $ packetSeparator $ kfsxri.playerIDHash $ packetSeparator;
+    timeConnected= Level.GRI.ElapsedTime - pri.StartTime;
+    if (timeConnected != 0) {
+        kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(pri);
+        if (KFPlayerReplicationInfo(pri) != none) {
+            kfsxri.summary.put(assistsKey, KFPlayerReplicationInfo(pri).KillAssists);
+        }
+        kfsxri.summary.put(killsKey, pri.Kills);
+        baseMsg= playerProtocol $ "," $ playerProtocolVersion $ "," $ 
+            class'KFSXMutator'.default.serverPwd $ packetSeparator $ kfsxri.playerIDHash $ packetSeparator;
 
-    statMsgs[statMsgs.Length]= "0" $ packetSeparator $ "summary" $ packetSeparator $ getStatValues(kfsxri.summary);
-    statMsgs[statMsgs.Length]= "1" $ packetSeparator $ "weapons" $ packetSeparator $ getStatValues(kfsxri.weapons);
-    statMsgs[statMsgs.Length]= "2" $ packetSeparator $ "kills" $ packetSeparator $ getStatValues(kfsxri.kills);
-    statMsgs[statMsgs.Length]= "3" $ packetSeparator $ "perks" $ packetSeparator $ getStatValues(kfsxri.perks);
-    statMsgs[statMsgs.Length]= "4" $ packetSeparator $ "actions" $ packetSeparator $ getStatValues(kfsxri.actions);
-    statMsgs[statMsgs.Length]= "5" $ packetSeparator $ "deaths" $ packetSeparator $ getStatValues(kfsxri.deaths);
+        statMsgs[statMsgs.Length]= "0" $ packetSeparator $ "summary" $ packetSeparator $ getStatValues(kfsxri.summary);
+        statMsgs[statMsgs.Length]= "1" $ packetSeparator $ "weapons" $ packetSeparator $ getStatValues(kfsxri.weapons);
+        statMsgs[statMsgs.Length]= "2" $ packetSeparator $ "kills" $ packetSeparator $ getStatValues(kfsxri.kills);
+        statMsgs[statMsgs.Length]= "3" $ packetSeparator $ "perks" $ packetSeparator $ getStatValues(kfsxri.perks);
+        statMsgs[statMsgs.Length]= "4" $ packetSeparator $ "actions" $ packetSeparator $ getStatValues(kfsxri.actions);
+        statMsgs[statMsgs.Length]= "5" $ packetSeparator $ "deaths" $ packetSeparator $ getStatValues(kfsxri.deaths);
 
-    realWaveNum= KFGameType(Level.Game).WaveNum + 1;
-    reachedFinale= realWaveNum > KFGameType(Level.Game).FinalWave;
-    resultParts[0]= "6";
-    resultParts[1]= "match";
-    resultParts[2]= mapName;
-    resultParts[3]= difficulty;
-    resultParts[4]= length;
-    resultParts[5]= string(KFGameReplicationInfo(Level.GRI).EndGameType);
-    resultParts[6]= string(realWaveNum);
-    resultParts[7]= string(byte(reachedFinale));
-    resultParts[8]= string(byte(!pri.bOnlySpectator && kfsxri.survivedFinale && reachedFinale));
-    resultParts[9]= string(Level.GRI.ElapsedTime - pri.StartTime);
-    resultPArts[10]= "_close";
+        realWaveNum= KFGameType(Level.Game).WaveNum + 1;
+        reachedFinale= realWaveNum > KFGameType(Level.Game).FinalWave;
+        resultParts[0]= "6";
+        resultParts[1]= "match";
+        resultParts[2]= mapName;
+        resultParts[3]= difficulty;
+        resultParts[4]= length;
+        resultParts[5]= string(KFGameReplicationInfo(Level.GRI).EndGameType);
+        resultParts[6]= string(realWaveNum);
+        resultParts[7]= string(byte(reachedFinale));
+        resultParts[8]= string(byte(!pri.bOnlySpectator && kfsxri.survivedFinale && reachedFinale));
+        resultParts[9]= string(timeConnected);
+        resultPArts[10]= "_close";
 
-    statMsgs[statMsgs.Length]= join(resultParts, packetSeparator);
-    for(index= 0; index < statMsgs.Length; index++) {
-        SendText(serverAddr, baseMsg $ statMsgs[index]);
+        statMsgs[statMsgs.Length]= join(resultParts, packetSeparator);
+        for(index= 0; index < statMsgs.Length; index++) {
+            SendText(serverAddr, baseMsg $ statMsgs[index]);
+        }
     }
 }
 
