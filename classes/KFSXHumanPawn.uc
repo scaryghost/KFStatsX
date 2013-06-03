@@ -125,12 +125,13 @@ function DisableMovement(float DisableDuration) {
 
 /**
  * Called whenever a weapon is fired.  
- * This function tracks usage for every weapon except the Welder and Huskgun
+ * This function tracks usage for every weapon except the Welder
  */
 function DeactivateSpawnProtection() {
     local int mode;
     local string itemName;
-    local float load;
+    local float load, healAmount;
+
     super.DeactivateSpawnProtection();
     
     if (prevHuskgunAmmo != 0 && Huskgun(Weapon) != none) {
@@ -143,10 +144,19 @@ function DeactivateSpawnProtection() {
             mode= 1;
 
         if (Syringe(Weapon) != none) {
-            if (mode ==1)
+            if (mode == 1) {
                 itemName= healedSelf;
-            else
+                healAmount= Syringe(Weapon).HealBoostAmount * KFPlayerReplicationInfo(PlayerReplicationInfo).ClientVeteranSkill.static.
+                        GetHealPotency(KFPlayerReplicationInfo(PlayerReplicationInfo));
+                if ((Health + healthToGive + healAmount) > HealthMax ) {
+                    healAmount= HealthMax - (Health + healthToGive);
+                }
+                if (healAmount > 0) {
+                    kfsxri.summary.accum(healing, healAmount);
+                }
+            } else {
                 itemName= healedTeammates;
+            }
             kfsxri.actions.accum(itemName,1);
             return;
         }
