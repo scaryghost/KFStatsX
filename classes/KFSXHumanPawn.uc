@@ -9,7 +9,7 @@ class KFSXHumanPawn extends KFHumanPawn;
 var bool signalToss, signalFire;
 var string damageTaken, armorLost, timeAlive, cashSpent, shotByHusk;
 var string healedSelf, receivedHeal, healDartsConnected, healedTeammates;
-var string boltsRetrieved, bladesRetrieved, grabbedByClot, pukedOn, welding, healing;
+var string boltsRetrieved, bladesRetrieved, pukedOn, welding, healing;
 var KFSXReplicationInfo kfsxri;
 var int prevTime, prevHuskgunAmmo, prevWeldStat, prevHealStat;
 
@@ -116,11 +116,6 @@ function PossessedBy(Controller C) {
         prevWeldStat= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).WeldingPointsStat.Value;
         prevHealStat= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).DamageHealedStat.Value;
     }
-}
-
-function DisableMovement(float DisableDuration) {
-    super.DisableMovement(DisableDuration);
-    kfsxri.actions.accum(grabbedByClot, 1);
 }
 
 /**
@@ -262,7 +257,6 @@ defaultproperties {
     shotByHusk= "Shot By Husk"
     boltsRetrieved= "Bolts Retrieved"
     bladesRetrieved= "Blades Retrieved"
-    grabbedByClot= "Grabbed By Clot"
     pukedOn= "Puked On"
     welding= "Welding"
     healing= "Healing"
