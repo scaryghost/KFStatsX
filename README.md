@@ -24,6 +24,7 @@ The check sum for the package is generated with the following command from the s
 
 If the output does not match any of the hashes in this README, you do not have an official version from me.
 
+    3.0     d7520254a097dde029b5cda01ce5536f
     2.1     ba25d3a9f7c7c5264ed1051b22d8a8c0
     2.0.1   2c0c4657258b2857d5d8c70b4c659cd6  
     2.0     9c0505e858678cb184f42f5bb18fab48  
@@ -34,7 +35,7 @@ If the output does not match any of the hashes in this README, you do not have a
 Copy the contents of the system folder to your Killing Floor system folder.  To enable stats broadcasting, check the box 
 for "Broadcast Statistics" and fill in the server address, port, and password for the remote server.  If the server is a 
 listened server or a solo game, enter in the steamid64 number of the local host.  This extra step is needed because the 
-game will not properly retrieve the local hosts's steamid64.  Your steamid64 number can be converted from your community 
+game will not properly retrieve the local hosts' steamid64.  Your steamid64 number can be converted from your community 
 url at http://steamidconverter.com/.
 
 See the TWI thread for information on accumulating statistics:  
