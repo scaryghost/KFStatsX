@@ -7,7 +7,7 @@ https://github.com/scaryghost/KFStatsX
 Scary Ghost
 
 ## Release Notes
-https://github.com/scaryghost/KFStatsX/wiki/Release-KFStatsX-3.0
+https://github.com/scaryghost/KFStatsX/wiki/Release-KFStatsX-3.0.1
 
 ## About
 Provides advanced statistics about a player's performance and tracks game information for each match.  This started out 
@@ -15,7 +15,7 @@ as enhancements to Game Stats Tab but I did not like how static everything was. 
 mutator from ground up and new features have made the mutator more resemble HLStatsX.
 
 ## Version
-3.0
+3.0.1
 
 ## Check Sum
 The check sum for the package is generated with the following command from the system folder:
@@ -24,6 +24,7 @@ The check sum for the package is generated with the following command from the s
 
 If the output does not match any of the hashes in this README, you do not have an official version from me.
 
+    3.0.1   502be92059f1d2e0eb94741a3cdc9cbb
     3.0     d7520254a097dde029b5cda01ce5536f
     2.1     ba25d3a9f7c7c5264ed1051b22d8a8c0
     2.0.1   2c0c4657258b2857d5d8c70b4c659cd6  

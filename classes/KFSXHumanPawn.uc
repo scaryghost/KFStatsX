@@ -156,13 +156,13 @@ function DeactivateSpawnProtection() {
             return;
         }
 
-        if (KFMeleeGun(Weapon) != none || (mode == 1 && (KFMedicGun(Weapon) != none || ZEDGun(Weapon) != none))) {
+        if (KFMeleeGun(Weapon) != none || (mode == 1 && (KFMedicGun(Weapon) != none || ZEDGun(Weapon) != none || SPAutoShotgun(Weapon) != none))) {
             load= 1;
         } else if (load == 0) {
             load= Weapon.GetFireMode(mode).Load;
         }
 
-        if (mode == 1 && (KFMedicGun(Weapon) != none || (KFWeapon(Weapon) != none && KFWeapon(Weapon).bHasSecondaryAmmo))) {
+        if (mode == 1 && (KFMedicGun(Weapon) != none || SPAutoShotgun(Weapon) != none || (KFWeapon(Weapon) != none && KFWeapon(Weapon).bHasSecondaryAmmo))) {
             itemName$= " Alt";
         }
 
