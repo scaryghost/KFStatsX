@@ -33,13 +33,25 @@ If the output does not match any of the hashes in this README, you do not have a
     1.0     6ea3bd489c574ab046a431cfaf391aa3  
 
 ## Install
-Copy the contents of the system folder to your Killing Floor system folder.  To enable stats broadcasting, check the box 
-for "Broadcast Statistics" and fill in the server address, port, and password for the remote server.  If the server is a 
-listened server or a solo game, enter in the steamid64 number of the local host.  This extra step is needed because the 
-game will not properly retrieve the local hosts' steamid64.  Your steamid64 number can be converted from your community 
-url at http://steamidconverter.com/.
+Copy the contents of the system folder to your Killing Floor system folder.
 
-See the TWI thread for information on accumulating statistics:  
+## Configuartion
+Edit the KFStatsX.ini file to configure the mutator.  Below are descriptions for the properties:
+
+    broadcastStats          Broadcast player and match statistics to a remote server
+    serverPort              UDP port to the remote server is listening on
+    serverAddress           Address of the remote server
+    serverPwd               Remote server password
+    localHostSteamId        SteamID64 of a the local host.  This is only used for solo or listen server games
+    
+    playerController        Player controller to use for the game
+    compatibleControllers   List of controllers compatible with KFStatsX
+    
+The last two properties are not needed for the vanilla game.  If you are planning on using Server Perks, see the 
+KFStatsX_ServerPerks (https://github.com/scaryghost/KFStatsX_ServerPerks) project for more information on using 
+the "compatibleControllers" property
+
+See the TWI thread for information on storing statistics on a remote server:  
 http://forums.tripwireinteractive.com/showthread.php?t=83045
 
 ## Usage
