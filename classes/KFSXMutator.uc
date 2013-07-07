@@ -209,6 +209,7 @@ defaultproperties {
     kfsxRIClass= class'KFSXReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"
     compatibleControllers(0)= "KFStatsX.KFSXPlayerController;Vanilla KF"
+    compatibleControllers(1)= "KFStatsX.KFSXPlayerController_Story;Objective Mode"
 
     broadcastedWaveEnd= true
 }
