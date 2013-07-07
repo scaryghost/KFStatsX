@@ -60,7 +60,7 @@ function PostBeginPlay() {
         }
     }
 
-    if (broadcastStats) {
+    if (broadcastStats && !Level.Game.IsA('KFStoryGameInfo')) {
         serverLink= Spawn(serverLinkClass);
         perks= Spawn(class'SortedMap');
         SetTimer(1, true);
