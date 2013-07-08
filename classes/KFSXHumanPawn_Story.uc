@@ -43,7 +43,7 @@ simulated function Tick(float DeltaTime) {
     local KFPlayerReplicationInfo kfPRI;
     local class<Projectile> nadeType;
 
-    if (Role == ROLE_Authority) {
+    if (Role == ROLE_Authority && PlayerReplicationInfo != none) {
         if (!signalToss && bThrowingNade) {
             kfPRI= KFPlayerReplicationInfo(PlayerReplicationInfo);
             if (kfPRI != none && kfPRI.ClientVeteranSkill != none) {
