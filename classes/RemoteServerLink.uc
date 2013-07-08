@@ -58,7 +58,11 @@ event Resolved(IpAddr addr) {
 function MatchStarting() {
     mapName= locs(Left(string(Level), InStr(string(Level), ".")));
     difficulty= difficulties[int(Level.Game.GameDifficulty)];
-    length= lengths[KFGameType(Level.Game).KFGameLength];
+    if (KFStoryGameInfo(Level.Game) != none) {
+        length= "Objective";
+    } else {
+        length= lengths[KFGameType(Level.Game).KFGameLength];
+    }
 }
 
 /**

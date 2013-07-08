@@ -60,7 +60,7 @@ function PostBeginPlay() {
         }
     }
 
-    if (broadcastStats && !Level.Game.IsA('KFStoryGameInfo')) {
+    if (broadcastStats) {
         serverLink= Spawn(serverLinkClass);
         perks= Spawn(class'SortedMap');
         SetTimer(1, true);
@@ -102,6 +102,11 @@ function Tick(float DeltaTime) {
     }
 }
 
+function bool shouldBroadcast() {
+    return ((KFStoryGameInfo(gameType) == none && (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress)) || 
+            (KFStoryGameInfo(gameType) != none &&  KFStoryGameInfo(gameType).CurrentObjectiveIdx != -1));
+}
+
 function Timer() {
     local Controller C;
 
@@ -122,9 +127,8 @@ function Timer() {
         }
         broadcastedWaveEnd= !broadcastedWaveEnd;
     }
-    if (broadcastStats && KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType != 0 &&
-        (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress)) {
-        if (KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType == 1) {
+    if (broadcastStats && KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType != 0 && shouldBroadcast() ) {
+        if (KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType == 1 && KFStoryGameInfo(gameType) == none) {
             serverLink.broadcastWaveInfo(gameRules.deaths, gameType.WaveNum + 1, "deaths");
             serverLink.broadcastWaveInfo(gameRules.kills, gameType.WaveNum + 1, "kills");
             serverLink.broadcastWaveInfo(perks, gameType.WaveNum + 1, "perks");
@@ -138,8 +142,7 @@ function Timer() {
 }
 
 function NotifyLogout(Controller Exiting) {
-    if (broadcastStats && gameType.GameReplicationInfo.bMatchHasBegun && 
-        (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress) &&
+    if (broadcastStats && gameType.GameReplicationInfo.bMatchHasBegun && shouldBroadcast() &&
         Exiting != Level.GetLocalPlayerController()) {
         serverLink.broadcastPlayerStats(Exiting.PlayerReplicationInfo);
     }
