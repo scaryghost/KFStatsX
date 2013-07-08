@@ -24,7 +24,7 @@ The check sum for the package is generated with the following command from the s
 
 If the output does not match any of the hashes in this README, you do not have an official version from me.
 
-    3.1     497efde65dcd45612f00f51dfd75d222
+    3.1     07440ae30f3616fbd906f168828b5286
     3.0     d7520254a097dde029b5cda01ce5536f
     2.1     ba25d3a9f7c7c5264ed1051b22d8a8c0
     2.0.1   2c0c4657258b2857d5d8c70b4c659cd6  
@@ -48,7 +48,9 @@ Edit the KFStatsX.ini file to configure the mutator.  Below are descriptions for
     compatibleControllers   List of controllers compatible with KFStatsX
     
 The mod comes with build in support for objective mode.  You will need to change the playerController property by using the compatibility 
-drop down box to switch to objective mode.  The mod will not save statistics in objective mode.
+drop down box to switch to objective mode.  If there is no option for objective mode, add this line to KFStatsX.ini:
+
+    compatibleControllers=KFStatsX.KFSXPlayerController_Story;Objective Mode
 
 If you are planning on using Server Perks, see the KFStatsX_ServerPerks (https://github.com/scaryghost/KFStatsX_ServerPerks) 
 project for more information.
