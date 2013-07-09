@@ -24,7 +24,7 @@ The check sum for the package is generated with the following command from the s
 
 If the output does not match any of the hashes in this README, you do not have an official version from me.
 
-    3.1     07440ae30f3616fbd906f168828b5286
+    3.1     dae63ec0ed7fe31beeeabefd5df54e2a
     3.0     d7520254a097dde029b5cda01ce5536f
     2.1     ba25d3a9f7c7c5264ed1051b22d8a8c0
     2.0.1   2c0c4657258b2857d5d8c70b4c659cd6  
