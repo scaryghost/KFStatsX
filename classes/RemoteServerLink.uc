@@ -78,7 +78,11 @@ function broadcastMatchResults() {
     matchParts[4]= string(KFGameType(Level.Game).WaveNum + 1);
     matchParts[5]= mapName;
     matchParts[6]= string(Level.GRI.ElapsedTime);
-    matchParts[7]= string(KFGameReplicationInfo(Level.GRI).EndGameType);
+    if (KFGameReplicationInfo(Level.GRI).EndGameType == 0) {
+        matchParts[7]= "1";
+    } else {
+        matchParts[7]= string(KFGameReplicationInfo(Level.GRI).EndGameType);
+    }
     matchParts[8]= "_close";
     SendText(serverAddr, join(matchParts, packetSeparator));
 }    
@@ -154,7 +158,12 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
         resultParts[2]= mapName;
         resultParts[3]= difficulty;
         resultParts[4]= length;
-        resultParts[5]= string(KFGameReplicationInfo(Level.GRI).EndGameType);
+        if (xVotingHandler(Level.Game.VotingHandler) != none && xVotingHandler(Level.Game.VotingHandler).bLevelSwitchPending && 
+                KFGameReplicationInfo(Level.GRI).EndGameType == 0) {
+            resultParts[5]= "1";
+        } else {
+            resultParts[5]= string(KFGameReplicationInfo(Level.GRI).EndGameType);
+        }
         resultParts[6]= string(realWaveNum);
         resultParts[7]= string(byte(reachedFinale));
         resultParts[8]= string(byte(!pri.bOnlySpectator && kfsxri.survivedFinale && reachedFinale));
