@@ -41,7 +41,8 @@ var transient RemoteServerLink serverLink;
 
 var array<ZombieFleshPound> passiveFPs, frustratedFPs;
 var SortedMap perks;
-var bool broadcastedWaveEnd;
+var bool broadcastedWaveEnd, broadcastedFinalWave;
+var int travelTime;
 
 function PostBeginPlay() {
     gameType= KFGameType(Level.Game);
@@ -102,18 +103,36 @@ function Tick(float DeltaTime) {
     }
 }
 
+function ServerTraveling(string URL, bool bItems) {
+    travelTime= Level.GRI.ElapsedTime;
+    if (broadcastStats && shouldBroadcast() && !broadcastedFinalWave && KFStoryGameInfo(gameType) == none) {
+        broadcastWaveStats(gameType.WaveNum + 1);
+        serverLink.broadcastMatchResults();
+    }
+    super.ServerTraveling(URL, bItems);
+}
+
+function broadcastWaveStats(int wave) {
+    serverLink.broadcastWaveInfo(gameRules.deaths, wave, "deaths");
+    serverLink.broadcastWaveInfo(gameRules.kills, wave, "kills");
+    serverLink.broadcastWaveInfo(perks, wave, "perks");
+}
+
 function bool shouldBroadcast() {
-    return ((KFStoryGameInfo(gameType) == none && (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress)) || 
-            (KFStoryGameInfo(gameType) != none &&  KFStoryGameInfo(gameType).CurrentObjectiveIdx != -1));
+    local bool midGameVoteTrigger, waveModeCheck, storyModeCheck;
+
+    midGameVoteTrigger= xVotingHandler(gameType.VotingHandler) != none && 
+        (xVotingHandler(gameType.VotingHandler).bLevelSwitchPending && travelTime < 60);
+    waveModeCheck= (KFStoryGameInfo(gameType) == none && (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress));
+    storyModeCheck= KFStoryGameInfo(gameType) != none &&  KFStoryGameInfo(gameType).CurrentObjectiveIdx != -1;
+    return  !midGameVoteTrigger && (waveModeCheck || storyModeCheck);
 }
 
 function Timer() {
     local Controller C;
 
     if (broadcastStats && !broadcastedWaveEnd && !gameType.bWaveInProgress) {
-        serverLink.broadcastWaveInfo(gameRules.deaths, gameType.WaveNum, "deaths");
-        serverLink.broadcastWaveInfo(gameRules.kills, gameType.WaveNum, "kills");
-        serverLink.broadcastWaveInfo(perks, gameType.WaveNum, "perks");
+        broadcastWaveStats(gameType.WaveNum);
         gameRules.deaths.clear();
         gameRules.kills.clear();
         perks.clear();
@@ -129,9 +148,8 @@ function Timer() {
     }
     if (broadcastStats && KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType != 0 && shouldBroadcast() ) {
         if (KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType == 1 && KFStoryGameInfo(gameType) == none) {
-            serverLink.broadcastWaveInfo(gameRules.deaths, gameType.WaveNum + 1, "deaths");
-            serverLink.broadcastWaveInfo(gameRules.kills, gameType.WaveNum + 1, "kills");
-            serverLink.broadcastWaveInfo(perks, gameType.WaveNum + 1, "perks");
+            broadcastWaveStats(gameType.WaveNum + 1);
+            broadcastedFinalWave= true;
         }
         serverLink.broadcastMatchResults();
         if (Level.NetMode != NM_DedicatedServer) {
