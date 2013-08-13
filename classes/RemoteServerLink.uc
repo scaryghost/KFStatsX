@@ -135,7 +135,7 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     local bool reachedFinale;
 
     timeConnected= Level.GRI.ElapsedTime - pri.StartTime;
-    if (timeConnected != 0) {
+    if (timeConnected > 0 && !(pri.bOutOfLives && pri.Deaths == 0)) {
         kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(pri);
         if (KFPlayerReplicationInfo(pri) != none) {
             kfsxri.summary.put(assistsKey, KFPlayerReplicationInfo(pri).KillAssists);
