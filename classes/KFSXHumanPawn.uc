@@ -13,6 +13,14 @@ var string boltsRetrieved, bladesRetrieved, pukedOn, welding, healing;
 var KFSXReplicationInfo kfsxri;
 var int prevTime, prevHuskgunAmmo, prevWeldStat, prevHealStat;
 
+function AddDefaultInventory() {
+    if (KFStoryGameInfo(Level.Game) != none) {
+        Super.AddDefaultInventory();
+    } else {
+        Super(KFHumanPawn).AddDefaultInventory();
+    }
+}
+
 /**
  * If the Pawn touched a healing dart, arrow, or blade, increment appropriate stats
  */
@@ -221,12 +229,15 @@ function ServerBuyWeapon( Class<Weapon> WClass ) {
     kfsxri.summary.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
 }
 
-function ServerBuyAmmo( Class<Ammunition> AClass, bool bOnlyClip ) {
+function bool ServerBuyAmmo( Class<Ammunition> AClass, bool bOnlyClip ) {
     local float oldScore;
 
     oldScore= PlayerReplicationInfo.Score;
-    super.ServerBuyAmmo(AClass, bOnlyClip);
-    kfsxri.summary.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
+    if (super.ServerBuyAmmo(AClass, bOnlyClip)) {
+        kfsxri.summary.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
+        return true;
+    }
+    return false;
 }
 
 function ServerBuyKevlar() {
