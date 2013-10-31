@@ -221,7 +221,7 @@ static event string GetDescriptionText(string property) {
 
 defaultproperties {
     GroupName="KFStatX"
-    FriendlyName="KFStatsX v3.1"
+    FriendlyName="KFStatsX v3.1.1"
     Description="Tracks player and match statistics"
 
     kfStatsXRules= class'KFSXGameRules'
@@ -230,7 +230,6 @@ defaultproperties {
     kfsxRIClass= class'KFSXReplicationInfo'
     playerController= "KFStatsX.KFSXPlayerController"
     compatibleControllers(0)= "KFStatsX.KFSXPlayerController;Vanilla KF"
-    compatibleControllers(1)= "KFStatsX.KFSXPlayerController_Story;Objective Mode"
 
     broadcastedWaveEnd= true
 }

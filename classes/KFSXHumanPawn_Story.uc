@@ -1,3 +1,8 @@
+/**
+ * This class is deprecated and will be removed when version 4.0 is 
+ * released.  The KFSXHumanPawn class extends from the story mode variant 
+ * and manages all the different differences between wave and story mode.
+ */
 class KFSXHumanPawn_Story extends KFStoryGame.KFHumanPawn_Story;
 
 var bool signalToss, signalFire;
