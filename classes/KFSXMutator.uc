@@ -84,8 +84,9 @@ function Tick(float DeltaTime) {
             frustratedFPs[frustratedFPs.length]= passiveFPs[i];
             passiveFPs.remove(i, 1);
             end--;
+        } else {
+            i++;
         }
-        i++;
     }
 
     end= frustratedFPs.length;
@@ -98,8 +99,9 @@ function Tick(float DeltaTime) {
             passiveFPs[passiveFPs.length]= frustratedFPs[i];
             frustratedFPs.remove(i, 1);
             end--;
+        } else {
+            i++;
         }
-        i++;
     }
 }
 

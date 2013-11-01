@@ -71,8 +71,8 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
             }
             zfp= ZombieFleshPound(injured);
             zsc= ZombieScrake(injured);
-            if (zfp != none && nonFatalBlow && (!injured.IsInState('BeginRaging') && !injured.IsInState('RageCharging')) && 
-                    zfp.TwoSecondDamageTotal + newDamage > zfp.RageDamageThreshold) {
+            if (zfp != none && nonFatalBlow && !zfp.bZapped && !(zfp.bCrispified && zfp.bBurnified) && !zfp.bDecapitated &&
+                    (!injured.IsInState('BeginRaging') && !injured.IsInState('RageCharging')) && zfp.TwoSecondDamageTotal + newDamage > zfp.RageDamageThreshold) {
                 instigatorRI.actions.accum(instigatorRI.fleshpoundsRaged, 1);
             } else if (zsc != none) {
                 if (nonFatalBlow && !contains(ragedScrakes, injured) && !zsc.bDecapitated && 
@@ -85,9 +85,9 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
                 }
             } else if (ZombieHusk(injured) != none && nonFatalBlow && (newDamage * 1.5 >float(injured.default.Health) || 
                     (damageType == class'DamTypeCrossbow' || damageType == class'DamTypeCrossbowHeadShot' ||
-                    damageType == class'DamTypeWinchester' || damageType == class'DamTypeM14EBR'
-                    || damageType == class'DamTypeM99HeadShot' || damageType == class'DamTypeM99SniperRifle' ) && newDamage > 200)) {
-                    instigatorRI.actions.accum(husksStunned, 1);
+                    damageType == class'DamTypeWinchester' || damageType == class'DamTypeM14EBR' || damageType == class'DamTypeM99HeadShot' || 
+                    damageType == class'DamTypeM99SniperRifle' || damageType == class'DamTypeSPSniper' ) && newDamage > 200)) {
+                instigatorRI.actions.accum(husksStunned, 1);
             }
         }
 
