@@ -7,23 +7,26 @@ https://github.com/scaryghost/KFStatsX
 Scary Ghost
 
 ## Release Notes
-https://github.com/scaryghost/KFStatsX/wiki/Release-KFStatsX-3.1
+https://github.com/scaryghost/KFStatsX/wiki/Release-KFStatsX-3.1.1
 
 ## About
 Provides advanced statistics about a player's performance and tracks game information for each match.  This started out 
 as enhancements to Game Stats Tab but I did not like how static everything was.  Eventually, I decided to rebuild the 
 mutator from ground up and new features have made the mutator more resemble HLStatsX.
 
+As of version 3.1.1, the default KFStatsX player controller is compatible with objective mode.
+
 ## Version
-3.1
+3.1.1
 
 ## Check Sum
 The check sum for the package is generated with the following command from the system folder:
 
-    ucc.exe Editor.CheckSumPackageCommandlet KFStatsX.u
+    ucc.exe Editor.CheckSumPackage KFStatsX.u
 
 If the output does not match any of the hashes in this README, you do not have an official version from me.
 
+    3.1.1   616198026d1a2e264ed090313fad3d8d
     3.1     dae63ec0ed7fe31beeeabefd5df54e2a
     3.0     d7520254a097dde029b5cda01ce5536f
     2.1     ba25d3a9f7c7c5264ed1051b22d8a8c0
@@ -47,11 +50,6 @@ Edit the KFStatsX.ini file to configure the mutator.  Below are descriptions for
     playerController        Player controller to use for the game
     compatibleControllers   List of controllers compatible with KFStatsX
     
-The mod comes with build in support for objective mode.  You will need to change the playerController property by using the compatibility 
-drop down box to switch to objective mode.  If there is no option for objective mode, add this line to KFStatsX.ini:
-
-    compatibleControllers=KFStatsX.KFSXPlayerController_Story;Objective Mode
-
 If you are planning on using Server Perks, see the KFStatsX_ServerPerks (https://github.com/scaryghost/KFStatsX_ServerPerks) 
 project for more information.
 
