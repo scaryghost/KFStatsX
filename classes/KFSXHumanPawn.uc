@@ -221,15 +221,15 @@ function TakeBileDamage() {
     }
 }
 
-function ServerBuyWeapon( Class<Weapon> WClass ) {
+function ServerBuyWeapon(Class<Weapon> WClass, float ItemWeight) {
     local float oldScore;
 
     oldScore= PlayerReplicationInfo.Score;
-    super.ServerBuyWeapon(WClass);
+    super.ServerBuyWeapon(WClass, ItemWeight);
     kfsxri.summary.accum(cashSpent, (oldScore - PlayerReplicationInfo.Score));
 }
 
-function bool ServerBuyAmmo( Class<Ammunition> AClass, bool bOnlyClip ) {
+function bool ServerBuyAmmo(Class<Ammunition> AClass, bool bOnlyClip) {
     local float oldScore;
 
     oldScore= PlayerReplicationInfo.Score;
