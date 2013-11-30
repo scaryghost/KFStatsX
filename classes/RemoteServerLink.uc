@@ -44,7 +44,8 @@ function PostBeginPlay() {
     for(i= 0; i < parts.Length; i+= 2)
         lengths[int(parts[i])]= parts[i+1];
 
-    matchHeader= matchProtocol $ "," $ matchProtocolVersion $ "," $ class'KFSXMutator'.default.serverPwd;
+    matchHeader= matchProtocol $ "," $ matchProtocolVersion $ "," $ class'KFSXMutator'.default.serverPwd $ "," $ Level.Game.GetServerPort();
+    playerHeader= playerProtocol $ "," $ playerProtocolVersion $ "," $ class'KFSXMutator'.default.serverPwd $ "," $ Level.Game.GetServerPort(); 
 }
 
 event Resolved(IpAddr addr) {
@@ -85,7 +86,7 @@ function broadcastMatchResults() {
     }
     matchParts[8]= "_close";
     SendText(serverAddr, join(matchParts, packetSeparator));
-}    
+}
 
 /**
  * Send wave specific stats to the remote server
@@ -141,8 +142,7 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
             kfsxri.summary.put(assistsKey, KFPlayerReplicationInfo(pri).KillAssists);
         }
         kfsxri.summary.put(killsKey, pri.Kills);
-        baseMsg= playerProtocol $ "," $ playerProtocolVersion $ "," $ 
-            class'KFSXMutator'.default.serverPwd $ packetSeparator $ kfsxri.playerIDHash $ packetSeparator;
+        baseMsg= playerHeader $ packetSeparator $ kfsxri.playerIDHash $ packetSeparator;
 
         statMsgs[statMsgs.Length]= "0" $ packetSeparator $ "summary" $ packetSeparator $ getStatValues(kfsxri.summary);
         statMsgs[statMsgs.Length]= "1" $ packetSeparator $ "weapons" $ packetSeparator $ getStatValues(kfsxri.weapons);
