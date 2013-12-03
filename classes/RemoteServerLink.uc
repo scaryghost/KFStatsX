@@ -28,6 +28,9 @@ var array<string> difficulties, lengths;
 var string matchHeader, playerHeader;
 var string killsKey, assistsKey;
 
+/** True if a stat packet has been broadcasted */
+var bool broadcastedStatPacket;
+
 function PostBeginPlay() {
     local KFGameType gametype;
     local array<string> parts;
@@ -86,6 +89,7 @@ function broadcastMatchResults() {
     }
     matchParts[8]= "_close";
     SendText(serverAddr, join(matchParts, packetSeparator));
+    broadcastedStatPacket= true;
 }
 
 /**
@@ -103,6 +107,7 @@ function broadcastWaveInfo(SortedMap stats, int wave, string group) {
     packetParts[6]= getStatValues(stats);
     packetParts[7]= "_close";
     SendText(serverAddr, join(packetParts, packetSeparator));
+    broadcastedStatPacket= true;
 }
 
 /**
@@ -174,6 +179,8 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
         for(index= 0; index < statMsgs.Length; index++) {
             SendText(serverAddr, baseMsg $ statMsgs[index]);
         }
+
+        broadcastedStatPacket= true;
     }
 }
 

@@ -127,7 +127,7 @@ function bool shouldBroadcast() {
         (xVotingHandler(gameType.VotingHandler).bLevelSwitchPending && travelTime < 60);
     waveModeCheck= (KFStoryGameInfo(gameType) == none && (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress));
     storyModeCheck= KFStoryGameInfo(gameType) != none &&  KFStoryGameInfo(gameType).CurrentObjectiveIdx != -1;
-    return  !midGameVoteTrigger && (waveModeCheck || storyModeCheck);
+    return  serverLink.broadcastedStatPacket || (!midGameVoteTrigger && (waveModeCheck || storyModeCheck));
 }
 
 function Timer() {
