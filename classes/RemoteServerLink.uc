@@ -60,6 +60,9 @@ event Resolved(IpAddr addr) {
  * Initialize matchData with map name, difficulty, and length
  */
 function MatchStarting() {
+    local array<string> matchParts, mutatorNames;
+    local Mutator mutIt;
+
     mapName= locs(Left(string(Level), InStr(string(Level), ".")));
     difficulty= difficulties[int(Level.Game.GameDifficulty)];
     if (KFStoryGameInfo(Level.Game) != none) {
@@ -67,6 +70,16 @@ function MatchStarting() {
     } else {
         length= lengths[KFGameType(Level.Game).KFGameLength];
     }
+    
+    for(mutIt= Level.Game.BaseMutator; mutIt != None; mutIt= mutIt.NextMutator) {
+        mutatorNames[mutatorNames.Length]= mutIt.FriendlyName;
+    }
+    matchParts[0]= matchHeader;
+    matchParts[1]= "start";
+    matchParts[2]= Level.GRI.ServerName;
+    matchParts[3]= join(mutatorNames, ",");
+    matchParts[4]= "_close";
+    SendText(serverAddr, join(matchParts, packetSeparator));
 }
 
 /**
