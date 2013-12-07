@@ -11,16 +11,23 @@ struct MatchInfo {
     var array<string> mutators;
 };
 
+struct PlayerStats {
+    var string category;
+    var SortedMap statsMap;
+};
+
 struct PlayerInfo {
     var int wave, timeConnected, endGameType;
     var byte reachedFinalWave, survivedFinalWave;
     var bool levelSwitching;
+    var string steamID64;
+    var array<PlayerStats> stats;
 };
 
 var Header matchHeader, playerHeader;
 var string separator, password;
 
-function array<string> createPlayerPackets(KFSXReplicationInfo kfsxri, PacketCreater.PlayerInfo info);
+function array<string> createPlayerPackets(PacketCreater.PlayerInfo info);
 function string createWaveInfoPacket(SortedMap stats, int wave, string category);
 function string createMatchResultPacket(int wave, int elapsedTime, int endGameType);
 function string createMatchInfoPacket(PacketCreater.MatchInfo info);

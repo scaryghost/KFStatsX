@@ -109,8 +109,23 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
         info.endGameType= KFGameReplicationInfo(Level.GRI).EndGameType;
         info.levelSwitching= xVotingHandler(Level.Game.VotingHandler) != none && 
                 xVotingHandler(Level.Game.VotingHandler).bLevelSwitchPending;
+        info.steamID64= kfsxri.playerIDHash;
 
-        packets= packetCreater.createPlayerPackets(kfsxri, info);
+        info.stats.Length= 6;
+        info.stats[0].category= "summary";
+        info.stats[0].statsMap= kfsxri.summary;
+        info.stats[1].category= "weapons";
+        info.stats[1].statsMap= kfsxri.weapons;
+        info.stats[2].category= "kills";
+        info.stats[2].statsMap= kfsxri.kills;
+        info.stats[3].category= "perks";
+        info.stats[3].statsMap= kfsxri.perks;
+        info.stats[4].category= "actions";
+        info.stats[4].statsMap= kfsxri.actions;
+        info.stats[5].category= "deaths";
+        info.stats[5].statsMap= kfsxri.deaths;
+        
+        packets= packetCreater.createPlayerPackets(info);
         for(i= 0; i < packets.Length; i++) {
             SendText(serverAddr, packets[i]);
         }

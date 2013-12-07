@@ -2,37 +2,39 @@ class V2PacketCreater extends PacketCreater;
 
 var private PacketCreater.MatchInfo matchInformation;
 
-function array<string> createPlayerPackets(KFSXReplicationInfo kfsxri, PacketCreater.PlayerInfo info) {
+function array<string> createPlayerPackets(PacketCreater.PlayerInfo info) {
     local string baseMsg;
-    local array<string> statMsgs, resultParts;
+    local int i;
+    local array<string> packets, parts;
         
-    baseMsg= generateHeader(playerHeader) $ separator $ kfsxri.playerIDHash $ separator;
+    baseMsg= generateHeader(playerHeader) $ separator $ info.steamID64;
 
-    statMsgs[statMsgs.Length]= "0" $ separator $ "summary" $ separator $ getStatValues(kfsxri.summary);
-    statMsgs[statMsgs.Length]= "1" $ separator $ "weapons" $ separator $ getStatValues(kfsxri.weapons);
-    statMsgs[statMsgs.Length]= "2" $ separator $ "kills" $ separator $ getStatValues(kfsxri.kills);
-    statMsgs[statMsgs.Length]= "3" $ separator $ "perks" $ separator $ getStatValues(kfsxri.perks);
-    statMsgs[statMsgs.Length]= "4" $ separator $ "actions" $ separator $ getStatValues(kfsxri.actions);
-    statMsgs[statMsgs.Length]= "5" $ separator $ "deaths" $ separator $ getStatValues(kfsxri.deaths);
-
-    resultParts[0]= "6";
-    resultParts[1]= "match";
-    resultParts[2]= matchInformation.map;
-    resultParts[3]= matchInformation.difficulty;
-    resultParts[4]= matchInformation.length;
-    if (info.levelSwitching && info.endGameType == 0) {
-        resultParts[5]= "1";
-    } else {
-        resultParts[5]= string(info.endGameType);
+    parts[0]= baseMsg;
+    for(i= 0; i < info.stats.Length; i++) {
+        parts[1]= string(i);
+        parts[2]= info.stats[i].category;
+        parts[3]= getStatValues(info.stats[i].statsMap);
+        packets[i]= join(parts, separator);
     }
-    resultParts[6]= string(info.wave);
-    resultParts[7]= string(info.reachedFinalWave);
-    resultParts[8]= string(info.survivedFinalWave);
-    resultParts[9]= string(info.timeConnected);
-    resultParts[10]= "_close";
-    statMsgs[statMsgs.Length]= join(resultParts, separator);
 
-    return statMsgs;
+    parts[1]= string(packets.Length);
+    parts[2]= "match";
+    parts[3]= matchInformation.map;
+    parts[4]= matchInformation.difficulty;
+    parts[5]= matchInformation.length;
+    if (info.levelSwitching && info.endGameType == 0) {
+        parts[6]= "1";
+    } else {
+        parts[6]= string(info.endGameType);
+    }
+    parts[7]= string(info.wave);
+    parts[8]= string(info.reachedFinalWave);
+    parts[9]= string(info.survivedFinalWave);
+    parts[10]= string(info.timeConnected);
+    parts[11]= "_close";
+    packets[packets.Length]= join(parts, separator);
+
+    return packets;
 }
 
 function string createWaveInfoPacket(SortedMap stats, int wave, string category) {
