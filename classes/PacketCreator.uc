@@ -25,7 +25,7 @@ struct PlayerInfo {
 };
 
 var Header matchHeader, playerHeader;
-var string separator, password;
+var string sectionSeparator, password;
 
 function array<string> createPlayerPackets(PacketCreator.PlayerInfo info);
 function string createWaveInfoPacket(SortedMap stats, int wave, string category);
@@ -69,5 +69,5 @@ function string join(array<string> parts, string separator) {
 }
 
 defaultproperties {
-    separator= "|";
+    sectionSeparator= "|";
 }

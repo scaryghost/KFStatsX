@@ -7,14 +7,14 @@ function array<string> createPlayerPackets(PacketCreator.PlayerInfo info) {
     local int i;
     local array<string> packets, parts;
         
-    baseMsg= generateHeader(playerHeader) $ separator $ info.steamID64;
+    baseMsg= generateHeader(playerHeader) $ sectionSeparator $ info.steamID64;
 
     parts[0]= baseMsg;
     for(i= 0; i < info.stats.Length; i++) {
         parts[1]= string(i);
         parts[2]= info.stats[i].category;
         parts[3]= getStatValues(info.stats[i].statsMap);
-        packets[i]= join(parts, separator);
+        packets[i]= join(parts, sectionSeparator);
     }
 
     parts[1]= string(packets.Length);
@@ -32,7 +32,7 @@ function array<string> createPlayerPackets(PacketCreator.PlayerInfo info) {
     parts[9]= string(info.survivedFinalWave);
     parts[10]= string(info.timeConnected);
     parts[11]= "_close";
-    packets[packets.Length]= join(parts, separator);
+    packets[packets.Length]= join(parts, sectionSeparator);
 
     return packets;
 }
@@ -49,7 +49,7 @@ function string createWaveInfoPacket(SortedMap stats, int wave, string category)
     packetParts[6]= getStatValues(stats);
     packetParts[7]= "_close";
 
-    return join(packetParts, separator);
+    return join(packetParts, sectionSeparator);
 }
 
 function string createMatchResultPacket(int wave, int elapsedTime, int endGameType) {
@@ -68,7 +68,7 @@ function string createMatchResultPacket(int wave, int elapsedTime, int endGameTy
         matchParts[7]= string(endGameType);
     }
     matchParts[8]= "_close";
-    return join(matchParts, separator);
+    return join(matchParts, sectionSeparator);
 }
 
 function string createMatchInfoPacket(PacketCreator.MatchInfo info) {
