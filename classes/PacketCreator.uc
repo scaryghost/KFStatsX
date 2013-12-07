@@ -41,18 +41,15 @@ function string generateHeader(Header header) {
  * comma separated ${key}=${value} pairs
  */
 function string getStatValues(SortedMap stats) {
-    local string statVals;
     local int i;
-    local bool addComma;
+    local array<string> parts;
 
     for(i= 0; i < stats.maxStatIndex; i++) {
         if (stats.values[i] != 0) {
-            if (addComma) statVals$= ",";
-            statVals$= stats.keys[i] $ "=" $ int(round(stats.values[i]));
-            addComma= true;
+            parts[parts.Length]= stats.keys[i] $ "=" $ int(round(stats.values[i]));
         }
     }
-    return statVals;
+    return join(parts, ",");
 }
 
 function string join(array<string> parts, string separator) {
