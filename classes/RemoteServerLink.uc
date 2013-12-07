@@ -4,14 +4,14 @@
  * @author etsai (Scary Ghost)
  */
 class RemoteServerLink extends UDPLink
-    dependson(PacketCreater);
+    dependson(PacketCreator);
 
 /** UDP port number the packets are broadcasted from */
 var int udpPort;
 /** Address of the remote tracking server */
 var IpAddr serverAddr;
 
-var PacketCreater packetCreater;
+var PacketCreator packetCreator;
 
 var array<string> difficulties, lengths;
 var string matchHeader, playerHeader;
@@ -46,7 +46,7 @@ event Resolved(IpAddr addr) {
  * Initialize matchData with map name, difficulty, and length
  */
 function MatchStarting() {
-    local PacketCreater.MatchInfo info;
+    local PacketCreator.MatchInfo info;
     local Mutator mutIt;
     local string matchInfoPacket;
 
@@ -61,7 +61,7 @@ function MatchStarting() {
     for(mutIt= Level.Game.BaseMutator; mutIt != None; mutIt= mutIt.NextMutator) {
         info.mutators[info.mutators.Length]= mutIt.FriendlyName;
     }
-    matchInfoPacket= packetCreater.createMatchInfoPacket(info);
+    matchInfoPacket= packetCreator.createMatchInfoPacket(info);
     if (Len(matchInfoPacket) > 0) {
         SendText(serverAddr, matchInfoPacket);
     }
@@ -71,7 +71,7 @@ function MatchStarting() {
  * Send the match information to the remote server
  */
 function broadcastMatchResults() {
-    SendText(serverAddr, packetCreater.createMatchResultPacket(KFGameType(Level.Game).WaveNum + 1, 
+    SendText(serverAddr, packetCreator.createMatchResultPacket(KFGameType(Level.Game).WaveNum + 1, 
             Level.GRI.ElapsedTime, KFGameReplicationInfo(Level.GRI).EndGameType));
 }
 
@@ -80,7 +80,7 @@ function broadcastMatchResults() {
  */
 function broadcastWaveInfo(SortedMap stats, int wave, string group) {
     broadcastedStatPacket= true;
-    SendText(serverAddr, packetCreater.createWaveInfoPacket(stats, wave, group));
+    SendText(serverAddr, packetCreator.createWaveInfoPacket(stats, wave, group));
 }
 
 /**
@@ -89,7 +89,7 @@ function broadcastWaveInfo(SortedMap stats, int wave, string group) {
  */
 function broadcastPlayerStats(PlayerReplicationInfo pri) {
     local KFSXReplicationInfo kfsxri;
-    local PacketCreater.PlayerInfo info;
+    local PacketCreator.PlayerInfo info;
     local int timeConnected, i;
     local array<string> packets;
 
@@ -125,7 +125,7 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
         info.stats[5].category= "deaths";
         info.stats[5].statsMap= kfsxri.deaths;
         
-        packets= packetCreater.createPlayerPackets(info);
+        packets= packetCreator.createPlayerPackets(info);
         for(i= 0; i < packets.Length; i++) {
             SendText(serverAddr, packets[i]);
         }

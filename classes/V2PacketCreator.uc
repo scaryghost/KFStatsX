@@ -1,8 +1,8 @@
-class V2PacketCreater extends PacketCreater;
+class V2PacketCreator extends PacketCreator;
 
-var private PacketCreater.MatchInfo matchInformation;
+var private PacketCreator.MatchInfo matchInformation;
 
-function array<string> createPlayerPackets(PacketCreater.PlayerInfo info) {
+function array<string> createPlayerPackets(PacketCreator.PlayerInfo info) {
     local string baseMsg;
     local int i;
     local array<string> packets, parts;
@@ -71,7 +71,7 @@ function string createMatchResultPacket(int wave, int elapsedTime, int endGameTy
     return join(matchParts, separator);
 }
 
-function string createMatchInfoPacket(PacketCreater.MatchInfo info) {
+function string createMatchInfoPacket(PacketCreator.MatchInfo info) {
     matchInformation= info;
     return "";
 }

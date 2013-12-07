@@ -1,4 +1,4 @@
-class PacketCreater extends Object
+class PacketCreator extends Object
     abstract;
 
 struct Header {
@@ -27,10 +27,10 @@ struct PlayerInfo {
 var Header matchHeader, playerHeader;
 var string separator, password;
 
-function array<string> createPlayerPackets(PacketCreater.PlayerInfo info);
+function array<string> createPlayerPackets(PacketCreator.PlayerInfo info);
 function string createWaveInfoPacket(SortedMap stats, int wave, string category);
 function string createMatchResultPacket(int wave, int elapsedTime, int endGameType);
-function string createMatchInfoPacket(PacketCreater.MatchInfo info);
+function string createMatchInfoPacket(PacketCreator.MatchInfo info);
 
 function string generateHeader(Header header) {
     return header.protocol $ "," $ header.version $ "," $ password;
