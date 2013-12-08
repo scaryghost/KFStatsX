@@ -12,6 +12,8 @@ struct ReplacePair {
 
 /** True if the player and match stats should be saved remotely */
 var() config bool broadcastStats;
+/** True if version 3 of the stat packets should be used */
+var() config bool useV3Packets;
 /** Port of the remote server */
 var() config int serverPort;
 /** Remote server address */
@@ -63,7 +65,11 @@ function PostBeginPlay() {
 
     if (broadcastStats) {
         serverLink= Spawn(serverLinkClass);
-        serverLink.packetCreator= new class'V2PacketCreator';
+        if (useV3Packets) {
+            serverLink.packetCreator= new class'V3PacketCreator';
+        } else {
+            serverLink.packetCreator= new class'V2PacketCreator';
+        }
         serverLink.packetCreator.password= serverPwd;
         perks= Spawn(class'SortedMap');
         SetTimer(1, true);
@@ -188,26 +194,25 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
 
 static function FillPlayInfo(PlayInfo PlayInfo) {
     local string controllers;
-    local int i;
     
     Super.FillPlayInfo(PlayInfo);
-    for(i= 0; i < default.compatibleControllers.Length; i++) {
-        if (i != 0) 
-            controllers$= ";";
-        controllers$= default.compatibleControllers[i];
-    }
-    PlayInfo.AddSetting("KFStatsX", "playerController", "Compatability", 0, 1, "Select", controllers, "Xb",,true);
-    PlayInfo.AddSetting("KFStatsX", "broadcastStats", "Broadcast Statistics", 0, 0, "Check");
-    PlayInfo.AddSetting("KFStatsX", "localHostSteamId", "Local Host Steam ID", 0, 0, "Text", "128",,,true);
-    PlayInfo.AddSetting("KFStatsX", "serverAddress", "Remote Server Address", 0, 0, "Text", "128");
-    PlayInfo.AddSetting("KFStatsX", "serverPort", "Remote Server Port", 0, 0, "Text");
-    PlayInfo.AddSetting("KFStatsX", "serverPwd", "Remote Server Password", 0, 0, "Text", "128");
+    controllers= class'PacketCreator'.static.join(default.compatibleControllers, ";");
+
+    PlayInfo.AddSetting(default.GroupName, "playerController", "Compatability", 0, 1, "Select", controllers, "Xb",,true);
+    PlayInfo.AddSetting(default.GroupName, "broadcastStats", "Broadcast Statistics", 0, 0, "Check");
+    PlayInfo.AddSetting(default.GroupName, "useV3Packets", "Use V3 Packet Format", 0, 0, "Check",,,,true);
+    PlayInfo.AddSetting(default.GroupName, "localHostSteamId", "Local Host Steam ID", 0, 0, "Text", "128",,,true);
+    PlayInfo.AddSetting(default.GroupName, "serverAddress", "Remote Server Address", 0, 0, "Text", "128");
+    PlayInfo.AddSetting(default.GroupName, "serverPort", "Remote Server Port", 0, 0, "Text");
+    PlayInfo.AddSetting(default.GroupName, "serverPwd", "Remote Server Password", 0, 0, "Text", "128");
 }
 
 static event string GetDescriptionText(string property) {
     switch(property) {
         case "broadcastStats":
             return "Select if the mutator should broadcast the stats to a remote server";
+        case "useV3Packets":
+            return "Select to use Version 3 of the UDP packet format";
         case "localHostSteamId":
             return "Local host's steamid64.  Only used for solo or listen server games by the host.";
         case "serverAddress":

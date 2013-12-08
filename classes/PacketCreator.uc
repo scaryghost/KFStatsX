@@ -1,4 +1,4 @@
-class PacketCreator extends Object
+class PacketCreator extends Info
     abstract;
 
 struct Header {
@@ -52,7 +52,7 @@ function string getStatValues(SortedMap stats) {
     return join(parts, ",");
 }
 
-function string join(array<string> parts, string separator) {
+static function string join(array<string> parts, string separator) {
     local int i;
     local string whole;
 
