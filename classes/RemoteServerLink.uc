@@ -47,7 +47,6 @@ event Resolved(IpAddr addr) {
  */
 function MatchStarting() {
     local PacketCreator.MatchInfo info;
-    local Mutator mutIt;
     local string matchInfoPacket;
 
     info.map= locs(Left(string(Level), InStr(string(Level), ".")));
@@ -58,9 +57,6 @@ function MatchStarting() {
         info.length= lengths[KFGameType(Level.Game).KFGameLength];
     }
     
-    for(mutIt= Level.Game.BaseMutator; mutIt != None; mutIt= mutIt.NextMutator) {
-        info.mutators[info.mutators.Length]= mutIt.FriendlyName;
-    }
     matchInfoPacket= packetCreator.createMatchInfoPacket(info);
     if (Len(matchInfoPacket) > 0) {
         SendText(serverAddr, matchInfoPacket);

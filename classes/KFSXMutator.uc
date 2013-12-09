@@ -66,9 +66,9 @@ function PostBeginPlay() {
     if (broadcastStats) {
         serverLink= Spawn(serverLinkClass);
         if (useV3Packets) {
-            serverLink.packetCreator= new class'V3PacketCreator';
+            serverLink.packetCreator= Spawn(class'V3PacketCreator');
         } else {
-            serverLink.packetCreator= new class'V2PacketCreator';
+            serverLink.packetCreator= Spawn(class'V2PacketCreator');
         }
         serverLink.packetCreator.password= serverPwd;
         perks= Spawn(class'SortedMap');

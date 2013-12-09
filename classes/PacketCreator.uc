@@ -8,7 +8,6 @@ struct Header {
 
 struct MatchInfo {
     var string difficulty, length, map;
-    var array<string> mutators;
 };
 
 struct PlayerStats {
