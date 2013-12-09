@@ -42,8 +42,6 @@ function string createMatchInfoPacket(PacketCreator.MatchInfo info) {
     parts[3]= info.difficulty;
     parts[4]= info.length;
     parts[5]= info.map;
-    parts[6]= Level.GRI.ServerName;
-    parts[7]= "_open";
     return join(parts, sectionSeparator);
 }
 
