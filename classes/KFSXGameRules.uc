@@ -139,26 +139,27 @@ function ScoreKill(Controller Killer, Controller Killed) {
             itemName= teammateDeathKey;
         } else if (KFMonsterController(Killer) != none) {
             itemName= Killer.Pawn.MenuName;
+        } else {
+            log("KFSXGameRules.ScoreKill - Cannot determine Killer:" @Killer);
+            itemName= kfsxri.unknownKiller;
         }
 
-        if (itemName != "") {
-            //kfsxri points to the killed controller
-            deaths.getStatsMap(KFPlayerReplicationInfo(Killed.PlayerReplicationInfo).ClientVeteranSkill)
-                    .accum(envDeathKey,1);
-            kfsxri.deaths.accum(itemName, 1);
+        //kfsxri points to the killed controller
+        deaths.getStatsMap(KFPlayerReplicationInfo(Killed.PlayerReplicationInfo).ClientVeteranSkill)
+                .accum(itemName,1);
+        kfsxri.deaths.accum(itemName, 1);
 
-            //Here kfsxri now points to the killer controller
-            kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
-            kfsxri.kills.accum(itemName, 1);
-            if (KFMonsterController(Killer) == none) {
-                kills.getStatsMap(KFPlayerReplicationInfo(Killer.PlayerReplicationInfo).ClientVeteranSkill)
-                        .accum(ItemName,1);
-            }
+        //Here kfsxri now points to the killer controller
+        kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
+        kfsxri.kills.accum(itemName, 1);
+        if (KFMonsterController(Killer) == none) {
+            kills.getStatsMap(KFPlayerReplicationInfo(Killer.PlayerReplicationInfo).ClientVeteranSkill)
+                    .accum(ItemName,1);
         }
     } else if (KFMonsterController(Killed) != none && PlayerController(Killer) != none) {
         kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
         kfsxri.kills.accum(Killed.Pawn.MenuName, 1);
-        kills.getStatsMap(KFPlayerReplicationInfo(Killed.PlayerReplicationInfo).ClientVeteranSkill)
+        kills.getStatsMap(KFPlayerReplicationInfo(Killer.PlayerReplicationInfo).ClientVeteranSkill)
                 .accum(Killed.Pawn.MenuName,1);
     }
 }

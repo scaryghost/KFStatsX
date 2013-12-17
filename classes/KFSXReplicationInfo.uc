@@ -12,7 +12,7 @@ var string timeSpectating;
 /** Map of values stored by this LRI */
 var SortedMap summary, actions, weapons, kills, perks, deaths;
 var string playerIdHash;
-var string fleshpoundsRaged;
+var string fleshpoundsRaged, unknownKiller;
 var int prevTime;
 var bool survivedFinale;
 
@@ -71,6 +71,7 @@ static function KFSXReplicationInfo findKFSXri(PlayerReplicationInfo pri) {
 defaultproperties {
     fleshpoundsRaged= "Fleshpounds Raged"
     timeSpectating= "Time Spectating"
+    unknownKiller= "Unknown"
 
     survivedFinale= true
 }

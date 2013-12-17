@@ -129,8 +129,8 @@ function broadcastWaveStats(int wave) {
     summary.end= Level.GRI.ElapsedTime;
     summary.wave= wave;
     summary.result= byte(KFGameReplicationInfo(gameType.GameReplicationInfo).EndGameType != 1 && 
-        xVotingHandler(gameType.VotingHandler) != none && 
-        (xVotingHandler(gameType.VotingHandler).bLevelSwitchPending));
+        (xVotingHandler(gameType.VotingHandler) == none || 
+        (!xVotingHandler(gameType.VotingHandler).bLevelSwitchPending)));
     
     serverLink.broadcastWaveData(gameRules.deaths);
     serverLink.broadcastWaveData(gameRules.kills);
