@@ -143,8 +143,8 @@ function Timer() {
 
     if (broadcastStats && !broadcastedWaveEnd && !gameType.bWaveInProgress) {
         broadcastWaveStats(gameType.WaveNum);
-        gameRules.deaths.clear();
-        gameRules.kills.clear();
+        gameRules.deaths.reset();
+        gameRules.kills.reset();
         perks.clear();
         broadcastedWaveEnd= !broadcastedWaveEnd;
     } else if (broadcastStats && broadcastedWaveEnd && gameType.bWaveInProgress) {

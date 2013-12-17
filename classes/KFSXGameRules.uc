@@ -6,7 +6,7 @@ class KFSXGameRules extends GameRules;
 
 var array<Pawn> decappedPawns, ragedScrakes;
 /** Record of deaths from all players */
-var SortedMap deaths, kills;
+var WaveInfo deaths, kills;
 /** key for environment death (fall or world fire) */
 var string envDeathKey;
 /** Key for self inflicted death */
@@ -26,8 +26,10 @@ var string damageKey;
 function PostBeginPlay() {
     NextGameRules = Level.Game.GameRulesModifiers;
     Level.Game.GameRulesModifiers = Self;
-    deaths= Spawn(class'SortedMap');
-    kills= Spawn(class'SortedMap');
+    deaths= Spawn(class'WaveInfo');
+    deaths.category= "deaths";
+    kills= Spawn(class'WaveInfo');
+    kills.category= "kills";
 }
 
 private function bool contains(array<Pawn> pawns, Pawn key) {
@@ -100,11 +102,12 @@ function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> dam
     local KFSXReplicationInfo kfsxri;
 
     if (!super.PreventDeath(Killed, Killer, damageType, HitLocation)) {
-        kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
         if(KFHumanPawn(Killed) != none && (damageType == class'Engine.Fell' || damageType == class'Gameplay.Burned')) {
-            deaths.accum(envDeathKey,1);
+            deaths.getStatsMap(KFPlayerReplicationInfo(Killed.PlayerReplicationInfo).ClientVeteranSkill).accum(envDeathKey,1);
+            kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killed.PlayerReplicationInfo);
             kfsxri.deaths.accum(envDeathKey, 1);
         } else if (ZombieCrawler(Killed) != none && Killed.Physics == PHYS_Falling && class<DamTypeMelee>(damageType) != none ) {
+            kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
             kfsxri.actions.accum(swattedCrawler, 1);
         }
         remove(decappedPawns, Killed);
@@ -139,20 +142,23 @@ function ScoreKill(Controller Killer, Controller Killed) {
 
         if (itemName != "") {
             //kfsxri points to the killed controller
-            deaths.accum(itemName, 1);
+            deaths.getStatsMap(KFPlayerReplicationInfo(Killed.PlayerReplicationInfo).ClientVeteranSkill)
+                    .accum(envDeathKey,1);
             kfsxri.deaths.accum(itemName, 1);
 
             //Here kfsxri now points to the killer controller
             kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
             kfsxri.kills.accum(itemName, 1);
             if (KFMonsterController(Killer) == none) {
-                kills.accum(itemName, 1);
+                kills.getStatsMap(KFPlayerReplicationInfo(Killer.PlayerReplicationInfo).ClientVeteranSkill)
+                        .accum(ItemName,1);
             }
         }
     } else if (KFMonsterController(Killed) != none && PlayerController(Killer) != none) {
         kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
         kfsxri.kills.accum(Killed.Pawn.MenuName, 1);
-        kills.accum(Killed.Pawn.MenuName, 1);
+        kills.getStatsMap(KFPlayerReplicationInfo(Killed.PlayerReplicationInfo).ClientVeteranSkill)
+                .accum(Killed.Pawn.MenuName,1);
     }
 }
 
