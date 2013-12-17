@@ -23,11 +23,18 @@ struct PlayerInfo {
     var array<PlayerStats> stats;
 };
 
+struct WaveSummary {
+    var int start, end, wave;
+    var byte result;
+    var SortedMap perks;
+};
+
 var Header matchHeader, playerHeader;
 var string sectionSeparator, password;
 
 function array<string> createPlayerPackets(PacketCreator.PlayerInfo info);
-function string createWaveInfoPacket(SortedMap stats, int wave, string category);
+function array<string> createWaveDataPacket(WaveData data);
+function string createWaveSummaryPacket(PacketCreator.WaveSummary summary);
 function string createMatchResultPacket(int wave, int elapsedTime, int endGameType);
 function string createMatchInfoPacket(PacketCreator.MatchInfo info);
 

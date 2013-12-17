@@ -2,11 +2,12 @@
  * Custom kill and death rules for KFStatsX
  * @author etsai (Scary Ghost)
  */
-class KFSXGameRules extends GameRules;
+class KFSXGameRules extends GameRules
+    dependson(WaveData);
 
 var array<Pawn> decappedPawns, ragedScrakes;
 /** Record of deaths from all players */
-var WaveInfo deaths, kills;
+var WaveData deaths, kills;
 /** key for environment death (fall or world fire) */
 var string envDeathKey;
 /** Key for self inflicted death */
@@ -26,9 +27,9 @@ var string damageKey;
 function PostBeginPlay() {
     NextGameRules = Level.Game.GameRulesModifiers;
     Level.Game.GameRulesModifiers = Self;
-    deaths= Spawn(class'WaveInfo');
+    deaths= Spawn(class'WaveData');
     deaths.category= "deaths";
-    kills= Spawn(class'WaveInfo');
+    kills= Spawn(class'WaveData');
     kills.category= "kills";
 }
 

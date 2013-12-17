@@ -71,12 +71,46 @@ function broadcastMatchResults() {
             Level.GRI.ElapsedTime, KFGameReplicationInfo(Level.GRI).EndGameType));
 }
 
+function broadcastWaveData(WaveData data) {
+    local array<string> packets;
+    local int i;
+
+    packets= packetCreator.createWaveDataPacket(data);
+    for(i= 0; i < packets.Length; i++) {
+        SendText(serverAddr, packets[i]);
+    }
+    broadcastedStatPacket= true;
+}
+
+function broadcastWaveSummary(PacketCreator.WaveSummary summary) {
+    local string packet;
+
+    packet= packetCreator.createWaveSummaryPacket(summary);
+    if (Len(packet) != 0) {
+        broadcastedStatPacket= true;
+        SendText(serverAddr, packet);
+    }
+}
+
 /**
  * Send wave specific stats to the remote server
  */
 function broadcastWaveInfo(SortedMap stats, int wave, string group) {
+    local WaveData data;
+    local int i;
+    local array<string> packets;
+
     broadcastedStatPacket= true;
-    SendText(serverAddr, packetCreator.createWaveInfoPacket(stats, wave, group));
+    data= Spawn(class'WaveData');
+    data.wave= wave;
+    data.category= group;
+    data.dataCollection.Length= 1;
+    data.dataCollection[0].stats= stats;
+
+    packets= packetCreator.createWaveDataPacket(data);
+    for(i= 0; i < packets.Length; i++) {
+        SendText(serverAddr, packets[i]);
+    }
 }
 
 /**

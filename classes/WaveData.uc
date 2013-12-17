@@ -3,7 +3,7 @@ class WaveData extends Info;
 struct Data {
     var class<KFVeterancyTypes> perk;
     var SortedMap stats;
-}
+};
 
 var int wave;
 var string category;
@@ -23,7 +23,7 @@ function SortedMap getStatsMap(class<KFVeterancyTypes> perk) {
     return dataCollection[i].stats;
 }
 
-function void reset() {
+function reset() {
     local int i;
 
     for(i= 0; i < dataCollection.Length; i++) {

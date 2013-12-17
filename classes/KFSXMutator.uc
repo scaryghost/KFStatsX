@@ -3,6 +3,7 @@
  * @author etsai (Scary Ghost)
  */
 class KFSXMutator extends Mutator
+    dependson(PacketCreator)
     config(KFStatsX);
 
 struct ReplacePair {
@@ -42,7 +43,7 @@ var class<RemoteServerLink> serverLinkClass;
 var transient RemoteServerLink serverLink;
 
 var array<ZombieFleshPound> passiveFPs, frustratedFPs;
-var SortedMap perks;
+var PacketCreator.WaveSummary summary;
 var bool broadcastedWaveEnd, broadcastedFinalWave;
 var int travelTime;
 
@@ -71,7 +72,7 @@ function PostBeginPlay() {
             serverLink.packetCreator= Spawn(class'V2PacketCreator');
         }
         serverLink.packetCreator.password= serverPwd;
-        perks= Spawn(class'SortedMap');
+        summary.perks= Spawn(class'SortedMap');
         SetTimer(1, true);
     }
 
@@ -123,9 +124,17 @@ function ServerTraveling(string URL, bool bItems) {
 }
 
 function broadcastWaveStats(int wave) {
-    serverLink.broadcastWaveInfo(gameRules.deaths, wave, "deaths");
-    serverLink.broadcastWaveInfo(gameRules.kills, wave, "kills");
-    serverLink.broadcastWaveInfo(perks, wave, "perks");
+    gameRules.deaths.wave= wave;
+    gameRules.kills.wave= wave;
+    summary.end= Level.GRI.ElapsedTime;
+    summary.wave= wave;
+    summary.result= byte(KFGameReplicationInfo(gameType.GameReplicationInfo).EndGameType != 1 && 
+        xVotingHandler(gameType.VotingHandler) != none && 
+        (xVotingHandler(gameType.VotingHandler).bLevelSwitchPending));
+    
+    serverLink.broadcastWaveData(gameRules.deaths);
+    serverLink.broadcastWaveData(gameRules.kills);
+    serverLink.broadcastWaveSummary(summary);
 }
 
 function bool shouldBroadcast() {
@@ -143,21 +152,23 @@ function Timer() {
 
     if (broadcastStats && !broadcastedWaveEnd && !gameType.bWaveInProgress) {
         broadcastWaveStats(gameType.WaveNum);
+
         gameRules.deaths.reset();
         gameRules.kills.reset();
-        perks.clear();
+        summary.perks.clear();
+
         broadcastedWaveEnd= !broadcastedWaveEnd;
     } else if (broadcastStats && broadcastedWaveEnd && gameType.bWaveInProgress) {
+        summary.start= Level.GRI.ElapsedTime;
         for(C= Level.ControllerList; C != none; C= C.NextController) {
-            if (C.bIsPlayer && C.Pawn != none && KFPlayerReplicationInfo(C.PlayerReplicationInfo) != none && 
-                KFPlayerReplicationInfo(C.PlayerReplicationInfo).ClientVeteranSkill != none) {
-                perks.accum(GetItemName(string(KFPlayerReplicationInfo(C.PlayerReplicationInfo).ClientVeteranSkill)), 1);
+            if (C.bIsPlayer && C.Pawn != none && KFPlayerReplicationInfo(C.PlayerReplicationInfo) != none) {
+                summary.perks.accum(GetItemName(string(KFPlayerReplicationInfo(C.PlayerReplicationInfo).ClientVeteranSkill)), 1);
             }
         }
         broadcastedWaveEnd= !broadcastedWaveEnd;
     }
-    if (broadcastStats && KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType != 0 && shouldBroadcast() ) {
-        if (KFGameReplicationInfo(Level.Game.GameReplicationInfo).EndGameType == 1 && KFStoryGameInfo(gameType) == none) {
+    if (broadcastStats && KFGameReplicationInfo(gameType.GameReplicationInfo).EndGameType != 0 && shouldBroadcast() ) {
+        if (KFGameReplicationInfo(gameType.GameReplicationInfo).EndGameType == 1 && KFStoryGameInfo(gameType) == none) {
             broadcastWaveStats(gameType.WaveNum + 1);
             broadcastedFinalWave= true;
         }

@@ -37,19 +37,24 @@ function array<string> createPlayerPackets(PacketCreator.PlayerInfo info) {
     return packets;
 }
 
-function string createWaveInfoPacket(SortedMap stats, int wave, string category) {
-    local array<string> packetParts;
+function array<string> createWaveDataPacket(WaveData data) {
+    local array<string> packetParts, packets;
+    local int i;
 
     packetParts[0]= generateHeader(matchHeader);
-    packetParts[1]= category;
+    packetParts[1]= data.category;
     packetParts[2]= matchInformation.difficulty;
     packetParts[3]= matchInformation.length;
-    packetParts[4]= string(wave);
+    packetParts[4]= string(data.wave);
     packetParts[5]= matchInformation.map;
-    packetParts[6]= getStatValues(stats);
     packetParts[7]= "_close";
 
-    return join(packetParts, sectionSeparator);
+    for(i= 0; i < data.dataCollection.Length; i++) {
+        packetParts[6]= getStatValues(data.dataCollection[i].stats);
+        packets[packets.Length]= join(packetParts, sectionSeparator);
+    }
+
+    return packets;
 }
 
 function string createMatchResultPacket(int wave, int elapsedTime, int endGameType) {

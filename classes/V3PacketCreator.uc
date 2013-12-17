@@ -45,14 +45,37 @@ function string createMatchInfoPacket(PacketCreator.MatchInfo info) {
     return join(parts, sectionSeparator);
 }
 
-function string createWaveInfoPacket(SortedMap stats, int wave, string category) {
+function array<string> createWaveDataPacket(WaveData data) {
+    local array<string> parts, packets;
+    local int i;
+
+    parts[0]= generateHeader(matchHeader);
+    parts[1]= string(Level.Game.GetServerPort());
+    parts[2]= "wave";
+    parts[3]= string(data.wave);
+    parts[4]= data.category;
+
+    for(i= 0; i < data.dataCollection.Length; i++) {
+        parts[5]= GetItemName(string(data.dataCollection[i].perk));
+        parts[6]= getStatValues(data.dataCollection[i].stats);
+        packets[packets.Length]= join(parts, sectionSeparator);
+    }
+
+    return packets;
+}
+
+function string createWaveSummaryPacket(PacketCreator.WaveSummary summary) {
     local array<string> parts;
 
     parts[0]= generateHeader(matchHeader);
     parts[1]= string(Level.Game.GetServerPort());
-    parts[2]= category;
-    parts[3]= string(wave);
-    parts[4]= getStatValues(stats);
+    parts[2]= "wave";
+    parts[3]= "summary";
+    parts[4]= string(summary.wave);
+    parts[5]= string(summary.result);;
+    parts[6]= string(summary.end - summary.start);
+    parts[7]= getStatValues(summary.perks);
+
     return join(parts, sectionSeparator);
 }
 
