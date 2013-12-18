@@ -70,8 +70,8 @@ function string createWaveSummaryPacket(PacketCreator.WaveSummary summary) {
     parts[0]= generateHeader(matchHeader);
     parts[1]= string(Level.Game.GetServerPort());
     parts[2]= "wave";
-    parts[3]= "summary";
-    parts[4]= string(summary.wave);
+    parts[3]= string(summary.wave);
+    parts[4]= "summary";
     parts[5]= string(summary.result);;
     parts[6]= string(summary.end - summary.start);
     parts[7]= getStatValues(summary.perks);
