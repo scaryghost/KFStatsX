@@ -104,8 +104,8 @@ function broadcastWaveInfo(SortedMap stats, int wave, string group) {
     data= Spawn(class'WaveData');
     data.wave= wave;
     data.category= group;
-    data.dataCollection.Length= 1;
-    data.dataCollection[0].stats= stats;
+    data.perkData.Length= 1;
+    data.perkData[0].stats= stats;
 
     packets= packetCreator.createWaveDataPacket(data);
     for(i= 0; i < packets.Length; i++) {

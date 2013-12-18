@@ -55,9 +55,9 @@ function array<string> createWaveDataPacket(WaveData data) {
     parts[3]= string(data.wave);
     parts[4]= data.category;
 
-    for(i= 0; i < data.dataCollection.Length; i++) {
-        parts[5]= GetItemName(string(data.dataCollection[i].perk));
-        parts[6]= getStatValues(data.dataCollection[i].stats);
+    for(i= 0; i < data.perkData.Length; i++) {
+        parts[5]= GetItemName(string(data.perkData[i].perk));
+        parts[6]= getStatValues(data.perkData[i].stats);
         packets[packets.Length]= join(parts, sectionSeparator);
     }
 

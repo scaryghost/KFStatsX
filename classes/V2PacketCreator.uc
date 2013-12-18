@@ -49,8 +49,8 @@ function array<string> createWaveDataPacket(WaveData data) {
     packetParts[5]= matchInformation.map;
     packetParts[7]= "_close";
 
-    for(i= 0; i < data.dataCollection.Length; i++) {
-        packetParts[6]= getStatValues(data.dataCollection[i].stats);
+    for(i= 0; i < data.perkData.Length; i++) {
+        packetParts[6]= getStatValues(data.perkData[i].stats);
         packets[packets.Length]= join(packetParts, sectionSeparator);
     }
 

@@ -7,27 +7,27 @@ struct Data {
 
 var int wave;
 var string category;
-var array<Data> dataCollection;
+var array<Data> perkData;
 
 function SortedMap getStatsMap(class<KFVeterancyTypes> perk) {
     local int i;
 
-    for(i= 0; i < dataCollection.Length; i++) {
-        if (dataCollection[i].perk == perk) {
-            return dataCollection[i].stats;
+    for(i= 0; i < perkData.Length; i++) {
+        if (perkData[i].perk == perk) {
+            return perkData[i].stats;
         }
     }
-    dataCollection.Length= dataCollection.Length + 1;
-    dataCollection[i].stats= Spawn(class'SortedMap');
-    dataCollection[i].perk= perk;
-    return dataCollection[i].stats;
+    perkData.Length= perkData.Length + 1;
+    perkData[i].stats= Spawn(class'SortedMap');
+    perkData[i].perk= perk;
+    return perkData[i].stats;
 }
 
 function reset() {
     local int i;
 
-    for(i= 0; i < dataCollection.Length; i++) {
-        dataCollection[i].stats.clear();
+    for(i= 0; i < perkData.Length; i++) {
+        perkData[i].stats.clear();
     }
 }
 
