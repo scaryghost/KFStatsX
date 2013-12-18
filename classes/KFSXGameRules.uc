@@ -7,7 +7,7 @@ class KFSXGameRules extends GameRules
 
 var array<Pawn> decappedPawns, ragedScrakes;
 /** Record of deaths from all players */
-var WaveData deaths, kills;
+var WaveData deaths, kills, weaponKills;
 /** key for environment death (fall or world fire) */
 var string envDeathKey;
 /** Key for self inflicted death */
@@ -22,7 +22,7 @@ var string deathKey;
 var string scrakesStunned, husksStunned;
 var string scrakesRaged;
 var string backstabs, decapitations;
-var string damageKey;
+var string damageKey, bleedOut;
 
 function PostBeginPlay() {
     NextGameRules = Level.Game.GameRulesModifiers;
@@ -31,6 +31,14 @@ function PostBeginPlay() {
     deaths.category= "deaths";
     kills= Spawn(class'WaveData');
     kills.category= "kills";
+    weaponKills= Spawn(class'WaveData');
+    weaponKills.category= "weapon kills";
+}
+
+function resetWaveData() {
+    deaths.reset();
+    kills.reset();
+    weaponKills.reset();
 }
 
 private function bool contains(array<Pawn> pawns, Pawn key) {
@@ -100,20 +108,39 @@ function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn insti
 }
 
 function bool PreventDeath(Pawn Killed, Controller Killer, class<DamageType> damageType, vector HitLocation) {
-    local KFSXReplicationInfo kfsxri;
+    local string weaponName;
 
     if (!super.PreventDeath(Killed, Killer, damageType, HitLocation)) {
         if(KFHumanPawn(Killed) != none && (damageType == class'Engine.Fell' || damageType == class'Gameplay.Burned')) {
             deaths.getStatsMap(KFPlayerReplicationInfo(Killed.PlayerReplicationInfo).ClientVeteranSkill).accum(envDeathKey,1);
-            kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killed.PlayerReplicationInfo);
-            kfsxri.deaths.accum(envDeathKey, 1);
-        } else if (ZombieCrawler(Killed) != none && Killed.Physics == PHYS_Falling && class<DamTypeMelee>(damageType) != none ) {
-            kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
-            kfsxri.actions.accum(swattedCrawler, 1);
-        }
-        remove(decappedPawns, Killed);
-        if (ZombieScrake(Killed) != none) {
-            remove(ragedScrakes, Killed);
+            class'KFSXReplicationInfo'.static.findKFSXri(Killed.PlayerReplicationInfo)
+                    .deaths.accum(envDeathKey, 1);
+        } else if (Killed.IsA('KFMonster') && Killer.IsA('KFPlayerController')) {
+            if (Killed.IsA('ZombieCrawler') && Killed.Physics == PHYS_Falling && class<DamTypeMelee>(damageType) != none) {
+                class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo)
+                        .actions.accum(swattedCrawler, 1);
+            } else if (Killed.IsA('ZombieScrake')) {
+                remove(ragedScrakes, Killed);
+            }
+            if (!ClassIsChildOf(damageType, class'WeaponDamageType')) {
+                weaponName= envDeathKey;
+            } else if (damageType == class'DamTypeBurned') {
+                weaponName= class'FlameThrower'.default.ItemName;
+            } else if (damageType == class'DamTypeDBShotgun') {
+                weaponName= class'BoomStick'.default.ItemName;
+            } else if (damageType == class'DamTypeFlameNade') {
+                weaponName= GetItemName(string(class'FlameNade'));
+            } else if (ClassIsChildOf(damageType, class'DamTypeBleedOut')) {
+                weaponName= bleedOut;
+            } else {
+                weaponName= class<WeaponDamageType>(damageType).default.WeaponClass.default.ItemName;
+            }
+            if (Len(weaponName) == 0) {
+                log("KFSXGameRules - Blank Weapon Name"@damageType);
+            }
+            weaponKills.getStatsMap(KFPlayerReplicationInfo(Killer.PlayerReplicationInfo).ClientVeteranSkill)
+                .accum(weaponName, 1);
+            remove(decappedPawns, Killed);
         }
         return false;
     }
@@ -176,4 +203,5 @@ defaultproperties {
     decapitations= "Decapitations"
     damageKey= "Damage"
     husksStunned= "Husks Stunned"
+    bleedOut= "Bleed Out"
 }
