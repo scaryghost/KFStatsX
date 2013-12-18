@@ -126,15 +126,17 @@ function ServerTraveling(string URL, bool bItems) {
 function broadcastWaveStats(int wave) {
     gameRules.deaths.wave= wave;
     gameRules.kills.wave= wave;
+    gameRules.weapons.wave= wave;
     summary.end= Level.GRI.ElapsedTime;
     summary.wave= wave;
     summary.result= byte(KFGameReplicationInfo(gameType.GameReplicationInfo).EndGameType != 1 && 
         (xVotingHandler(gameType.VotingHandler) == none || 
         (!xVotingHandler(gameType.VotingHandler).bLevelSwitchPending)));
     
+    serverLink.broadcastWaveSummary(summary);
     serverLink.broadcastWaveData(gameRules.deaths);
     serverLink.broadcastWaveData(gameRules.kills);
-    serverLink.broadcastWaveSummary(summary);
+    serverLink.broadcastWaveData(gameRules.weapons);
 }
 
 function bool shouldBroadcast() {
@@ -148,21 +150,30 @@ function bool shouldBroadcast() {
 }
 
 function Timer() {
-    local Controller C;
+    local Controller cIt;
+    local Inventory invIt;
+    local SortedMap perkInventory;
 
     if (broadcastStats && !broadcastedWaveEnd && !gameType.bWaveInProgress) {
         broadcastWaveStats(gameType.WaveNum);
 
         gameRules.deaths.reset();
         gameRules.kills.reset();
+        gameRules.weapons.reset();
         summary.perks.clear();
 
         broadcastedWaveEnd= !broadcastedWaveEnd;
     } else if (broadcastStats && broadcastedWaveEnd && gameType.bWaveInProgress) {
         summary.start= Level.GRI.ElapsedTime;
-        for(C= Level.ControllerList; C != none; C= C.NextController) {
-            if (C.bIsPlayer && C.Pawn != none && KFPlayerReplicationInfo(C.PlayerReplicationInfo) != none) {
-                summary.perks.accum(GetItemName(string(KFPlayerReplicationInfo(C.PlayerReplicationInfo).ClientVeteranSkill)), 1);
+        for(cIt= Level.ControllerList; cIt != none; cIt= cIt.NextController) {
+            if (cIt.bIsPlayer && cIt.Pawn != none && KFPlayerReplicationInfo(cIt.PlayerReplicationInfo) != none) {
+                summary.perks.accum(GetItemName(string(KFPlayerReplicationInfo(cIt.PlayerReplicationInfo).ClientVeteranSkill)), 1);
+                perkInventory= gameRules.weapons.getStatsMap(KFPlayerReplicationInfo(cIt.PlayerReplicationInfo).ClientVeteranSkill);
+                for(invIt= cIt.Pawn.Inventory; invIt != none; invIt= invIt.Inventory) {
+                    if (invIt.IsA('Weapon')) {
+                        perkInventory.accum(Weapon(invIt).ItemName, 1);
+                    }
+                }
             }
         }
         broadcastedWaveEnd= !broadcastedWaveEnd;

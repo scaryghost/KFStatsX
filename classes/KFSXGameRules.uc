@@ -7,7 +7,7 @@ class KFSXGameRules extends GameRules
 
 var array<Pawn> decappedPawns, ragedScrakes;
 /** Record of deaths from all players */
-var WaveData deaths, kills;
+var WaveData deaths, kills, weapons;
 /** key for environment death (fall or world fire) */
 var string envDeathKey;
 /** Key for self inflicted death */
@@ -31,6 +31,8 @@ function PostBeginPlay() {
     deaths.category= "deaths";
     kills= Spawn(class'WaveData');
     kills.category= "kills";
+    weapons= Spawn(class'WaveData');
+    weapons.category= "weapons";
 }
 
 private function bool contains(array<Pawn> pawns, Pawn key) {
