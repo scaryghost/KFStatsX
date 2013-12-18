@@ -51,6 +51,24 @@ private function remove(out array<Pawn> pawns, Pawn key) {
     }
 }
 
+function resetWaveData() {
+    deaths.reset();
+    kills.reset();
+    weapons.reset();
+}
+
+function setWave(int wave) {
+    deaths.wave= wave;
+    kills.wave= wave;
+    weapons.wave= wave;
+}
+
+function sendWaveData(RemoteServerLink link) {
+    link.broadcastWaveData(deaths);
+    link.broadcastWaveData(kills);
+    link.broadcastWaveData(weapons);
+}
+
 function int NetDamage( int OriginalDamage, int Damage, pawn injured, pawn instigatedBy, vector HitLocation, 
         out vector Momentum, class<DamageType> DamageType ) {
     local KFSXReplicationInfo instigatorRI;

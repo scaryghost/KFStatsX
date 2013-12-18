@@ -124,9 +124,7 @@ function ServerTraveling(string URL, bool bItems) {
 }
 
 function broadcastWaveStats(int wave) {
-    gameRules.deaths.wave= wave;
-    gameRules.kills.wave= wave;
-    gameRules.weapons.wave= wave;
+    gameRules.setWave(wave);
     summary.end= Level.GRI.ElapsedTime;
     summary.wave= wave;
     summary.result= byte(KFGameReplicationInfo(gameType.GameReplicationInfo).EndGameType != 1 && 
@@ -134,9 +132,7 @@ function broadcastWaveStats(int wave) {
         (!xVotingHandler(gameType.VotingHandler).bLevelSwitchPending)));
     
     serverLink.broadcastWaveSummary(summary);
-    serverLink.broadcastWaveData(gameRules.deaths);
-    serverLink.broadcastWaveData(gameRules.kills);
-    serverLink.broadcastWaveData(gameRules.weapons);
+    gameRules.sendWaveData(serverLink);
 }
 
 function bool shouldBroadcast() {
@@ -157,9 +153,7 @@ function Timer() {
     if (broadcastStats && !broadcastedWaveEnd && !gameType.bWaveInProgress) {
         broadcastWaveStats(gameType.WaveNum);
 
-        gameRules.deaths.reset();
-        gameRules.kills.reset();
-        gameRules.weapons.reset();
+        gameRules.resetWaveData();
         summary.perks.clear();
 
         broadcastedWaveEnd= !broadcastedWaveEnd;
