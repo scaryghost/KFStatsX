@@ -54,6 +54,7 @@ simulated function PostBeginPlay() {
 }
 
 simulated function Tick(float DeltaTime) {
+    local KFSteamStatsAndAchievements steamStats;
     local KFPlayerReplicationInfo kfPRI;
     local class<Projectile> nadeType;
 
@@ -81,14 +82,15 @@ simulated function Tick(float DeltaTime) {
         } else if (signalFire && Weapon != None && !Weapon.IsFiring()) {
             signalFire= false;
         }
-        if (KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements) != none) {
-            if (prevWeldStat < KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).WeldingPointsStat.Value) {
-                kfsxri.summary.accum(welding, KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).WeldingPointsStat.Value - prevWeldStat);
-                prevWeldStat= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).WeldingPointsStat.Value;
+        steamStats= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements);
+        if (steamStats != none) {
+            if (prevWeldStat < steamStats.WeldingPointsStat.Value) {
+                kfsxri.summary.accum(welding, steamStats.WeldingPointsStat.Value - prevWeldStat);
+                prevWeldStat= steamStats.WeldingPointsStat.Value;
             }
-            if (prevHealStat < KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).DamageHealedStat.Value) {
-                kfsxri.summary.accum(healing, KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).DamageHealedStat.Value - prevHealStat);
-                prevHealStat= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).DamageHealedStat.Value;
+            if (prevHealStat < steamStats.DamageHealedStat.Value) {
+                kfsxri.summary.accum(healing, steamStats.DamageHealedStat.Value - prevHealStat);
+                prevHealStat= steamStats.DamageHealedStat.Value;
             }
         }
     }
@@ -118,11 +120,14 @@ function Timer() {
  * Overridden to grab the stat info
  */
 function PossessedBy(Controller C) {
+    local KFSteamStatsAndAchievements steamStats;
+
     super.PossessedBy(C);
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(PlayerReplicationInfo);
-    if (KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements) != none) {
-        prevWeldStat= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).WeldingPointsStat.Value;
-        prevHealStat= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements).DamageHealedStat.Value;
+    steamStats= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements);
+    if (steamStats != none) {
+        prevWeldStat= steamStats.WeldingPointsStat.Value;
+        prevHealStat= steamStats.DamageHealedStat.Value;
     }
 }
 
