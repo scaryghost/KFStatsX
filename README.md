@@ -6,8 +6,8 @@ https://github.com/scaryghost/KFStatsX
 ## Author
 Scary Ghost
 
-## Release Notes
-https://github.com/scaryghost/KFStatsX/wiki/Release-KFStatsX-3.1.1
+## Release Information
+https://github.com/scaryghost/KFStatsX/releases/tag/3.2
 
 ## About
 Provides advanced statistics about a player's performance and tracks game information for each match.  This started out 
@@ -17,7 +17,7 @@ mutator from ground up and new features have made the mutator more resemble HLSt
 As of version 3.1.1, the default KFStatsX player controller is compatible with objective mode.
 
 ## Version
-3.1.1
+3.2
 
 ## Check Sum
 The check sum for the package is generated with the following command from the system folder:
@@ -26,6 +26,7 @@ The check sum for the package is generated with the following command from the s
 
 If the output does not match any of the hashes in this README, you do not have an official version from me.
 
+    3.2     2a6e1c1953210b1c330d2306bb7aa59b
     3.1.1   616198026d1a2e264ed090313fad3d8d
     3.1     dae63ec0ed7fe31beeeabefd5df54e2a
     3.0     d7520254a097dde029b5cda01ce5536f
@@ -42,6 +43,7 @@ Copy the contents of the system folder to your Killing Floor system folder.
 Edit the KFStatsX.ini file to configure the mutator.  Below are descriptions for the properties:
 
     broadcastStats          Broadcast player and match statistics to a remote server
+    useV3Packets            Use version 3 of the udp stat packets
     serverPort              UDP port to the remote server is listening on
     serverAddress           Address of the remote server
     serverPwd               Remote server password
