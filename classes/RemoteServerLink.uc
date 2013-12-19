@@ -17,9 +17,6 @@ var array<string> difficulties, lengths;
 var string matchHeader, playerHeader;
 var string killsKey, assistsKey;
 
-/** True if a stat packet has been broadcasted */
-var bool broadcastedStatPacket;
-
 function PostBeginPlay() {
     local KFGameType gametype;
     local array<string> parts;
@@ -79,7 +76,6 @@ function broadcastWaveData(WaveData data) {
     for(i= 0; i < packets.Length; i++) {
         SendText(serverAddr, packets[i]);
     }
-    broadcastedStatPacket= true;
 }
 
 function broadcastWaveSummary(PacketCreator.WaveSummary summary) {
@@ -87,7 +83,6 @@ function broadcastWaveSummary(PacketCreator.WaveSummary summary) {
 
     packet= packetCreator.createWaveSummaryPacket(summary);
     if (Len(packet) != 0) {
-        broadcastedStatPacket= true;
         SendText(serverAddr, packet);
     }
 }
@@ -100,7 +95,6 @@ function broadcastWaveInfo(SortedMap stats, int wave, string group) {
     local int i;
     local array<string> packets;
 
-    broadcastedStatPacket= true;
     data= Spawn(class'WaveData');
     data.wave= wave;
     data.category= group;
@@ -159,7 +153,6 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
         for(i= 0; i < packets.Length; i++) {
             SendText(serverAddr, packets[i]);
         }
-        broadcastedStatPacket= true;
     }
 }
 

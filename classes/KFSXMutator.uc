@@ -45,7 +45,6 @@ var transient RemoteServerLink serverLink;
 var array<ZombieFleshPound> passiveFPs, frustratedFPs;
 var PacketCreator.WaveSummary summary;
 var bool broadcastedWaveEnd, broadcastedFinalWave;
-var int travelTime;
 
 function PostBeginPlay() {
     gameType= KFGameType(Level.Game);
@@ -115,10 +114,12 @@ function Tick(float DeltaTime) {
 }
 
 function ServerTraveling(string URL, bool bItems) {
-    travelTime= Level.GRI.ElapsedTime;
-    if (broadcastStats && shouldBroadcast() && !broadcastedFinalWave && KFStoryGameInfo(gameType) == none) {
-        broadcastWaveStats(gameType.WaveNum + 1);
+    if (broadcastStats && shouldBroadcast() && !broadcastedFinalWave) {
+        if (KFStoryGameInfo(gameType) == none) {
+            broadcastWaveStats(gameType.WaveNum + 1);
+        }
         serverLink.broadcastMatchResults();
+        SetTimer(0, false);
     }
     super.ServerTraveling(URL, bItems);
 }
@@ -136,13 +137,11 @@ function broadcastWaveStats(int wave) {
 }
 
 function bool shouldBroadcast() {
-    local bool midGameVoteTrigger, waveModeCheck, storyModeCheck;
+    local bool waveModeCheck, storyModeCheck;
 
-    midGameVoteTrigger= xVotingHandler(gameType.VotingHandler) != none && 
-        (xVotingHandler(gameType.VotingHandler).bLevelSwitchPending && travelTime < 60);
     waveModeCheck= (KFStoryGameInfo(gameType) == none && (gameType.WaveNum != gameType.InitialWave || gameType.bWaveInProgress));
     storyModeCheck= KFStoryGameInfo(gameType) != none &&  KFStoryGameInfo(gameType).CurrentObjectiveIdx != -1;
-    return  serverLink.broadcastedStatPacket || (!midGameVoteTrigger && (waveModeCheck || storyModeCheck));
+    return  waveModeCheck || storyModeCheck;
 }
 
 function Timer() {

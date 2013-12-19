@@ -18,10 +18,9 @@ function array<string> createPlayerPackets(PacketCreator.PlayerInfo info) {
 
     parts[1]= string(packets.Length);
     parts[2]= "match";
-    if (info.levelSwitching && info.endGameType == 0) {
-        parts[3]= "1";
-    } else {
-        parts[3]= string(info.endGameType);
+    parts[3]= string(byte(info.endGameType == 0 && !info.levelSwitching));
+    if (info.endGameType == 2) {
+        info.wave--;
     }
     parts[4]= string(info.wave);
     parts[5]= string(info.reachedFinalWave);
@@ -82,6 +81,9 @@ function string createWaveSummaryPacket(PacketCreator.WaveSummary summary) {
 function string createMatchResultPacket(int wave, int elapsedTime, int endGameType) {
     local array<string> parts;
 
+    if (endGameType == 2) {
+        wave--;
+    }
     parts[0]= generateHeader(matchHeader);
     parts[1]= string(Level.Game.GetServerPort());
     parts[2]= "result";
