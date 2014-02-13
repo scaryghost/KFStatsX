@@ -171,8 +171,9 @@ function ScoreKill(Controller Killer, Controller Killed) {
 
         //Here kfsxri now points to the killer controller
         kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(Killer.PlayerReplicationInfo);
-        kfsxri.kills.accum(itemName, 1);
-        if (KFMonsterController(Killer) == none) {
+        //< IF killer doesn't have a kfsxRepInfo, don't increment the wave kill count
+        if (kfsxri != none) {
+            kfsxri.kills.accum(itemName, 1);
             kills.getStatsMap(KFPlayerReplicationInfo(Killer.PlayerReplicationInfo).ClientVeteranSkill)
                     .accum(ItemName,1);
         }
