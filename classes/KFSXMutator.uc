@@ -174,8 +174,8 @@ function Timer() {
     if (broadcastStats && KFGameReplicationInfo(gameType.GameReplicationInfo).EndGameType != 0 && shouldBroadcast() ) {
         if (KFGameReplicationInfo(gameType.GameReplicationInfo).EndGameType == 1 && KFStoryGameInfo(gameType) == none) {
             broadcastWaveStats(gameType.WaveNum + 1);
-            broadcastedFinalWave= true;
         }
+        broadcastedFinalWave= true;
         serverLink.broadcastMatchResults();
         if (Level.NetMode != NM_DedicatedServer) {
             serverLink.broadcastPlayerStats(Level.GetLocalPlayerController().PlayerReplicationInfo);
