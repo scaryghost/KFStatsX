@@ -200,6 +200,8 @@ function bool CheckReplacement(Actor Other, out byte bSuperRelevant) {
         pri= PlayerReplicationInfo(Other);
         kfsxri= spawn(kfsxRIClass, pri.Owner);
         kfsxri.ownerPRI= pri;
+        kfsxri.joinedDuringFinale= gameType.bWaveInProgress && 
+                (gameType.GetCurrentWaveNum() == gameType.getFinalWaveNum() + 1);
     } else if (ZombieFleshPound(Other) != none) {
         passiveFPs[passiveFPs.length]= ZombieFleshPound(Other);
     }
@@ -245,7 +247,7 @@ static event string GetDescriptionText(string property) {
 
 defaultproperties {
     GroupName="KFStatX"
-    FriendlyName="KFStatsX v3.2"
+    FriendlyName="KFStatsX v3.2.1"
     Description="Tracks player and match statistics"
 
     kfStatsXRules= class'KFSXGameRules'

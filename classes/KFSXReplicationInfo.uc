@@ -14,7 +14,7 @@ var SortedMap summary, actions, weapons, kills, perks, deaths;
 var string playerIdHash;
 var string fleshpoundsRaged, unknownKiller;
 var int prevTime;
-var bool survivedFinale;
+var bool survivedFinale, joinedDuringFinale;
 
 replication {
     reliable if (bNetDirty && Role == ROLE_Authority)
@@ -72,6 +72,5 @@ defaultproperties {
     fleshpoundsRaged= "Fleshpounds Raged"
     timeSpectating= "Time Spectating"
     unknownKiller= "Unknown"
-
     survivedFinale= true
 }

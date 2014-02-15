@@ -118,8 +118,8 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
     local array<string> packets;
 
     timeConnected= Level.GRI.ElapsedTime - pri.StartTime;
-    if (timeConnected > 0 && !(pri.bOutOfLives && pri.Deaths == 0)) {
-        kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(pri);
+    kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(pri);
+    if (!kfsxri.joinedDuringFinale && timeConnected > 0 && !(pri.bOutOfLives && pri.Deaths == 0)) {
         if (KFPlayerReplicationInfo(pri) != none) {
             kfsxri.summary.put(assistsKey, KFPlayerReplicationInfo(pri).KillAssists);
         }
