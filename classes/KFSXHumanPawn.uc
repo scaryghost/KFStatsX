@@ -6,6 +6,8 @@
  */
 class KFSXHumanPawn extends KFHumanPawn;
 
+
+var KFSteamStatsAndAchievements steamStats;
 var bool signalToss, signalFire;
 var string damageTaken, armorLost, timeAlive, cashSpent, shotByHusk;
 var string healedSelf, receivedHeal, healDartsConnected, healedTeammates;
@@ -54,7 +56,6 @@ simulated function PostBeginPlay() {
 }
 
 simulated function Tick(float DeltaTime) {
-    local KFSteamStatsAndAchievements steamStats;
     local KFPlayerReplicationInfo kfPRI;
     local class<Projectile> nadeType;
 
@@ -82,7 +83,6 @@ simulated function Tick(float DeltaTime) {
         } else if (signalFire && Weapon != None && !Weapon.IsFiring()) {
             signalFire= false;
         }
-        steamStats= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements);
         if (steamStats != none) {
             if (prevWeldStat < steamStats.WeldingPointsStat.Value) {
                 kfsxri.summary.accum(welding, steamStats.WeldingPointsStat.Value - prevWeldStat);
@@ -120,8 +120,6 @@ function Timer() {
  * Overridden to grab the stat info
  */
 function PossessedBy(Controller C) {
-    local KFSteamStatsAndAchievements steamStats;
-
     super.PossessedBy(C);
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(PlayerReplicationInfo);
     steamStats= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements);
