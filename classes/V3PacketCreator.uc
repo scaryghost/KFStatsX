@@ -55,9 +55,11 @@ function array<string> createWaveDataPacket(WaveData data) {
     parts[4]= data.category;
 
     for(i= 0; i < data.perkData.Length; i++) {
-        parts[5]= GetItemName(string(data.perkData[i].perk));
-        parts[6]= getStatValues(data.perkData[i].stats);
-        packets[packets.Length]= join(parts, sectionSeparator);
+        if (data.perkData[i].stats.maxStatIndex > 0) {
+            parts[5]= GetItemName(string(data.perkData[i].perk));
+            parts[6]= getStatValues(data.perkData[i].stats);
+            packets[packets.Length]= join(parts, sectionSeparator);
+        }
     }
 
     return packets;
@@ -81,9 +83,6 @@ function string createWaveSummaryPacket(PacketCreator.WaveSummary summary) {
 function string createMatchResultPacket(int wave, int elapsedTime, int endGameType) {
     local array<string> parts;
 
-    if (endGameType == 2) {
-        wave--;
-    }
     parts[0]= generateHeader(matchHeader);
     parts[1]= string(Level.Game.GetServerPort());
     parts[2]= "result";

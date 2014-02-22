@@ -115,7 +115,7 @@ function Tick(float DeltaTime) {
 
 function ServerTraveling(string URL, bool bItems) {
     if (broadcastStats && shouldBroadcast() && !broadcastedFinalWave) {
-        if (KFStoryGameInfo(gameType) == none) {
+        if (KFStoryGameInfo(gameType) == none && gameType.bWaveInProgress) {
             broadcastWaveStats(gameType.WaveNum + 1);
         }
         serverLink.broadcastMatchResults();
