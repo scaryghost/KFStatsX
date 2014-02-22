@@ -115,7 +115,7 @@ function Tick(float DeltaTime) {
 
 function ServerTraveling(string URL, bool bItems) {
     if (broadcastStats && shouldBroadcast() && !broadcastedFinalWave) {
-        if (KFStoryGameInfo(gameType) == none && gameType.bWaveInProgress) {
+        if (KFStoryGameInfo(gameType) == none) {
             broadcastWaveStats(gameType.WaveNum + 1);
         }
         serverLink.broadcastMatchResults();
@@ -127,6 +127,9 @@ function ServerTraveling(string URL, bool bItems) {
 function broadcastWaveStats(int wave) {
     gameRules.setWave(wave);
     summary.end= Level.GRI.ElapsedTime;
+    if (summary.start == -1) {
+        summary.end= summary.start - 1;
+    }
     summary.wave= wave;
     summary.result= byte(KFGameReplicationInfo(gameType.GameReplicationInfo).EndGameType != 1 && 
         (xVotingHandler(gameType.VotingHandler) == none || 
@@ -134,6 +137,7 @@ function broadcastWaveStats(int wave) {
     
     serverLink.broadcastWaveSummary(summary);
     gameRules.sendWaveData(serverLink);
+    summary.start= -1;
 }
 
 function bool shouldBroadcast() {

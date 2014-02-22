@@ -64,13 +64,7 @@ function MatchStarting() {
  * Send the match information to the remote server
  */
 function broadcastMatchResults() {
-    local int wave;
-
-    wave= KFGameType(Level.Game).WaveNum;
-    if (KFGameType(Level.Game).bWaveInProgress) {
-        wave++;
-    }
-    SendText(serverAddr, packetCreator.createMatchResultPacket(wave, 
+    SendText(serverAddr, packetCreator.createMatchResultPacket(KFGameType(Level.Game).WaveNum + 1,
             Level.GRI.ElapsedTime, KFGameReplicationInfo(Level.GRI).EndGameType));
 }
 
@@ -131,15 +125,12 @@ function broadcastPlayerStats(PlayerReplicationInfo pri) {
         }
         kfsxri.summary.put(killsKey, pri.Kills);
 
-        info.endGameType= KFGameReplicationInfo(Level.GRI).EndGameType;
-        info.wave= KFGameType(Level.Game).WaveNum;
-        if (info.endGameType != 0 || KFGameType(Level.Game).bWaveInProgress) {
-            info.wave++;
-        }
         info.timeConnected= timeConnected;
+        info.wave= KFGameType(Level.Game).WaveNum + 1;
         info.reachedFinalWave= byte(info.wave > KFGameType(Level.Game).FinalWave);
         info.survivedFinalWave= byte(!pri.bOnlySpectator && kfsxri.survivedFinale && 
                 (info.reachedFinalWave != 0));
+        info.endGameType= KFGameReplicationInfo(Level.GRI).EndGameType;
         info.levelSwitching= xVotingHandler(Level.Game.VotingHandler) != none && 
                 xVotingHandler(Level.Game.VotingHandler).bLevelSwitchPending;
         info.steamID64= kfsxri.playerIDHash;

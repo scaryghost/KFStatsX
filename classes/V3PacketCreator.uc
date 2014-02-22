@@ -83,6 +83,9 @@ function string createWaveSummaryPacket(PacketCreator.WaveSummary summary) {
 function string createMatchResultPacket(int wave, int elapsedTime, int endGameType) {
     local array<string> parts;
 
+    if (endGameType == 2) {
+        wave--;
+    }
     parts[0]= generateHeader(matchHeader);
     parts[1]= string(Level.Game.GetServerPort());
     parts[2]= "result";
