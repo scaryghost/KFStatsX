@@ -8,7 +8,7 @@ class KFSXHumanPawn extends KFHumanPawn;
 
 
 var KFSteamStatsAndAchievements steamStats;
-var bool signalToss, signalFire;
+var bool signalToss, signalFire, setSteamStats;
 var string damageTaken, armorLost, timeAlive, cashSpent, shotByHusk;
 var string healedSelf, receivedHeal, healDartsConnected, healedTeammates;
 var string boltsRetrieved, bladesRetrieved, pukedOn, welding, healing;
@@ -83,14 +83,20 @@ simulated function Tick(float DeltaTime) {
         } else if (signalFire && Weapon != None && !Weapon.IsFiring()) {
             signalFire= false;
         }
-        if (steamStats != none) {
-            if (prevWeldStat < steamStats.WeldingPointsStat.Value) {
-                kfsxri.summary.accum(welding, steamStats.WeldingPointsStat.Value - prevWeldStat);
+        if (steamStats != none && steamStats.bInitialized) {
+            if (!setSteamStats) {
+                if (prevWeldStat < steamStats.WeldingPointsStat.Value) {
+                    kfsxri.summary.accum(welding, steamStats.WeldingPointsStat.Value - prevWeldStat);
+                    prevWeldStat= steamStats.WeldingPointsStat.Value;
+                }
+                if (prevHealStat < steamStats.DamageHealedStat.Value) {
+                    kfsxri.summary.accum(healing, steamStats.DamageHealedStat.Value - prevHealStat);
+                    prevHealStat= steamStats.DamageHealedStat.Value;
+                }
+            } else {
                 prevWeldStat= steamStats.WeldingPointsStat.Value;
-            }
-            if (prevHealStat < steamStats.DamageHealedStat.Value) {
-                kfsxri.summary.accum(healing, steamStats.DamageHealedStat.Value - prevHealStat);
                 prevHealStat= steamStats.DamageHealedStat.Value;
+                setSteamStats= false;
             }
         }
     }
@@ -123,9 +129,11 @@ function PossessedBy(Controller C) {
     super.PossessedBy(C);
     kfsxri= class'KFSXReplicationInfo'.static.findKFSXri(PlayerReplicationInfo);
     steamStats= KFSteamStatsAndAchievements(PlayerReplicationInfo.SteamStatsAndAchievements);
-    if (steamStats != none) {
+    if (steamStats != none && steamStats.bInitialized) {
         prevWeldStat= steamStats.WeldingPointsStat.Value;
         prevHealStat= steamStats.DamageHealedStat.Value;
+    } else {
+        setSteamStats= true;
     }
 }
 
