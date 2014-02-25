@@ -7,7 +7,7 @@ https://github.com/scaryghost/KFStatsX
 Scary Ghost
 
 ## Release Information
-https://github.com/scaryghost/KFStatsX/releases/tag/3.2
+https://github.com/scaryghost/KFStatsX/releases/tag/3.2.1
 
 ## About
 Provides advanced statistics about a player's performance and tracks game information for each match.  This started out 
@@ -26,6 +26,7 @@ The check sum for the package is generated with the following command from the s
 
 If the output does not match any of the hashes in this README, you do not have an official version from me.
 
+    3.2.1   7e385365b5d107bcf4be04f5b6c0bcfe
     3.2     e25b44655a9c0c2b3611c9c6f59b8008
     3.1.1   616198026d1a2e264ed090313fad3d8d
     3.1     dae63ec0ed7fe31beeeabefd5df54e2a
